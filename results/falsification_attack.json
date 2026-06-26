@@ -1,0 +1,320 @@
+{
+  "experiment": "falsification_attack",
+  "checkpoint": "/Users/nathansamson/PCRL/checkpoints/v2_adult_s0/final.pt",
+  "purpose": "income_prediction",
+  "purpose_idx": 0,
+  "sensitive_attr": "sex",
+  "lora_target": "all_linear",
+  "tau": 0.05,
+  "device": "mps",
+  "config": {
+    "n_steps": 300,
+    "eval_every": 10,
+    "batch_size": 512,
+    "lr": 0.01,
+    "seed": 0,
+    "rank": 8,
+    "alpha": 16.0
+  },
+  "n_train": 24145,
+  "repr_per_dim_std_mean": 0.3686659038066864,
+  "repr_per_dim_std_max": 0.6221376657485962,
+  "baseline": {
+    "linear_r2": 0.034942350219597684,
+    "dominant_axis_r2": 0.034942350219597684,
+    "da_argmax_class": 0,
+    "da_per_class_r2": [
+      0.034942350219597684,
+      0.034942350219597684
+    ]
+  },
+  "final": {
+    "attack_linear_r2": 0.1038348750320982,
+    "attack_dominant_axis_r2": 0.10383487503209843,
+    "control_linear_r2": 0.0349423457401844,
+    "control_dominant_axis_r2": 0.03494234574018462
+  },
+  "breach_step_linear": 0,
+  "notes": "ATTACK = post-ReLU LoRA-adapted repr (probed). CONTROL = pre-ReLU strict-linear LoRA output; linear/dominant-axis R^2 are invariant under invertible affine maps, so the control stays at the frozen baseline \u2014 the nonlinearity is what breaks the certificate.",
+  "curve": [
+    {
+      "step": 0,
+      "loss": null,
+      "linear_r2": 0.07690734006719246,
+      "dominant_axis_r2": 0.07690734006719246,
+      "da_argmax_class": 0,
+      "control_linear_r2": 0.034942350219597684,
+      "control_dominant_axis_r2": 0.034942350219597684
+    },
+    {
+      "step": 10,
+      "loss": 0.6053542494773865,
+      "linear_r2": 0.08506705316796559,
+      "dominant_axis_r2": 0.08506705316796559,
+      "da_argmax_class": 1,
+      "control_linear_r2": 0.03494235034708182,
+      "control_dominant_axis_r2": 0.03494235034708182
+    },
+    {
+      "step": 20,
+      "loss": 0.5959842801094055,
+      "linear_r2": 0.07781515275450246,
+      "dominant_axis_r2": 0.07781515275450246,
+      "da_argmax_class": 1,
+      "control_linear_r2": 0.034942349754628066,
+      "control_dominant_axis_r2": 0.034942349754628066
+    },
+    {
+      "step": 30,
+      "loss": 0.6210007071495056,
+      "linear_r2": 0.08998561154262374,
+      "dominant_axis_r2": 0.08998561154262374,
+      "da_argmax_class": 0,
+      "control_linear_r2": 0.03494235309735827,
+      "control_dominant_axis_r2": 0.03494235309735838
+    },
+    {
+      "step": 40,
+      "loss": 0.5616456866264343,
+      "linear_r2": 0.09104947617094472,
+      "dominant_axis_r2": 0.09104947617094472,
+      "da_argmax_class": 0,
+      "control_linear_r2": 0.03494236976959286,
+      "control_dominant_axis_r2": 0.03494236976959286
+    },
+    {
+      "step": 50,
+      "loss": 0.6031612753868103,
+      "linear_r2": 0.09719533170548267,
+      "dominant_axis_r2": 0.09719533170548267,
+      "da_argmax_class": 1,
+      "control_linear_r2": 0.034942359593550076,
+      "control_dominant_axis_r2": 0.0349423595935503
+    },
+    {
+      "step": 60,
+      "loss": 0.5810819864273071,
+      "linear_r2": 0.09798101449462016,
+      "dominant_axis_r2": 0.09798101449462016,
+      "da_argmax_class": 1,
+      "control_linear_r2": 0.03494240532193227,
+      "control_dominant_axis_r2": 0.03494240532193227
+    },
+    {
+      "step": 70,
+      "loss": 0.5683652758598328,
+      "linear_r2": 0.09795515715625513,
+      "dominant_axis_r2": 0.09795515715625513,
+      "da_argmax_class": 1,
+      "control_linear_r2": 0.03494237482488782,
+      "control_dominant_axis_r2": 0.03494237482488782
+    },
+    {
+      "step": 80,
+      "loss": 0.586292564868927,
+      "linear_r2": 0.1003047798562684,
+      "dominant_axis_r2": 0.10030477985626851,
+      "da_argmax_class": 1,
+      "control_linear_r2": 0.03494234207757885,
+      "control_dominant_axis_r2": 0.03494234207757885
+    },
+    {
+      "step": 90,
+      "loss": 0.5746007561683655,
+      "linear_r2": 0.0955270118840813,
+      "dominant_axis_r2": 0.09552701188408164,
+      "da_argmax_class": 1,
+      "control_linear_r2": 0.03494234938874763,
+      "control_dominant_axis_r2": 0.03494234938874763
+    },
+    {
+      "step": 100,
+      "loss": 0.5845580101013184,
+      "linear_r2": 0.10041987451043932,
+      "dominant_axis_r2": 0.10041987451043932,
+      "da_argmax_class": 1,
+      "control_linear_r2": 0.0349423487066296,
+      "control_dominant_axis_r2": 0.0349423487066296
+    },
+    {
+      "step": 110,
+      "loss": 0.5667577385902405,
+      "linear_r2": 0.10179650147220942,
+      "dominant_axis_r2": 0.10179650147220942,
+      "da_argmax_class": 0,
+      "control_linear_r2": 0.03494235074877994,
+      "control_dominant_axis_r2": 0.03494235074877994
+    },
+    {
+      "step": 120,
+      "loss": 0.5762139558792114,
+      "linear_r2": 0.10130581896327928,
+      "dominant_axis_r2": 0.10130581896327917,
+      "da_argmax_class": 1,
+      "control_linear_r2": 0.03494234928308004,
+      "control_dominant_axis_r2": 0.03494234928308004
+    },
+    {
+      "step": 130,
+      "loss": 0.5822697877883911,
+      "linear_r2": 0.101645798981012,
+      "dominant_axis_r2": 0.101645798981012,
+      "da_argmax_class": 0,
+      "control_linear_r2": 0.03494235094369336,
+      "control_dominant_axis_r2": 0.03494235094369336
+    },
+    {
+      "step": 140,
+      "loss": 0.5920217037200928,
+      "linear_r2": 0.1011947536051162,
+      "dominant_axis_r2": 0.10119475360511643,
+      "da_argmax_class": 1,
+      "control_linear_r2": 0.03494234727211565,
+      "control_dominant_axis_r2": 0.03494234727211565
+    },
+    {
+      "step": 150,
+      "loss": 0.5838834047317505,
+      "linear_r2": 0.10227323074792438,
+      "dominant_axis_r2": 0.10227323074792438,
+      "da_argmax_class": 0,
+      "control_linear_r2": 0.0349423538938447,
+      "control_dominant_axis_r2": 0.034942353893844924
+    },
+    {
+      "step": 160,
+      "loss": 0.5922894477844238,
+      "linear_r2": 0.10275344597678826,
+      "dominant_axis_r2": 0.10275344597678837,
+      "da_argmax_class": 1,
+      "control_linear_r2": 0.034942350047358905,
+      "control_dominant_axis_r2": 0.034942350047358905
+    },
+    {
+      "step": 170,
+      "loss": 0.5797669887542725,
+      "linear_r2": 0.10203239742437376,
+      "dominant_axis_r2": 0.10203239742437376,
+      "da_argmax_class": 0,
+      "control_linear_r2": 0.03494234768907101,
+      "control_dominant_axis_r2": 0.03494234768907112
+    },
+    {
+      "step": 180,
+      "loss": 0.5832628011703491,
+      "linear_r2": 0.102229397152801,
+      "dominant_axis_r2": 0.102229397152801,
+      "da_argmax_class": 0,
+      "control_linear_r2": 0.034942351410143346,
+      "control_dominant_axis_r2": 0.034942351410143346
+    },
+    {
+      "step": 190,
+      "loss": 0.5481319427490234,
+      "linear_r2": 0.10255885691772704,
+      "dominant_axis_r2": 0.10255885691772704,
+      "da_argmax_class": 0,
+      "control_linear_r2": 0.034942353205101195,
+      "control_dominant_axis_r2": 0.03494235320510142
+    },
+    {
+      "step": 200,
+      "loss": 0.5660973191261292,
+      "linear_r2": 0.1027724682417075,
+      "dominant_axis_r2": 0.10277246824170772,
+      "da_argmax_class": 1,
+      "control_linear_r2": 0.03494234847810984,
+      "control_dominant_axis_r2": 0.03494234847810995
+    },
+    {
+      "step": 210,
+      "loss": 0.5672183036804199,
+      "linear_r2": 0.10256061328270383,
+      "dominant_axis_r2": 0.10256061328270383,
+      "da_argmax_class": 1,
+      "control_linear_r2": 0.034942351654331905,
+      "control_dominant_axis_r2": 0.034942351654331905
+    },
+    {
+      "step": 220,
+      "loss": 0.5669128894805908,
+      "linear_r2": 0.10400010869365495,
+      "dominant_axis_r2": 0.10400010869365495,
+      "da_argmax_class": 1,
+      "control_linear_r2": 0.034942356580877076,
+      "control_dominant_axis_r2": 0.034942356580877076
+    },
+    {
+      "step": 230,
+      "loss": 0.5622731447219849,
+      "linear_r2": 0.10286776996785052,
+      "dominant_axis_r2": 0.10286776996785063,
+      "da_argmax_class": 1,
+      "control_linear_r2": 0.034942376155293386,
+      "control_dominant_axis_r2": 0.034942376155293386
+    },
+    {
+      "step": 240,
+      "loss": 0.5935112833976746,
+      "linear_r2": 0.10311044941185832,
+      "dominant_axis_r2": 0.10311044941185832,
+      "da_argmax_class": 0,
+      "control_linear_r2": 0.034942335528237334,
+      "control_dominant_axis_r2": 0.034942335528237334
+    },
+    {
+      "step": 250,
+      "loss": 0.5605135560035706,
+      "linear_r2": 0.102548073029187,
+      "dominant_axis_r2": 0.10254807302918723,
+      "da_argmax_class": 1,
+      "control_linear_r2": 0.03494239815765976,
+      "control_dominant_axis_r2": 0.03494239815765976
+    },
+    {
+      "step": 260,
+      "loss": 0.5758867263793945,
+      "linear_r2": 0.10422938848887675,
+      "dominant_axis_r2": 0.10422938848887675,
+      "da_argmax_class": 0,
+      "control_linear_r2": 0.03494240409217397,
+      "control_dominant_axis_r2": 0.034942404092174306
+    },
+    {
+      "step": 270,
+      "loss": 0.5677545666694641,
+      "linear_r2": 0.10298887924821376,
+      "dominant_axis_r2": 0.10298887924821376,
+      "da_argmax_class": 0,
+      "control_linear_r2": 0.03492582585895809,
+      "control_dominant_axis_r2": 0.034925825858735826
+    },
+    {
+      "step": 280,
+      "loss": 0.5705743432044983,
+      "linear_r2": 0.1038545133247245,
+      "dominant_axis_r2": 0.1038545133247245,
+      "da_argmax_class": 0,
+      "control_linear_r2": 0.03494235663844936,
+      "control_dominant_axis_r2": 0.03494235663844936
+    },
+    {
+      "step": 290,
+      "loss": 0.5686990022659302,
+      "linear_r2": 0.10384419649924581,
+      "dominant_axis_r2": 0.10384419649924581,
+      "da_argmax_class": 0,
+      "control_linear_r2": 0.03494233760809151,
+      "control_dominant_axis_r2": 0.03494233760809151
+    },
+    {
+      "step": 300,
+      "loss": 0.5445540547370911,
+      "linear_r2": 0.1038348750320982,
+      "dominant_axis_r2": 0.10383487503209843,
+      "da_argmax_class": 0,
+      "control_linear_r2": 0.0349423457401844,
+      "control_dominant_axis_r2": 0.03494234574018462
+    }
+  ]
+}

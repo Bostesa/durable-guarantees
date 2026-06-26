@@ -1,0 +1,16 @@
+# durable-guarantees — falsification experiments against PCRL compliance certificates.
+# Run locally on MPS/CPU. Versions track the audited PCRL .venv (py3.13).
+torch>=2.0.0
+numpy>=1.21.0
+scikit-learn>=1.0.0
+matplotlib>=3.5.0
+pandas>=1.3.0
+peft>=0.10.0
+
+# Transitively required to IMPORT the PCRL package (read-only) and its data:
+pyyaml>=6.0
+xgboost>=1.7.0
+concept-erasure>=0.2.0
+tqdm>=4.64.0
+seaborn>=0.12.0
+torchvision>=0.15.0  # pcrl.data.__init__ imports celeba.py which needs torchvision
