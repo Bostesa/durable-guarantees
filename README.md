@@ -4,6 +4,17 @@ Empirical tests of whether ML "compliance guarantees" are *durable* — i.e.
 whether they survive realistic downstream use — or are merely **training-time
 artifacts** that an adapter can dissolve.
 
+> **Bottom line (after the Experiment 5 honest re-audit).** PCRL's linear R²
+> certificate is blind to nonlinear recovery, and that blindness propagated into our
+> *own* "durable" verdicts. Re-measured with an honest XGBoost/MLP probe, **only 3 of
+> 21 R²-"stopped" results survive — all of them isotropic noise at high σ.** Every
+> targeted projection (LEOPARD-MMD, HSIC) and the training-time HSIC encoder leak the
+> attribute at near-unprotected levels to a tree probe. The single robust lesson:
+> **a compliance guarantee is only as strong as the strongest attacker used to certify
+> it; only an attacker-agnostic mechanism (noise / a data-processing bound) genuinely
+> hides an attribute, and only at a real utility cost.** Read the experiments below in
+> order — several "wins" are explicitly overturned by later sections.
+
 ## Experiment 1 — Falsification attack on PCRL's compliance certificate
 
 PCRL (Purpose-Conditioned Representation Learning) ships a per-purpose
@@ -117,6 +128,16 @@ fragile-signal/robust-task separation is a property of this representation and
 attribute, not a guarantee it holds for every dataset. **Experiment 3 tests both
 of those caveats directly.**
 
+> ⚠️ **Corrected by Experiment 5 (honest re-audit).** The "STOPPED from σ≈1" and
+> "cheap, ≲1 accuracy point" claims above were measured with the R²/linear
+> certificate. Re-measured with an **XGBoost** probe, sex is still recovered at
+> **0.59 AUC at σ=1 and 0.55 AUC at σ=2** — *not* stopped. The honest stop point
+> (XGB+MLP driven to ~chance) is **σ≈4**, where income lift falls from +0.051 to
+> **+0.029 (≈57% kept)**, and only σ=8 (lift +0.010, ~20% kept) is comfortably
+> clear. The noise channel *does* genuinely survive — it is the only method that
+> does — but it is **meaningfully more expensive** than the R² certificate implied.
+> See Experiment 5 below.
+
 ## Experiment 3 — Is the cheap-durability result robust and general?
 
 Two questions decide whether Experiment 2's result is general or specific to
@@ -146,6 +167,12 @@ for all). "STOPPED" is not attacker-specific.
 Honest caveat: at σ=2 a faint residual rank-signal remains (AUC≈0.575, a few SE
 above chance) that the R²-certificate scores as stopped and that *no* attacker
 exceeds. Closing it to ~chance (AUC≈0.52) needs σ≈8 (income acc 0.79 → 0.76).
+
+> **Note (Experiment 5).** This caveat was correct and is the seed of the later
+> correction: the σ=2 "STOPPED" verdict is relative-to-control (no *stronger*
+> attacker beats the rank-8 control), but the **absolute** residual (XGB AUC ≈0.55
+> at σ=2) means sex is not actually hidden at σ=2. The honest re-audit makes this
+> precise — durability requires σ≈4–8, not σ=2.
 
 ### Test B — does the favourable tradeoff generalize? (`experiments/generalization_test.py`)
 
@@ -239,26 +266,37 @@ signal is fragile (Experiments 1-3). Result (`results/smart_erasure_adult.png`):
 | LEOPARD-MMD proj, r=16 | 0.036 | +0.032 | **yes (63% kept)** |
 | HSIC proj, r=16 | 0.037 | +0.042 | **yes (83% kept)** |
 
-Here the targeted projections **do** stop the attack — they drop attacked R² to
-~0.036 (well below τ) — while keeping most of the income lift (best 83%). Removing a
-**low-rank, task-separable sex subspace** suffices, because the sex signal is
-fragile and concentrated. (Honest nuance: lift varies with rank — e.g. r=1 removes a
-direction shared by sex *and* income and keeps only 1% — but good ranks clearly
-reach the stop-and-keep region. Noise is also cheap here, σ=1 keeps 91%.)
+By the R² certificate the targeted projections appear to **stop** the attack — they
+drop attacked R² to ~0.036 (well below τ) — while keeping most of the income lift
+(best 83%). This looked like the cleanest win in the project.
 
-### The characterization
+> ⛔ **Overturned by Experiment 5 — this was the worst case of R²-blindness.** The
+> projections do **not** hide sex from an honest probe. Re-measured with XGBoost,
+> the projected representations leak sex at **~0.68 AUC — identical to the
+> *unprotected* representation (σ=0 XGB AUC = 0.683)**, across *every* family and
+> rank (MMD and HSIC, r=1…32). In other words, the MMD/HSIC projections removed
+> only the linear/kernel-aligned subspace the R² certificate can see, and did
+> **essentially nothing** to a gradient-boosted attacker. The "targeted erasure
+> wins cheaply on Adult/sex" result was pure certificate theater. The **only**
+> Adult/sex method that survives honest measurement is isotropic **noise at σ≥4**
+> (see Experiment 5) — because noise is the only one with an attacker-agnostic
+> (information-theoretic) guarantee; the projections have none.
+
+### The characterization (R²-certificate view — see Experiment 5 for the honest correction)
 
 | cell | attack@rest R² | targeted erasure stops + keeps utility? |
 |---|---|---|
-| Adult / income / sex (**fragile**) | 0.104 | **YES** — HSIC r=16, R²=0.037≤τ, 83% lift kept |
+| Adult / income / sex (**fragile**) | 0.104 | R² said **YES** (HSIC r=16) — **but XGB still recovers sex at 0.68 AUC; honest NO** |
 | HMDA / underwriting / race (**robust**) | 0.720 | **NO** — best projection only R²≈0.17 (3×τ); none stop |
 
-**Targeted erasure works iff the protected signal is low-rank-separable from the
-task.** When the attribute is fragile and concentrated (Adult/sex), an MMD/HSIC
-projection removes it cheaply. When it is robustly, nonlinearly diffused and
-entangled with the task (HMDA/race), no frozen post-hoc erasure — blunt or smart —
-can remove it without destroying utility; the cost is fundamental and has to be paid
-at representation-training time, not bolted on afterward.
+The original lesson — "targeted erasure works iff the protected signal is
+low-rank-separable from the task" — was an artifact of the linear certificate. The
+**corrected** lesson is stronger and simpler: a *targeted* eraser (projection, HSIC,
+MMD) only removes what its own statistic can see, so it never beats the honest probe;
+**only an attacker-agnostic mechanism (isotropic noise / a DPI bound) genuinely
+hides the attribute**, and even then only at a σ that costs real utility. The cost is
+fundamental, and it must be paid by an attacker-agnostic guarantee — not bolted on by
+a probe-shaped projection.
 
 ## Experiment 4 — Stage 2 (decisive): can a *training-time* intervention pay the bill?
 
@@ -350,6 +388,53 @@ R²/linear certificate is not that attacker. (Honest caveats: one HSIC kernel an
 kernel family — might do better, but the burden of proof now sits with it, measured
 against XGBoost, not against the linear certificate.)
 
+## Experiment 5 — Honest re-audit: how many "stopped" verdicts were real?
+
+The hardening test proved the linear R²/dominant-axis certificate is blind to
+nonlinear recovery. That indicts **every** R²-only "stopped" verdict in Experiments
+2–4. `experiments/honest_reaudit.py` re-measures all 21 of them with the honest probe
+battery (XGBoost + deep MLP, PCRL-auditor configs). A result "survives" only if
+**both** strong probes are driven to ~chance (max AUC ≤ 0.55; chance = 0.5).
+
+**Master table (every R²-"stopped" verdict, honest re-measurement):**
+
+| experiment | cell | method | old R² (verdict) | XGB AUC | MLP AUC | honest agrees stopped? |
+|---|---|---|---|---|---|---|
+| E2 noise | adult/sex | noise σ=1.0 | 0.047 (stop) | 0.589 | 0.599 | **NO — leaks** |
+| E2 noise | adult/sex | noise σ=2.0 | 0.034 (stop) | 0.550 | 0.562 | **NO — leaks** |
+| E2 noise | adult/sex | noise σ=4.0 | 0.026 (stop) | 0.534 | 0.547 | ✅ yes |
+| E2 noise | adult/sex | noise σ=8.0 | 0.010 (stop) | 0.514 | 0.518 | ✅ yes |
+| E4S1 proj | adult/sex | LEOPARD-MMD r=1…16 | ~0.036 (stop) | **0.681** | 0.55–0.59 | **NO — leaks** |
+| E4S1 proj | adult/sex | HSIC r=1…32 | ~0.036 (stop) | **0.683** | 0.54–0.58 | **NO — leaks** |
+| E4S1 noise | adult/sex | noise σ=8.0 | 0.010 (stop) | 0.514 | 0.518 | ✅ yes |
+| E4S1 noise | hmda/race | noise σ=8.0 | 0.005 (stop) | 0.549 | 0.551 | **NO — leaks** (and utility already 0) |
+
+*(projection rows condensed — all 9 ranks behave identically; full per-rank numbers
+in `results/honest_reaudit.json`. Reference: the **unprotected** Adult/sex repr has
+XGB AUC 0.683 — so the projections leak sex at the unprotected level.)*
+
+**Verdict: only 3 of 21 R²-"stopped" results survive honest measurement — and all 3
+are isotropic noise at high σ.** The 18 that collapse split into two groups:
+
+- **Targeted projections (all of them).** LEOPARD-MMD and HSIC projections leak sex
+  to XGBoost at ~0.68 AUC — *the unprotected level*. They removed only what their own
+  linear/kernel statistic could see and nothing a tree exploits. Every "smart erasure
+  wins" verdict was R²-blindness.
+- **Low-σ noise.** σ=1 and σ=2 — the "wide cheap operating window" of Experiment 2 —
+  leak at 0.55–0.60 AUC. Honest durability on Adult/sex starts at **σ≈4** (lift +0.029,
+  ~57% kept), not σ=1.
+
+The pattern is sharp and explains *which* mechanisms are real: **only the noise
+channel has an attacker-agnostic (data-processing-inequality) guarantee, and only the
+noise channel survives an attacker-agnostic probe.** Every probe-shaped eraser (R²
+projection, MMD, HSIC, training-time HSIC) only fools the matching probe. This is the
+central finding in its strongest form: **a compliance guarantee is exactly as strong
+as the attacker used to certify it, and a linear/R² certificate certifies almost
+nothing** — here, 0 of the post-hoc *targeted* methods and only the bluntest, most
+expensive noise settings. (Honest scope: the 0.55 AUC bar is generous; the survivors
+still carry a small residual 0.51–0.53 AUC, i.e. "≈chance," not "provably zero." And
+HMDA/race has *no* row that is both honest-stopped and utility-positive at all.)
+
 ### Layout
 
 ```
@@ -361,6 +446,7 @@ experiments/smart_erasure.py          # Experiment 4: targeted (MMD/HSIC) erasur
 experiments/smart_erasure_control.py  # Experiment 4 positive control: same erasers on Adult/sex + contrast
 experiments/training_time_erasure.py  # Experiment 4 Stage 2: training-time two-component erasure
 experiments/hardening_test.py         # Experiment 4 Stage 2 hardening: seeds + stronger attackers (overturns the win)
+experiments/honest_reaudit.py         # Experiment 5: re-audit all R²-"stopped" verdicts with XGBoost/MLP (3/21 survive)
 utils/pcrl_io.py                       # PCRL-specific glue (imports the read-only PCRL repo)
 results/                               # JSON curves + plots
 requirements.txt
