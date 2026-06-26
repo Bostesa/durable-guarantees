@@ -435,6 +435,55 @@ expensive noise settings. (Honest scope: the 0.55 AUC bar is generous; the survi
 still carry a small residual 0.51–0.53 AUC, i.e. "≈chance," not "provably zero." And
 HMDA/race has *no* row that is both honest-stopped and utility-positive at all.)
 
+## Experiment 6 — Can targeted (anisotropic) noise buy honest durability cheaper?
+
+Experiment 5 left isotropic noise as the only honest stopper, and an expensive one. But
+noise works by *destroying* information (a DPI bound), so a natural question
+(`experiments/targeted_noise.py`): can we destroy the sex information **more surgically**
+— pour noise only into the directions/dims that carry sex, sparing task-only directions
+— and pay less utility for the same XGBoost-proof protection? Two targeted variants vs the
+isotropic floor, all measured with XGBoost + MLP (never R²):
+
+1. **Subspace noise** — Gaussian noise confined to the learned rank-r *most-sex-carrying
+   subspace* (the same HSIC subspace the failed projection used — but we **destroy** it with
+   noise instead of deleting it). Sweep r, σ.
+2. **Importance noise** — Gaussian noise only on the top-k repr dims **XGBoost itself uses**
+   to predict sex (axis-aligned targeting matched to the honest attacker). Sweep k, σ.
+
+**Head-to-head — cheapest config reaching honest durability (XGB *and* MLP ≤ 0.55 AUC):**
+
+| method | best honest config | XGB AUC | MLP AUC | income lift | % of clean |
+|---|---|---|---|---|---|
+| isotropic | σ=4 | 0.534 | 0.546 | +0.0289 | 57% |
+| **subspace (HSIC)** | r=16, σ=16 | 0.536 | 0.548 | **+0.0434** | **86%** |
+| importance (XGB-dims) | — none reached ≤0.55 — | 0.642 | 0.550 | (leaks) | — |
+
+*(clean income lift = +0.0508; chance AUC 0.5.)*
+
+**Mixed verdict — one targeted variant genuinely helps, the other leaks like the projections.**
+
+- **Subspace noise is a genuine (but modest, fragile) improvement.** Confining heavy noise
+  (σ=16) to the 16-dim most-sex-carrying subspace drives XGB to 0.536 while keeping **86%**
+  of income lift — vs isotropic's **57%** at matched protection. Unlike *deleting* that
+  subspace (the Exp-5 projection, which leaked at XGB 0.68), *noising* it with fresh
+  per-sample noise destroys the tree-recoverable signal irreducibly, while income — which
+  lives in the orthogonal complement — is barely touched (lift is nearly flat in σ). This is
+  the **first method in the project to beat blunt noise** on the durability/utility frontier.
+- **Importance noise leaks like the projections.** Noising the top-k axis-aligned dims one
+  XGB used does *not* protect: a retrained tree simply routes around them and recovers sex at
+  0.64–0.65 AUC even at k=48, σ=16 (and barely dents income, ~98% kept — because it barely
+  dents sex). Axis-aligned targeting fails for the same reason projections did: the
+  tree-exploitable signal is spread across directions/interactions the target misses.
+
+**Honest caveat — the win is bar-dependent and cannot reach near-chance.** The subspace
+advantage exists only at the *generous* 0.55 bar. The MLP residual for subspace noise
+plateaus around **0.54–0.55**; at a stricter **0.53** bar **no** targeted config qualifies,
+and only blunt isotropic noise (σ=8) drives *both* probes to near-chance — at 20% utility.
+So targeted subspace noise buys a *cheaper approximate* protection (down to ~0.54 AUC at 86%
+utility), but **for true near-chance erasure, blunt isotropic noise remains the floor.** The
+direction of information-destruction can be made surgical; the *amount* needed for near-zero
+recovery still costs what isotropic noise costs.
+
 ### Layout
 
 ```
