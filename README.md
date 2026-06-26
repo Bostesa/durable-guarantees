@@ -114,17 +114,87 @@ this attacker for ≲1 accuracy point.
 Caveat (honest scope): "STOPPED" means *this* rank-8 ReLU attacker is held below
 τ; the DPI bound is attacker-agnostic but τ is a specific operating point. The
 fragile-signal/robust-task separation is a property of this representation and
-attribute, not a guarantee it holds for every dataset.
+attribute, not a guarantee it holds for every dataset. **Experiment 3 tests both
+of those caveats directly.**
+
+## Experiment 3 — Is the cheap-durability result robust and general?
+
+Two questions decide whether Experiment 2's result is general or specific to
+Adult/sex.
+
+### Test A — stronger attacker (`experiments/stronger_attackers.py`)
+
+At fixed σ=2 on Adult/sex, a battery of attackers tries to recover sex from the
+noisy frozen repr: the rank-8 ReLU LoRA (control), a rank-32 LoRA, a deep MLP
+probe (PCRL's 256-256 auditor), and an XGBoost probe (PCRL's auditor — imported
+and verified to match `attack_acc` exactly, |Δacc|=0.0000).
+
+| attacker | σ=0 R² | σ=0 AUC | σ=2 R² | σ=2 AUC |
+|---|---|---|---|---|
+| rank-8 ReLU LoRA (control) | 0.104 | 0.685 | 0.034 | 0.575 |
+| rank-32 ReLU LoRA | 0.104 | 0.687 | 0.034 | 0.575 |
+| MLP probe (256-256) | n/a | 0.686 | n/a | 0.562 |
+| XGBoost probe | n/a | 0.683 | n/a | 0.550 |
+
+*(sex majority acc = 0.677; chance AUC = 0.5; τ = 0.05 on R²)*
+
+**Verdict: ATTACKER-ROBUST.** Extra capacity does **not** break through — rank-32
+LoRA, deep MLP, and XGBoost recover sex no better than the rank-8 control (max
+stronger AUC 0.575 vs control 0.575; all LoRA R²≈0.034<τ; accuracy at majority
+for all). "STOPPED" is not attacker-specific.
+
+Honest caveat: at σ=2 a faint residual rank-signal remains (AUC≈0.575, a few SE
+above chance) that the R²-certificate scores as stopped and that *no* attacker
+exceeds. Closing it to ~chance (AUC≈0.52) needs σ≈8 (income acc 0.79 → 0.76).
+
+### Test B — does the favourable tradeoff generalize? (`experiments/generalization_test.py`)
+
+Same full σ-sweep + ReLU attack (3 seeds) on cells where the sensitive signal may
+be as robust as the task signal. **Utility cost is measured as lift over the
+majority baseline retained**, not absolute accuracy — these tasks have very high
+majority baselines, so a ~2pp absolute drop can erase the entire useful signal.
+
+| cell | attacked R² @σ=0 | σ to stop | task lift over majority: clean → stopped | verdict |
+|---|---|---|---|---|
+| Adult / income / sex (Exp 2) | 0.104 | σ≈1–2 | +0.051 → +0.042 (82% kept) | **CHEAP** |
+| HMDA / underwriting / race | **0.720** | σ=8 | +0.019 → +0.000 (**1% kept**) | **EXPENSIVE** |
+| Diabetes / quality_research / age_bucket | 0.101 | σ=2 | +0.000 → +0.000 | **DEGENERATE** |
+
+**Verdict: the cheap-durability result does NOT generalize — it was specific to
+Adult/sex.**
+
+- **HMDA/race:** the attack is far more severe (R²=**0.72** at rest vs Adult's
+  0.10 — race is robustly, nonlinearly encoded, and the certificate-at-rest of
+  0.040 drastically understates it). Stopping it needs σ=8, by which point task
+  accuracy has fallen to the majority baseline (0.912 → 0.893 = majority): **~all
+  of the representation's task utility is destroyed.** Here the sensitive signal
+  is *more* robust than the task signal, so noise cannot separate them.
+- **Diabetes/age_bucket:** a degenerate cell — the certificate is **already
+  breached at rest** (R²=0.103 > τ, i.e. the frozen repr was never compliant for
+  age_bucket), and the linear task head never beats majority (lift ≈ 0), so noise
+  looks "free" only because there is no utility to lose.
+
+**Overall:** noise-channel erasure is genuinely attacker-robust (Test A), but its
+*cheapness* depends entirely on the sensitive signal being more fragile than the
+task signal. When they are comparably robust (HMDA/race), durability costs all the
+utility. The Adult/sex win is the exception, not the rule.
 
 ### Layout
 
 ```
 experiments/falsification_attack.py   # Experiment 1: linear erasure is defeated
-experiments/noise_channel_test.py     # Experiment 2: noise-channel durability vs utility
+experiments/noise_channel_test.py     # Experiment 2: noise-channel durability vs utility (Adult)
+experiments/stronger_attackers.py     # Experiment 3 Test A: attacker-robustness at fixed σ
+experiments/generalization_test.py    # Experiment 3 Test B: generalization to HMDA / Diabetes
 utils/pcrl_io.py                       # PCRL-specific glue (imports the read-only PCRL repo)
 results/                               # JSON curves + plots
 requirements.txt
 ```
+
+> macOS note: XGBoost and PyTorch each bundle an OpenMP runtime; loading both in
+> one process segfaults. `stronger_attackers.py` imports `xgboost` before torch
+> and sets `KMP_DUPLICATE_LIB_OK=TRUE` + `OMP_NUM_THREADS=1` (run it with those
+> env vars).
 
 The PCRL repo is **never modified**. `utils/pcrl_io.py` adds it to `sys.path`
 (default `/Users/nathansamson/PCRL`, override with the `PCRL_ROOT` env var) and

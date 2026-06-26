@@ -86,27 +86,42 @@ def load_adult_encoder(
     Uses weights_only=False (audit fact) and the lora_target auto-detection
     rather than hardcoding the adapter layout. Returns an eval()-mode encoder.
     """
+    return _build_and_load_encoder(
+        ckpt_path, input_dim, n_purposes, ADULT_LORA_RANK, ADULT_LORA_ALPHA
+    )
+
+
+def _build_and_load_encoder(ckpt_path, input_dim, n_purposes, rank, alpha):
+    """Generic StandardEncoder + PerPurposeLoRAEncoder build + checkpoint load.
+
+    Mirrors run_eval_multi.py::load_encoder for ANY tabular PCRL checkpoint:
+    weights_only=False, lora_target auto-detect, LEACE buffer restore. repr_dim
+    is always 64. The (rank, alpha) passed in are only fallbacks — the
+    AUTHORITATIVE values come from the checkpoint's own ``config`` (some
+    checkpoints, e.g. v2_diabetes_s0, were trained at a different rank than the
+    run_eval_multi DATASET_CONFIG default). We don't hardcode the adapter layout.
+    Returns (encoder.eval(), lora_target).
+    """
     ckpt = torch.load(ckpt_path, map_location="cpu", weights_only=False)
     lora_target = _detect_lora_target(ckpt["lora_adapters"])
+    ck_cfg = ckpt.get("config", {}) or {}
+    rank = int(ck_cfg.get("lora_rank", rank))
+    alpha = float(ck_cfg.get("lora_alpha", alpha))
+    # Sanity: the adapter A.weight first dim is the true rank.
+    detected = ckpt["lora_adapters"]["0.0.A.weight"].shape[0]
+    if detected != rank:
+        rank = detected  # checkpoint tensor shape wins over config
 
     backbone = StandardEncoder(
-        input_dim=input_dim,
-        hidden_dims=[128, 128],
-        repr_dim=64,
-        dropout=0.3,
+        input_dim=input_dim, hidden_dims=[128, 128], repr_dim=64, dropout=0.3,
     )
     encoder = PerPurposeLoRAEncoder(
-        backbone,
-        n_purposes=n_purposes,
-        rank=ADULT_LORA_RANK,
-        alpha=ADULT_LORA_ALPHA,
-        dropout=0.0,
-        lora_target=lora_target,
+        backbone, n_purposes=n_purposes, rank=rank, alpha=alpha,
+        dropout=0.0, lora_target=lora_target,
     )
     encoder.backbone.load_state_dict(ckpt["backbone"], strict=False)
     encoder.adapters.load_state_dict(ckpt["lora_adapters"])
 
-    # Restore any frozen LEACE projections that were checkpointed.
     enc_buf = ckpt.get("encoder_buffers", {}) or {}
     for p_idx in range(n_purposes):
         P_key, mu_key = f"leace_P_p{p_idx}", f"leace_mu_p{p_idx}"
@@ -134,6 +149,51 @@ def build_adult_train_loader(batch_size: int = 512):
         num_workers=0,
     )
     return purposes, train_ds, train_loader
+
+
+# --- Multi-dataset generalization (mirrors run_eval_multi.py DATASET_CONFIG) -
+# repr_dim is always 64; only input_dim, rank/alpha, data_root and the dataset
+# class differ. rank/alpha match PCRL's per-dataset training config.
+DATASET_CFG: dict[str, dict] = {
+    "adult": dict(loader_module="pcrl.data.adult", dataset_class="AdultDataset",
+                  purposes_fn="get_adult_purposes", rank=8, alpha=16.0,
+                  data_root="data", ckpt_dir="v2_adult_s0"),
+    "hmda": dict(loader_module="pcrl.data.hmda", dataset_class="HMDADataset",
+                 purposes_fn="get_hmda_purposes", rank=8, alpha=16.0,
+                 data_root="data", ckpt_dir="v2_hmda_s0"),
+    "diabetes": dict(loader_module="pcrl.data.diabetes", dataset_class="DiabetesDataset",
+                     purposes_fn="get_diabetes_purposes", rank=24, alpha=48.0,
+                     data_root="data/diabetes_processed", ckpt_dir="v2_diabetes_s0"),
+}
+
+
+def build_train_loader(dataset: str, batch_size: int = 512):
+    """Build any PCRL tabular train dataset + loader (mirrors build_loaders, train split).
+
+    Returns (purposes, train_ds, train_loader).
+    """
+    cfg = DATASET_CFG[dataset]
+    mod = __import__(cfg["loader_module"],
+                     fromlist=[cfg["dataset_class"], cfg["purposes_fn"]])
+    DSCls = getattr(mod, cfg["dataset_class"])
+    purposes = getattr(mod, cfg["purposes_fn"])()
+    root = str(PCRL_ROOT / cfg["data_root"])
+    train_ds = DSCls(purposes=purposes, root=root, split="train", download=False)
+    train_loader = DataLoader(
+        train_ds, batch_size=batch_size, shuffle=False,
+        collate_fn=collate_pcrl_batch, num_workers=0,
+    )
+    return purposes, train_ds, train_loader
+
+
+def load_encoder(dataset: str, input_dim: int, n_purposes: int, ckpt_path: Path | None = None):
+    """Load any PCRL tabular encoder (final.pt by default). Returns (encoder, lora_target)."""
+    cfg = DATASET_CFG[dataset]
+    if ckpt_path is None:
+        ckpt_path = PCRL_ROOT / "checkpoints" / cfg["ckpt_dir"] / "final.pt"
+    return _build_and_load_encoder(
+        ckpt_path, input_dim, n_purposes, cfg["rank"], cfg["alpha"]
+    )
 
 
 @torch.no_grad()

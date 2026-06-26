@@ -1,7 +1,6 @@
 {
   "experiment": "noise_channel_test",
-  "checkpoint": "/Users/nathansamson/PCRL/checkpoints/v2_adult_s0/final.pt",
-  "purpose": "income_prediction",
+  "cell": "adult / income_prediction / sex",
   "sensitive_attr": "sex",
   "task": "income",
   "tau": 0.05,
@@ -21,17 +20,17 @@
     8.0
   ],
   "repr_per_dim_std": 0.3686659038066864,
-  "income_majority_acc": 0.7518740940153241,
+  "task_majority_acc": 0.7518740940153241,
+  "attr_majority_acc": 0.6771588320563263,
   "config": {
     "n_steps": 300,
     "eval_every": 10,
     "batch_size": 512,
     "lr": 0.01,
-    "rank": 8,
-    "alpha": 16.0,
     "eval_draws": 5,
     "final_draws": 20
   },
+  "extra_meta": {},
   "rows": [
     {
       "sigma_rel": 0.0,
@@ -39,9 +38,12 @@
       "task_acc_mean": 0.8026613660206504,
       "task_acc_std": 0.0017232054038238652,
       "baseline_linear_r2": 0.034942350219597684,
+      "baseline_dominant_axis_r2": 0.034942350219597684,
       "attacked_linear_r2_mean": 0.10362235128290258,
       "attacked_linear_r2_std": 0.0011845215093431094,
       "attacked_dominant_axis_r2_mean": 0.10362235128290269,
+      "attacked_acc_mean": 0.6793400980189134,
+      "attacked_auc_mean": 0.6851159287527814,
       "breaches_tau": true,
       "per_seed_attacks": [
         {
@@ -236,7 +238,9 @@
           ],
           "final_linear_r2": 0.1042260595826231,
           "final_linear_r2_std": 0.0,
-          "final_dominant_axis_r2": 0.10422605958262321
+          "final_dominant_axis_r2": 0.10422605958262321,
+          "acc": 0.679188237730379,
+          "auc": 0.6825383596871673
         },
         {
           "seed": 1,
@@ -430,7 +434,9 @@
           ],
           "final_linear_r2": 0.10467374841265786,
           "final_linear_r2_std": 0.0,
-          "final_dominant_axis_r2": 0.10467374841265809
+          "final_dominant_axis_r2": 0.10467374841265809,
+          "acc": 0.6759991716711534,
+          "auc": 0.679244803282901
         },
         {
           "seed": 2,
@@ -624,7 +630,9 @@
           ],
           "final_linear_r2": 0.10196724585342676,
           "final_linear_r2_std": 0.0,
-          "final_dominant_axis_r2": 0.10196724585342676
+          "final_dominant_axis_r2": 0.10196724585342676,
+          "acc": 0.6828328846552081,
+          "auc": 0.6935646232882758
         }
       ]
     },
@@ -633,10 +641,13 @@
       "sigma_abs": 0.0921664759516716,
       "task_acc_mean": 0.8005631936392247,
       "task_acc_std": 0.0028240763850796305,
-      "baseline_linear_r2": 0.03424450243793633,
+      "baseline_linear_r2": 0.03424629960037798,
+      "baseline_dominant_axis_r2": 0.03424629960037801,
       "attacked_linear_r2_mean": 0.08679373104123116,
       "attacked_linear_r2_std": 0.0006396369784892505,
       "attacked_dominant_axis_r2_mean": 0.08679373104123118,
+      "attacked_acc_mean": 0.6773244978256368,
+      "attacked_auc_mean": 0.6714851295852761,
       "breaches_tau": true,
       "per_seed_attacks": [
         {
@@ -831,7 +842,9 @@
           ],
           "final_linear_r2": 0.08612803657045935,
           "final_linear_r2_std": 0.0011528013918729696,
-          "final_dominant_axis_r2": 0.08612803657045938
+          "final_dominant_axis_r2": 0.08612803657045938,
+          "acc": 0.6767446676330503,
+          "auc": 0.6710243569448776
         },
         {
           "seed": 1,
@@ -1025,7 +1038,9 @@
           ],
           "final_linear_r2": 0.08765699448118114,
           "final_linear_r2_std": 0.0011582279913468843,
-          "final_dominant_axis_r2": 0.08765699448118121
+          "final_dominant_axis_r2": 0.08765699448118121,
+          "acc": 0.6768275005177056,
+          "auc": 0.668573715213822
         },
         {
           "seed": 2,
@@ -1219,7 +1234,9 @@
           ],
           "final_linear_r2": 0.08659616207205294,
           "final_linear_r2_std": 0.0010187310202047174,
-          "final_dominant_axis_r2": 0.08659616207205298
+          "final_dominant_axis_r2": 0.08659616207205298,
+          "acc": 0.6784013253261545,
+          "auc": 0.6748573165971287
         }
       ]
     },
@@ -1228,10 +1245,13 @@
       "sigma_abs": 0.1843329519033432,
       "task_acc_mean": 0.800673623764563,
       "task_acc_std": 0.0042389923731807515,
-      "baseline_linear_r2": 0.0333548200815366,
+      "baseline_linear_r2": 0.03334182558193653,
+      "baseline_dominant_axis_r2": 0.03334182558193658,
       "attacked_linear_r2_mean": 0.06760507510877152,
       "attacked_linear_r2_std": 0.0013700172040797534,
       "attacked_dominant_axis_r2_mean": 0.06760507510877159,
+      "attacked_acc_mean": 0.6773659142679644,
+      "attacked_auc_mean": 0.6503470022800103,
       "breaches_tau": true,
       "per_seed_attacks": [
         {
@@ -1426,7 +1446,9 @@
           ],
           "final_linear_r2": 0.06949570214541154,
           "final_linear_r2_std": 0.001172967183198896,
-          "final_dominant_axis_r2": 0.06949570214541159
+          "final_dominant_axis_r2": 0.06949570214541159,
+          "acc": 0.6775315800372748,
+          "auc": 0.6510353692577182
         },
         {
           "seed": 1,
@@ -1620,7 +1642,9 @@
           ],
           "final_linear_r2": 0.0662929267973142,
           "final_linear_r2_std": 0.0011910487348996762,
-          "final_dominant_axis_r2": 0.06629292679731431
+          "final_dominant_axis_r2": 0.06629292679731431,
+          "acc": 0.677200248498654,
+          "auc": 0.6486406129546698
         },
         {
           "seed": 2,
@@ -1814,7 +1838,9 @@
           ],
           "final_linear_r2": 0.06702659638358881,
           "final_linear_r2_std": 0.0011511999108601487,
-          "final_dominant_axis_r2": 0.06702659638358885
+          "final_dominant_axis_r2": 0.06702659638358885,
+          "acc": 0.6773659142679643,
+          "auc": 0.651365024627643
         }
       ]
     },
@@ -1823,10 +1849,13 @@
       "sigma_abs": 0.3686659038066864,
       "task_acc_mean": 0.797857655568439,
       "task_acc_std": 0.003709696213845923,
-      "baseline_linear_r2": 0.03138534056636143,
+      "baseline_linear_r2": 0.031348252774085233,
+      "baseline_dominant_axis_r2": 0.03134825277408532,
       "attacked_linear_r2_mean": 0.046498277435005175,
       "attacked_linear_r2_std": 0.0011684082043933674,
       "attacked_dominant_axis_r2_mean": 0.04649827743500521,
+      "attacked_acc_mean": 0.6771588320563263,
+      "attacked_auc_mean": 0.6108079187696445,
       "breaches_tau": false,
       "per_seed_attacks": [
         {
@@ -2021,7 +2050,9 @@
           ],
           "final_linear_r2": 0.04713588145664434,
           "final_linear_r2_std": 0.0011647805468738006,
-          "final_dominant_axis_r2": 0.04713588145664437
+          "final_dominant_axis_r2": 0.04713588145664437,
+          "acc": 0.6771588320563263,
+          "auc": 0.6108374457868194
         },
         {
           "seed": 1,
@@ -2215,7 +2246,9 @@
           ],
           "final_linear_r2": 0.04485930027223311,
           "final_linear_r2_std": 0.000879864623519364,
-          "final_dominant_axis_r2": 0.04485930027223316
+          "final_dominant_axis_r2": 0.04485930027223316,
+          "acc": 0.6771588320563263,
+          "auc": 0.6058711320084819
         },
         {
           "seed": 2,
@@ -2409,7 +2442,9 @@
           ],
           "final_linear_r2": 0.047499650576138086,
           "final_linear_r2_std": 0.0007379772561873917,
-          "final_dominant_axis_r2": 0.04749965057613813
+          "final_dominant_axis_r2": 0.04749965057613813,
+          "acc": 0.6771588320563263,
+          "auc": 0.6157151785136321
         }
       ]
     },
@@ -2418,10 +2453,13 @@
       "sigma_abs": 0.7373318076133728,
       "task_acc_mean": 0.7933852354922424,
       "task_acc_std": 0.0034754800909626814,
-      "baseline_linear_r2": 0.02616751391055261,
+      "baseline_linear_r2": 0.026102732614599444,
+      "baseline_dominant_axis_r2": 0.026102732614599482,
       "attacked_linear_r2_mean": 0.03407683904947483,
       "attacked_linear_r2_std": 0.00035171751792992386,
       "attacked_dominant_axis_r2_mean": 0.03407683904947489,
+      "attacked_acc_mean": 0.6771588320563263,
+      "attacked_auc_mean": 0.5745710566184052,
       "breaches_tau": false,
       "per_seed_attacks": [
         {
@@ -2616,7 +2654,9 @@
           ],
           "final_linear_r2": 0.03439344685015242,
           "final_linear_r2_std": 0.0006508475609957478,
-          "final_dominant_axis_r2": 0.03439344685015244
+          "final_dominant_axis_r2": 0.03439344685015244,
+          "acc": 0.6771588320563263,
+          "auc": 0.575635679579751
         },
         {
           "seed": 1,
@@ -2810,7 +2850,9 @@
           ],
           "final_linear_r2": 0.03358630413908316,
           "final_linear_r2_std": 0.0008350399511923003,
-          "final_dominant_axis_r2": 0.033586304139083215
+          "final_dominant_axis_r2": 0.033586304139083215,
+          "acc": 0.6771588320563263,
+          "auc": 0.5759390576175036
         },
         {
           "seed": 2,
@@ -3004,7 +3046,9 @@
           ],
           "final_linear_r2": 0.03425076615918891,
           "final_linear_r2_std": 0.0005487693666995579,
-          "final_dominant_axis_r2": 0.034250766159189
+          "final_dominant_axis_r2": 0.034250766159189,
+          "acc": 0.6771588320563263,
+          "auc": 0.5721384326579612
         }
       ]
     },
@@ -3013,10 +3057,13 @@
       "sigma_abs": 1.4746636152267456,
       "task_acc_mean": 0.7807962012036884,
       "task_acc_std": 0.003091057368953331,
-      "baseline_linear_r2": 0.016498897155214614,
+      "baseline_linear_r2": 0.016417621216267237,
+      "baseline_dominant_axis_r2": 0.016417621216267296,
       "attacked_linear_r2_mean": 0.025632875760627487,
       "attacked_linear_r2_std": 0.0001469130594577546,
       "attacked_dominant_axis_r2_mean": 0.02563287576062753,
+      "attacked_acc_mean": 0.6771174156139987,
+      "attacked_auc_mean": 0.5501809741077915,
       "breaches_tau": false,
       "per_seed_attacks": [
         {
@@ -3211,7 +3258,9 @@
           ],
           "final_linear_r2": 0.025810642791507476,
           "final_linear_r2_std": 0.0007182725738551054,
-          "final_dominant_axis_r2": 0.025810642791507504
+          "final_dominant_axis_r2": 0.025810642791507504,
+          "acc": 0.6771588320563263,
+          "auc": 0.5513976221721366
         },
         {
           "seed": 1,
@@ -3405,7 +3454,9 @@
           ],
           "final_linear_r2": 0.025637128342421284,
           "final_linear_r2_std": 0.0005716680762296828,
-          "final_dominant_axis_r2": 0.025637128342421333
+          "final_dominant_axis_r2": 0.025637128342421333,
+          "acc": 0.6771588320563263,
+          "auc": 0.5498853220817077
         },
         {
           "seed": 2,
@@ -3599,7 +3650,9 @@
           ],
           "final_linear_r2": 0.025450856147953706,
           "final_linear_r2_std": 0.0005946049219714318,
-          "final_dominant_axis_r2": 0.025450856147953744
+          "final_dominant_axis_r2": 0.025450856147953744,
+          "acc": 0.6770345827293436,
+          "auc": 0.5492599780695302
         }
       ]
     },
@@ -3608,10 +3661,13 @@
       "sigma_abs": 2.949327230453491,
       "task_acc_mean": 0.7619126497708576,
       "task_acc_std": 0.0008152406305688976,
-      "baseline_linear_r2": 0.008069782587414897,
+      "baseline_linear_r2": 0.008000065902960079,
+      "baseline_dominant_axis_r2": 0.008000065902960162,
       "attacked_linear_r2_mean": 0.009835344033815476,
       "attacked_linear_r2_std": 0.00012051959267824546,
       "attacked_dominant_axis_r2_mean": 0.009835344033815528,
+      "attacked_acc_mean": 0.6758473113826189,
+      "attacked_auc_mean": 0.5211060332330967,
       "breaches_tau": false,
       "per_seed_attacks": [
         {
@@ -3806,7 +3862,9 @@
           ],
           "final_linear_r2": 0.00989295269275125,
           "final_linear_r2_std": 0.0007462916474451027,
-          "final_dominant_axis_r2": 0.009892952692751329
+          "final_dominant_axis_r2": 0.009892952692751329,
+          "acc": 0.6756678401325326,
+          "auc": 0.5204381072317588
         },
         {
           "seed": 1,
@@ -4000,7 +4058,9 @@
           ],
           "final_linear_r2": 0.009945458350110898,
           "final_linear_r2_std": 0.000688301323289169,
-          "final_dominant_axis_r2": 0.009945458350110925
+          "final_dominant_axis_r2": 0.009945458350110925,
+          "acc": 0.6758749223441707,
+          "auc": 0.524117922372414
         },
         {
           "seed": 2,
@@ -4194,7 +4254,9 @@
           ],
           "final_linear_r2": 0.009667621058584281,
           "final_linear_r2_std": 0.0007909370754499109,
-          "final_dominant_axis_r2": 0.009667621058584324
+          "final_dominant_axis_r2": 0.009667621058584324,
+          "acc": 0.6759991716711534,
+          "auc": 0.5187620700951171
         }
       ]
     }
