@@ -484,6 +484,57 @@ utility), but **for true near-chance erasure, blunt isotropic noise remains the 
 direction of information-destruction can be made surgical; the *amount* needed for near-zero
 recovery still costs what isotropic noise costs.
 
+## Experiment 7 — Sealed channel vs the footprint: does race leak through the output?
+
+A natural escape from the wall is *architecture*: split the model into a **public**
+channel P (race must be unrecoverable), a **sealed** channel S (holds race, used by the
+task head but never exposed), and a head D([P,S]). The footprint hypothesis says this
+cannot work — because the decision depends on race via S, the **output** leaks race even
+if P is perfectly hidden. `experiments/sealed_channel.py` tests it on both cells,
+probing race/sex from the public channel **and** from the task outputs with XGBoost+MLP
+(never R²). We give the architecture its best shot: P is hidden with the only mechanism
+that works (a BatchNorm'd noise channel — adversarial gradient-reversal **failed** to
+hide P from a tree, 0.997 AUC, the same probe-shaped-erasure lesson).
+
+**Race/sex recovery (max of XGB,MLP AUC) as the representation is progressively hidden:**
+
+| model (public channel) | HMDA: P | HMDA: **output** | Adult: P | Adult: **output** |
+|---|---|---|---|---|
+| plain (no scrub) | 1.00 | 0.65 | 1.00 | 0.83 |
+| adversarial scrub | 1.00 | 0.67 | 1.00 | 0.76 |
+| noised, public-only | 0.55 | 0.53 | 0.69 | 0.73 |
+| **noised + sealed S** | **0.55** | **0.55** | **0.57** | **0.73** |
+| *label↔attribute floor* | — | 0.51 | — | 0.60 |
+
+*(sealed S holds the attribute by construction: HMDA 0.99, Adult 0.95 AUC. Task lift kept:
+HMDA +0.023, Adult +0.131.)*
+
+**Verdict — the footprint is real, and its size = how much the task actually uses the
+attribute (≈ the label↔attribute correlation):**
+
+- **Adult/sex — FOOTPRINT CONFIRMED (strong).** As the public channel is hidden from 1.00
+  down to **0.57**, the output leak does **not** follow — it plateaus at **0.73** (XGB
+  0.71). Income genuinely depends on sex-correlated signal (the true label alone leaks sex
+  at 0.60), so an accurate income decision *must* encode sex; the sealed channel even
+  *gains* utility (+0.131 vs +0.121) bundled with that leak. Sealing the internal channel
+  is irrelevant — you cannot make the decision without the decision carrying sex.
+- **HMDA/race — no real footprint, for the opposite reason.** Here the output leak
+  **follows** the hidden representation down to **0.55 ≈ chance** (label↔race floor 0.51),
+  and the sealed channel buys **zero** utility (−0.0005). The HMDA loan label barely
+  encodes race, so the achievable task lift doesn't need it — a single noised channel
+  hides race in *both* representation and output while keeping utility, and sealing adds
+  nothing.
+
+**The unifying answer to "can XGBoost recover the attribute from the task output alone?":
+yes, to exactly the extent the task label is correlated with the attribute.** That
+correlation is an irreducible floor on output leakage for any *useful* model — you can
+scrub every internal representation to chance, but the decision itself betrays the
+attribute whenever the decision genuinely depends on it. Sealing relocates the signal
+(public→sealed→output); it never removes it. (Side result, consistent with Exp 5–6:
+adversarial scrubbing fooled its own discriminator but not a fresh tree; only the noise
+channel hid the public representation — and on Adult only the *sealed* architecture, which
+frees P from carrying sex, pushed P near the bar.)
+
 ### Layout
 
 ```
@@ -496,6 +547,8 @@ experiments/smart_erasure_control.py  # Experiment 4 positive control: same eras
 experiments/training_time_erasure.py  # Experiment 4 Stage 2: training-time two-component erasure
 experiments/hardening_test.py         # Experiment 4 Stage 2 hardening: seeds + stronger attackers (overturns the win)
 experiments/honest_reaudit.py         # Experiment 5: re-audit all R²-"stopped" verdicts with XGBoost/MLP (3/21 survive)
+experiments/targeted_noise.py         # Experiment 6: anisotropic vs isotropic noise (subspace noise beats blunt, at the 0.55 bar)
+experiments/sealed_channel.py         # Experiment 7: sealed-channel / footprint test (output leaks attr ∝ task's use of it)
 utils/pcrl_io.py                       # PCRL-specific glue (imports the read-only PCRL repo)
 results/                               # JSON curves + plots
 requirements.txt

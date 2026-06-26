@@ -1,0 +1,275 @@
+{
+  "experiment": "sealed_channel",
+  "cells": [
+    "hmda/race",
+    "adult/sex"
+  ],
+  "honest_auc_bar": 0.55,
+  "alpha": 1.5,
+  "pub_noise": 6.0,
+  "pub_dim": 64,
+  "seal_dim": 16,
+  "seeds": [
+    0,
+    1,
+    2
+  ],
+  "meta": {
+    "hmda/race": {
+      "attr_majority": 0.6452695813136304,
+      "task_majority": 0.8929204511584858,
+      "attr_name": "race",
+      "task_name": "loan_decision",
+      "verdict": "Adversarial scrub FAILED (P race XGB 0.998); only a NOISE channel hides the public channel, driven from max-AUC 1.000 (plain) down to 0.554 (sealed). Sealed S genuinely holds race (XGB 0.988); label\u2194race floor (XGB on the true label) = 0.514. NO footprint here: as the representation is hidden, the OUTPUT leak FOLLOWS it down to 0.553 (\u2248 chance/label floor). The sealed channel adds only -0.0005 task lift \u2014 the task barely needs race, so the decision encodes almost none and a single noised channel already hides race in both representation AND output while keeping utility. The footprint exists only insofar as the decision USES the attribute; on this cell it doesn't."
+    },
+    "adult/sex": {
+      "attr_majority": 0.6771588320563263,
+      "task_majority": 0.7518740940153241,
+      "attr_name": "sex",
+      "task_name": "income",
+      "verdict": "Adversarial scrub FAILED (P sex XGB 0.997); only a NOISE channel hides the public channel, driven from max-AUC 1.000 (plain) down to 0.568 (sealed). Sealed S genuinely holds sex (XGB 0.951); label\u2194sex floor (XGB on the true label) = 0.603. FOOTPRINT CONFIRMED (strong): the representation was hidden by 0.43 AUC but the TASK OUTPUT still leaks sex at 0.728 \u2014 it does NOT follow the representation down to chance. The decision genuinely depends on sex (sealing buys task lift +0.0099 over public-only), and that utility comes bundled with the output leak. You cannot make this decision accurately without the decision encoding sex; sealing the internal channel is irrelevant."
+    }
+  },
+  "rows": [
+    {
+      "cell": "hmda/race",
+      "model": "label",
+      "target": "true label y",
+      "kind": "rep",
+      "xgb_auc": 0.5138321967431266,
+      "xgb_acc": 0.6452908326535735,
+      "mlp_auc": 0.5175118397751193,
+      "mlp_acc": 0.6452908326535735,
+      "task_lift": null,
+      "attr_recovered": false
+    },
+    {
+      "cell": "hmda/race",
+      "model": "plain",
+      "target": "public P",
+      "kind": "rep",
+      "xgb_auc": 0.999799119489086,
+      "xgb_acc": 0.994875656229738,
+      "mlp_auc": 0.9999893773210369,
+      "mlp_acc": 0.9996444332894102,
+      "task_lift": null,
+      "attr_recovered": true
+    },
+    {
+      "cell": "hmda/race",
+      "model": "plain",
+      "target": "output logits",
+      "kind": "output",
+      "xgb_auc": 0.6500500805330017,
+      "xgb_acc": 0.6433665892786179,
+      "mlp_auc": 0.6363693956416622,
+      "mlp_acc": 0.6468385936290811,
+      "task_lift": 0.02185200872197912,
+      "attr_recovered": true
+    },
+    {
+      "cell": "hmda/race",
+      "model": "sealed-adv",
+      "target": "public P",
+      "kind": "rep",
+      "xgb_auc": 0.9984705607717467,
+      "xgb_acc": 0.9854008491769677,
+      "mlp_auc": 0.9999547802637551,
+      "mlp_acc": 0.9987868900462237,
+      "task_lift": null,
+      "attr_recovered": true
+    },
+    {
+      "cell": "hmda/race",
+      "model": "sealed-adv",
+      "target": "output logits",
+      "kind": "output",
+      "xgb_auc": 0.6502125745991562,
+      "xgb_acc": 0.6723557340361005,
+      "mlp_auc": 0.6735547018930882,
+      "mlp_acc": 0.6749283637656607,
+      "task_lift": 0.019483269800931846,
+      "attr_recovered": true
+    },
+    {
+      "cell": "hmda/race",
+      "model": "pub-noised",
+      "target": "public P",
+      "kind": "rep",
+      "xgb_auc": 0.5457565710580701,
+      "xgb_acc": 0.6358578569785195,
+      "mlp_auc": 0.5368823496012495,
+      "mlp_acc": 0.63117274267428,
+      "task_lift": null,
+      "attr_recovered": false
+    },
+    {
+      "cell": "hmda/race",
+      "model": "pub-noised",
+      "target": "output logits",
+      "kind": "output",
+      "xgb_auc": 0.5323687138790847,
+      "xgb_acc": 0.6415678400368117,
+      "mlp_auc": 0.5332212196389863,
+      "mlp_acc": 0.6452908326535735,
+      "task_lift": 0.023185404803363396,
+      "attr_recovered": false
+    },
+    {
+      "cell": "hmda/race",
+      "model": "sealed",
+      "target": "public P",
+      "kind": "rep",
+      "xgb_auc": 0.5539244658342374,
+      "xgb_acc": 0.6357323628453703,
+      "mlp_auc": 0.5354437723532558,
+      "mlp_acc": 0.6275124971240927,
+      "task_lift": null,
+      "attr_recovered": true
+    },
+    {
+      "cell": "hmda/race",
+      "model": "sealed",
+      "target": "sealed S",
+      "kind": "rep",
+      "xgb_auc": 0.9875727699950483,
+      "xgb_acc": 0.956809102507791,
+      "mlp_auc": 0.9932916657679468,
+      "mlp_acc": 0.9714291690196818,
+      "task_lift": null,
+      "attr_recovered": true
+    },
+    {
+      "cell": "hmda/race",
+      "model": "sealed",
+      "target": "output logits",
+      "kind": "output",
+      "xgb_auc": 0.5530513090984254,
+      "xgb_acc": 0.6404383928384682,
+      "mlp_auc": 0.5496837136728437,
+      "mlp_acc": 0.6452908326535735,
+      "task_lift": 0.022714794421698326,
+      "attr_recovered": true
+    },
+    {
+      "cell": "adult/sex",
+      "model": "label",
+      "target": "true label y",
+      "kind": "rep",
+      "xgb_auc": 0.6033502051832492,
+      "xgb_acc": 0.6771575285737951,
+      "mlp_auc": 0.6033502051832492,
+      "mlp_acc": 0.6771575285737951,
+      "task_lift": null,
+      "attr_recovered": true
+    },
+    {
+      "cell": "adult/sex",
+      "model": "plain",
+      "target": "public P",
+      "kind": "rep",
+      "xgb_auc": 0.9992185138848866,
+      "xgb_acc": 0.9880183314008062,
+      "mlp_auc": 0.9999560716067952,
+      "mlp_acc": 0.9974601071172216,
+      "task_lift": null,
+      "attr_recovered": true
+    },
+    {
+      "cell": "adult/sex",
+      "model": "plain",
+      "target": "output logits",
+      "kind": "output",
+      "xgb_auc": 0.807188701650737,
+      "xgb_acc": 0.7499309811716636,
+      "mlp_auc": 0.8337999783788632,
+      "mlp_acc": 0.769145822980509,
+      "task_lift": 0.14164423276040583,
+      "attr_recovered": true
+    },
+    {
+      "cell": "adult/sex",
+      "model": "sealed-adv",
+      "target": "public P",
+      "kind": "rep",
+      "xgb_auc": 0.9967901732268074,
+      "xgb_acc": 0.9741593506708629,
+      "mlp_auc": 0.9985584374812783,
+      "mlp_acc": 0.9829385456352493,
+      "task_lift": null,
+      "attr_recovered": true
+    },
+    {
+      "cell": "adult/sex",
+      "model": "sealed-adv",
+      "target": "output logits",
+      "kind": "output",
+      "xgb_auc": 0.7432838716360473,
+      "xgb_acc": 0.7132129644967146,
+      "mlp_auc": 0.764531930837799,
+      "mlp_acc": 0.7257467837225996,
+      "task_lift": 0.12043901428867254,
+      "attr_recovered": true
+    },
+    {
+      "cell": "adult/sex",
+      "model": "pub-noised",
+      "target": "public P",
+      "kind": "rep",
+      "xgb_auc": 0.6863042691369653,
+      "xgb_acc": 0.6791452708298823,
+      "mlp_auc": 0.6789651943208034,
+      "mlp_acc": 0.6819060239633372,
+      "task_lift": null,
+      "attr_recovered": true
+    },
+    {
+      "cell": "adult/sex",
+      "model": "pub-noised",
+      "target": "output logits",
+      "kind": "output",
+      "xgb_auc": 0.7126223761361556,
+      "xgb_acc": 0.6934459720611783,
+      "mlp_auc": 0.7332939065545179,
+      "mlp_acc": 0.7045994147203357,
+      "task_lift": 0.12093601159660383,
+      "attr_recovered": true
+    },
+    {
+      "cell": "adult/sex",
+      "model": "sealed",
+      "target": "public P",
+      "kind": "rep",
+      "xgb_auc": 0.5684360228554828,
+      "xgb_acc": 0.646181878416432,
+      "mlp_auc": 0.5610999602719979,
+      "mlp_acc": 0.6507095135552979,
+      "task_lift": null,
+      "attr_recovered": true
+    },
+    {
+      "cell": "adult/sex",
+      "model": "sealed",
+      "target": "sealed S",
+      "kind": "rep",
+      "xgb_auc": 0.9512011821674488,
+      "xgb_acc": 0.8921097675445862,
+      "mlp_auc": 0.9682588491865465,
+      "mlp_acc": 0.9176191264977085,
+      "task_lift": null,
+      "attr_recovered": true
+    },
+    {
+      "cell": "adult/sex",
+      "model": "sealed",
+      "target": "output logits",
+      "kind": "output",
+      "xgb_auc": 0.7080594502608425,
+      "xgb_acc": 0.693832477499862,
+      "mlp_auc": 0.7281868752336571,
+      "mlp_acc": 0.7069184473524377,
+      "task_lift": 0.13083454131290118,
+      "attr_recovered": true
+    }
+  ]
+}
