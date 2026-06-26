@@ -1,0 +1,129 @@
+{
+  "experiment": "training_time_erasure",
+  "cell": "hmda/underwriting/race",
+  "task": "loan_decision",
+  "tau": 0.05,
+  "task_majority": 0.8929204511584858,
+  "seeds": [
+    0,
+    1,
+    2
+  ],
+  "lambdas": [
+    0.0,
+    100.0,
+    1000.0,
+    10000.0
+  ],
+  "rows": [
+    {
+      "method": "affine on h (LEACE-init) \u03bb=0",
+      "attacked_r2": 0.7239022796753399,
+      "attacked_r2_std": 0.0070789383723034414,
+      "task_lift": 0.01896175168186472,
+      "stops_attack": false,
+      "arch": "affine_h",
+      "lambda": 0.0
+    },
+    {
+      "method": "affine on h (LEACE-init) \u03bb=100",
+      "attacked_r2": 0.1392821910229084,
+      "attacked_r2_std": 0.04576189992946287,
+      "task_lift": 0.018522522215842236,
+      "stops_attack": false,
+      "arch": "affine_h",
+      "lambda": 100.0
+    },
+    {
+      "method": "affine on h (LEACE-init) \u03bb=1000",
+      "attacked_r2": 0.13352214956923122,
+      "attacked_r2_std": 0.03750653863656672,
+      "task_lift": 0.01827153394954369,
+      "stops_attack": false,
+      "arch": "affine_h",
+      "lambda": 1000.0
+    },
+    {
+      "method": "affine on h (LEACE-init) \u03bb=10000",
+      "attacked_r2": 0.1333434175592815,
+      "attacked_r2_std": 0.04366247520429912,
+      "task_lift": 0.01799962999438694,
+      "stops_attack": false,
+      "arch": "affine_h",
+      "lambda": 10000.0
+    },
+    {
+      "method": "MLP on h \u03bb=0",
+      "attacked_r2": 0.7333655842303629,
+      "attacked_r2_std": 0.008154623855277402,
+      "task_lift": 0.018501606526984033,
+      "stops_attack": false,
+      "arch": "mlp_h",
+      "lambda": 0.0
+    },
+    {
+      "method": "MLP on h \u03bb=100",
+      "attacked_r2": 0.09940498016665678,
+      "attacked_r2_std": 0.004739443128209007,
+      "task_lift": 0.01889900461529011,
+      "stops_attack": false,
+      "arch": "mlp_h",
+      "lambda": 100.0
+    },
+    {
+      "method": "MLP on h \u03bb=1000",
+      "attacked_r2": 0.09563923330809561,
+      "attacked_r2_std": 0.00734815586055593,
+      "task_lift": 0.018710763415566174,
+      "stops_attack": false,
+      "arch": "mlp_h",
+      "lambda": 1000.0
+    },
+    {
+      "method": "MLP on h \u03bb=10000",
+      "attacked_r2": 0.08714396164448797,
+      "attacked_r2_std": 0.001063966170804866,
+      "task_lift": 0.018501606526984033,
+      "stops_attack": false,
+      "arch": "mlp_h",
+      "lambda": 10000.0
+    },
+    {
+      "method": "MLP on raw x (from scratch) \u03bb=0",
+      "attacked_r2": 0.9362710514922981,
+      "attacked_r2_std": 0.006796077189554478,
+      "task_lift": 0.019359149770170725,
+      "stops_attack": false,
+      "arch": "mlp_x",
+      "lambda": 0.0
+    },
+    {
+      "method": "MLP on raw x (from scratch) \u03bb=100",
+      "attacked_r2": 0.022564168724623784,
+      "attacked_r2_std": 0.0009355324218489956,
+      "task_lift": 0.017476737772931572,
+      "stops_attack": true,
+      "arch": "mlp_x",
+      "lambda": 100.0
+    },
+    {
+      "method": "MLP on raw x (from scratch) \u03bb=1000",
+      "attacked_r2": 0.010920118097044296,
+      "attacked_r2_std": 0.00033965929193526684,
+      "task_lift": -2.969380139228317e-05,
+      "stops_attack": true,
+      "arch": "mlp_x",
+      "lambda": 1000.0
+    },
+    {
+      "method": "MLP on raw x (from scratch) \u03bb=10000",
+      "attacked_r2": 0.02065171652039059,
+      "attacked_r2_std": 0.0015823543923654257,
+      "task_lift": -2.969380139228317e-05,
+      "stops_attack": true,
+      "arch": "mlp_x",
+      "lambda": 10000.0
+    }
+  ],
+  "verdict": "YES \u2014 training-time intervention achieves durability where every post-hoc method failed: MLP on raw x (from scratch) \u03bb=100 stops the attack (R\u00b2=0.0226\u2264\u03c4) AND keeps 92% of task lift (+0.0175 vs clean +0.0190). Shaping E during training to be task-compatible \u2014 instead of bolting it onto a frozen rep \u2014 breaks the post-hoc impossibility on HMDA/race."
+}

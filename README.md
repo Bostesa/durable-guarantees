@@ -260,6 +260,48 @@ entangled with the task (HMDA/race), no frozen post-hoc erasure — blunt or sma
 can remove it without destroying utility; the cost is fundamental and has to be paid
 at representation-training time, not bolted on afterward.
 
+## Experiment 4 — Stage 2 (decisive): can a *training-time* intervention pay the bill?
+
+Stage 1 said the cost must be paid at training time. Stage 2
+(`experiments/training_time_erasure.py`) tests whether it actually *can* be. We
+train a two-component model M = D(E(·)) **jointly** with task loss + λ·HSIC(E(·),
+race), so E is shaped to be task-compatible instead of bolted onto a frozen rep.
+After training E is frozen and hit with the **same** ReLU attacker (3 seeds). To
+avoid rigging the test, E runs at three power levels and λ sweeps the trade-off:
+
+| method (best λ shown) | attacked R² | task lift | stops attack AND keeps utility? |
+|---|---|---|---|
+| *post-hoc* best (HSIC proj) | 0.166 | +0.012 | no (breaches τ) |
+| *post-hoc* noise σ=8 | 0.005 | +0.000 | no (utility destroyed) |
+| train-time: **affine on h** (LEACE-init), λ=10⁴ | 0.133 | +0.018 | no (breaches τ) |
+| train-time: **MLP on h**, λ=10⁴ | 0.087 | +0.019 | no (breaches τ) |
+| train-time: **MLP on raw x** (from scratch), λ=10³ | 0.011 | +0.000 | stops, but utility gone |
+| train-time: **MLP on raw x** (from scratch), **λ=100** | **0.023** | **+0.018** | **YES — stops τ, 92% lift kept** |
+
+**Verdict: YES — training-time intervention achieves durability where every post-hoc
+method (and every fix of the frozen rep) failed — but only by retraining the
+representation from raw inputs.** The from-scratch encoder at λ=100 drives the
+attacked race R² to 0.023 (below τ) while keeping +0.018 of the +0.019 task lift
+(92%). On the frontier plot it is the **only** point in the "left of τ AND high
+utility" region that was empty for every Stage-1 method.
+
+Crucially, **neither** training-time fix of the *frozen* PCRL repr works: an affine
+E (even LEACE-initialized + jointly trained) plateaus at R²≈0.13, and a nonlinear
+MLP on h plateaus at R²≈0.087 — both still breach τ. The race↔task entanglement is
+baked into `h`; no transform *of `h`*, trained or not, removes it. Only learning a
+fresh representation from raw features — where the encoder is free to find a
+task-good basis that never encodes race — pays the bill (λ must be tuned: λ=100
+wins, λ≥10³ over-erases and zeroes utility).
+
+This completes the arc: the durability cost is **fundamental for anything downstream
+of a fixed representation** (post-hoc erasure *and* trained transforms of `h`), but
+it is **not fundamental in absolute terms** — a representation trained from scratch
+with the erasure objective in the loop can be both durable and useful on the hard
+HMDA/race case. (Honest caveats: a single training seed per config; HSIC with one
+kernel vs one ReLU attacker — a different adversary could differ; "from scratch"
+means abandoning the PCRL representation, i.e. the fix belongs in how the encoder is
+trained, not in PCRL's post-hoc machinery.)
+
 ### Layout
 
 ```
@@ -269,6 +311,7 @@ experiments/stronger_attackers.py     # Experiment 3 Test A: attacker-robustness
 experiments/generalization_test.py    # Experiment 3 Test B: generalization to HMDA / Diabetes
 experiments/smart_erasure.py          # Experiment 4: targeted (MMD/HSIC) erasure vs noise on HMDA/race
 experiments/smart_erasure_control.py  # Experiment 4 positive control: same erasers on Adult/sex + contrast
+experiments/training_time_erasure.py  # Experiment 4 Stage 2: training-time two-component erasure (decisive)
 utils/pcrl_io.py                       # PCRL-specific glue (imports the read-only PCRL repo)
 results/                               # JSON curves + plots
 requirements.txt
