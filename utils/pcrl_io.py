@@ -156,3 +156,11 @@ def extract_attr(loader, attr_name: str) -> np.ndarray:
     for batch in loader:
         out.append(batch["sensitive_attrs"][attr_name].numpy())
     return np.concatenate(out, axis=0).astype(np.int64)
+
+
+def extract_task_label(loader, task_name: str) -> np.ndarray:
+    """Stack a task label (e.g. 'income') across the loader."""
+    out = []
+    for batch in loader:
+        out.append(batch["task_labels"][task_name].numpy())
+    return np.concatenate(out, axis=0).astype(np.int64)

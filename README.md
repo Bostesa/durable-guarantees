@@ -69,12 +69,60 @@ property of the *frozen* representation only; one downstream nonlinear adapter
 surfaces the nonlinearly-encoded sensitive information the linear certificate
 never bounded. The certificate does not survive downstream fine-tuning.
 
+## Experiment 2 — Does a noise-channel erasure module survive the same attack?
+
+Experiment 1 defeated *linear* (LEACE-style) erasure. A **Gaussian noise
+channel** is the one erasure approach with a provable information-theoretic
+guarantee: `h_noisy = h + N(0, σ²I)` caps the mutual information `I(h_noisy; A)`
+no matter how the downstream attacker is built (data-processing inequality).
+`experiments/noise_channel_test.py` tests whether that guarantee actually stops
+the **same ReLU attacker**, and at what cost to task utility.
+
+- **Stage 1 (σ=0, seeds 0/1/2):** the Experiment-1 breach reproduces tightly —
+  attacked linear R² = **0.104 ± 0.001** (baseline 0.035, breaches τ=0.05).
+- **Stage 2:** the noise is part of the **frozen** module and is **resampled
+  every forward pass** (the attacker faces the *channel*, not a fixed offset it
+  could invert). Sweep σ relative to the repr per-dim std (≈0.37); per σ, run the
+  full 3-seed ReLU attack, the certificate-at-rest (raw linear R²), and task
+  utility (a linear logistic head on `h_noisy` → income).
+
+### Result (Adult s0, MPS) — `results/noise_channel_test.png`
+
+| σ (rel) | task acc (income) | certificate at rest | attacked R² (mean±std) | vs τ=0.05 |
+|---|---|---|---|---|
+| 0.0  | 0.803 | 0.035 | 0.104 ± 0.001 | **BREACH** |
+| 0.25 | 0.801 | 0.034 | 0.087 ± 0.001 | **BREACH** |
+| 0.5  | 0.801 | 0.033 | 0.068 ± 0.001 | **BREACH** |
+| 1.0  | 0.798 | 0.031 | 0.047 ± 0.001 | **STOPPED** |
+| 2.0  | 0.793 | 0.026 | 0.034 ± 0.000 | STOPPED |
+| 4.0  | 0.781 | 0.017 | 0.026 ± 0.000 | STOPPED |
+| 8.0  | 0.762 | 0.008 | 0.010 ± 0.000 | STOPPED |
+
+*(income majority-class baseline = 0.752)*
+
+**The noise channel survives the attack — and cheaply.** Attacked R² falls
+monotonically with σ and drops below τ at **σ ≈ 1.0** (noise std ≈ signal std),
+robustly so by σ=2. This is the opposite of the linear-erasure result: the
+information-theoretic guarantee holds empirically against the nonlinear attacker
+that broke LEACE. The **tradeoff here is favourable** — the leaked sex signal the
+attacker exploits is fragile and drowns in noise (0.104 → 0.034 by σ=2), while
+income is encoded redundantly and is noise-robust, so task accuracy barely
+moves (0.803 → 0.793 at σ=2). Utility only erodes toward the majority baseline at
+large σ=8 (0.762). So there is a **wide operating window (σ ≈ 1–2)** that stops
+this attacker for ≲1 accuracy point.
+
+Caveat (honest scope): "STOPPED" means *this* rank-8 ReLU attacker is held below
+τ; the DPI bound is attacker-agnostic but τ is a specific operating point. The
+fragile-signal/robust-task separation is a property of this representation and
+attribute, not a guarantee it holds for every dataset.
+
 ### Layout
 
 ```
-experiments/falsification_attack.py   # the experiment
+experiments/falsification_attack.py   # Experiment 1: linear erasure is defeated
+experiments/noise_channel_test.py     # Experiment 2: noise-channel durability vs utility
 utils/pcrl_io.py                       # PCRL-specific glue (imports the read-only PCRL repo)
-results/                               # JSON curves + plot
+results/                               # JSON curves + plots
 requirements.txt
 ```
 
@@ -88,7 +136,8 @@ imports its code, including mirroring the `lora_target` auto-detection from
 ```bash
 python3.13 -m venv .venv
 .venv/bin/python -m pip install -r requirements.txt
-.venv/bin/python experiments/falsification_attack.py
+.venv/bin/python experiments/falsification_attack.py   # Experiment 1
+.venv/bin/python experiments/noise_channel_test.py     # Experiment 2
 ```
 
 Runs locally on **MPS/CPU** only — never AWS.
