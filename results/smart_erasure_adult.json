@@ -1,0 +1,146 @@
+{
+  "experiment": "smart_erasure_control",
+  "cell": "adult/income_prediction/sex",
+  "task": "income",
+  "tau": 0.05,
+  "task_majority": 0.7518740940153241,
+  "rows": [
+    {
+      "method": "no erasure (frozen)",
+      "rank": null,
+      "attacked_r2": 0.10362235128290258,
+      "attacked_r2_std": 0.0011845215093431094,
+      "task_lift": 0.050787272005326324,
+      "stops_attack": false
+    },
+    {
+      "method": "LEACE (linear)",
+      "rank": null,
+      "attacked_r2": 0.09472698823899776,
+      "attacked_r2_std": 0.0001440141027705555,
+      "task_lift": 0.048854744811907914,
+      "stops_attack": false
+    },
+    {
+      "method": "noise sigma=1.0",
+      "rank": null,
+      "attacked_r2": 0.046498277435005175,
+      "attacked_r2_std": 0.0011684082043933674,
+      "task_lift": 0.04598356155311493,
+      "stops_attack": true
+    },
+    {
+      "method": "noise sigma=2.0",
+      "rank": null,
+      "attacked_r2": 0.03407683904947483,
+      "attacked_r2_std": 0.00035171751792992386,
+      "task_lift": 0.041511141476918145,
+      "stops_attack": true
+    },
+    {
+      "method": "noise sigma=8.0",
+      "rank": null,
+      "attacked_r2": 0.009835344033815476,
+      "attacked_r2_std": 0.00012051959267824546,
+      "task_lift": 0.010038555755533399,
+      "stops_attack": true
+    },
+    {
+      "method": "LEOPARD-MMD proj",
+      "rank": 1,
+      "attacked_r2": 0.035554092358041,
+      "attacked_r2_std": 0.0002876853561149139,
+      "task_lift": 0.0006519951017870396,
+      "stops_attack": true
+    },
+    {
+      "method": "LEOPARD-MMD proj",
+      "rank": 2,
+      "attacked_r2": 0.03606298785020764,
+      "attacked_r2_std": 0.00015429759501435096,
+      "task_lift": 0.01340667457834821,
+      "stops_attack": true
+    },
+    {
+      "method": "LEOPARD-MMD proj",
+      "rank": 4,
+      "attacked_r2": 0.0358603263043058,
+      "attacked_r2_std": 0.000277473796328983,
+      "task_lift": 0.028149096310996897,
+      "stops_attack": true
+    },
+    {
+      "method": "LEOPARD-MMD proj",
+      "rank": 8,
+      "attacked_r2": 0.036008826399114104,
+      "attacked_r2_std": 0.00021927379774406674,
+      "task_lift": 0.019204256158603328,
+      "stops_attack": true
+    },
+    {
+      "method": "LEOPARD-MMD proj",
+      "rank": 16,
+      "attacked_r2": 0.035823300933753854,
+      "attacked_r2_std": 0.0004964571678332005,
+      "task_lift": 0.03206936576050271,
+      "stops_attack": true
+    },
+    {
+      "method": "LEOPARD-MMD proj",
+      "rank": 32,
+      "attacked_r2": 0.06304052422207063,
+      "attacked_r2_std": 0.021060867340529088,
+      "task_lift": 0.043995819297027484,
+      "stops_attack": false
+    },
+    {
+      "method": "HSIC proj",
+      "rank": 1,
+      "attacked_r2": 0.035918474471056006,
+      "attacked_r2_std": 0.00017276099006126468,
+      "task_lift": 0.033670602577906515,
+      "stops_attack": true
+    },
+    {
+      "method": "HSIC proj",
+      "rank": 2,
+      "attacked_r2": 0.09552582879421116,
+      "attacked_r2_std": 0.002103983024893476,
+      "task_lift": 0.05040076656664261,
+      "stops_attack": false
+    },
+    {
+      "method": "HSIC proj",
+      "rank": 4,
+      "attacked_r2": 0.036080297187518894,
+      "attacked_r2_std": 0.00014868316159402206,
+      "task_lift": 0.0349405490192957,
+      "stops_attack": true
+    },
+    {
+      "method": "HSIC proj",
+      "rank": 8,
+      "attacked_r2": 0.03611843410748924,
+      "attacked_r2_std": 0.0002398958794813701,
+      "task_lift": 0.004351404300616461,
+      "stops_attack": true
+    },
+    {
+      "method": "HSIC proj",
+      "rank": 16,
+      "attacked_r2": 0.03677960214511459,
+      "attacked_r2_std": 0.0011658297768037836,
+      "task_lift": 0.04233936741695458,
+      "stops_attack": true
+    },
+    {
+      "method": "HSIC proj",
+      "rank": 32,
+      "attacked_r2": 0.03466505804187373,
+      "attacked_r2_std": 9.45409339403576e-05,
+      "task_lift": 0.009099899690158711,
+      "stops_attack": true
+    }
+  ],
+  "contrast_verdict": "CONTRAST CONFIRMED. On Adult/sex the leaked signal is FRAGILE: a targeted erasure (HSIC proj r=16) stops the attack (R\u00b2=0.037\u2264\u03c4) while keeping 83% of income lift (+0.042 vs clean +0.051) \u2014 it removes a low-rank, task-separable sex subspace. On HMDA/race the signal is ROBUST and task-entangled: the SAME erasers never reach \u03c4 (best R\u00b2\u22480.17, 3\u00d7\u03c4) and only isotropic noise stops it, destroying all utility. Targeted erasure works iff the protected signal is low-rank-separable from the task \u2014 fragile\u2192cheap, robust\u2192fundamentally costly."
+}

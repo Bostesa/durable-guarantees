@@ -225,6 +225,41 @@ crosses τ sits at zero utility. The robust-nonlinear-encoding + task-entangleme
 that made HMDA/race the hard case is not something a cleverer *frozen, post-hoc*
 erasure removes; it would have to be addressed in how the representation is trained.
 
+### Positive control — the SAME erasers on the EASY cell (Adult/sex)
+
+To turn that negative into a characterization, `experiments/smart_erasure_control.py`
+runs the identical battery on **Adult / income_prediction / sex**, where the leaked
+signal is fragile (Experiments 1-3). Result (`results/smart_erasure_adult.png`):
+
+| method | attacked R² | task lift | stops attack? |
+|---|---|---|---|
+| no erasure (frozen) | 0.104 | +0.051 | no |
+| LEACE (linear) | 0.095 | +0.049 | no |
+| noise σ=1 | 0.047 | +0.046 | yes (91% lift kept) |
+| LEOPARD-MMD proj, r=16 | 0.036 | +0.032 | **yes (63% kept)** |
+| HSIC proj, r=16 | 0.037 | +0.042 | **yes (83% kept)** |
+
+Here the targeted projections **do** stop the attack — they drop attacked R² to
+~0.036 (well below τ) — while keeping most of the income lift (best 83%). Removing a
+**low-rank, task-separable sex subspace** suffices, because the sex signal is
+fragile and concentrated. (Honest nuance: lift varies with rank — e.g. r=1 removes a
+direction shared by sex *and* income and keeps only 1% — but good ranks clearly
+reach the stop-and-keep region. Noise is also cheap here, σ=1 keeps 91%.)
+
+### The characterization
+
+| cell | attack@rest R² | targeted erasure stops + keeps utility? |
+|---|---|---|
+| Adult / income / sex (**fragile**) | 0.104 | **YES** — HSIC r=16, R²=0.037≤τ, 83% lift kept |
+| HMDA / underwriting / race (**robust**) | 0.720 | **NO** — best projection only R²≈0.17 (3×τ); none stop |
+
+**Targeted erasure works iff the protected signal is low-rank-separable from the
+task.** When the attribute is fragile and concentrated (Adult/sex), an MMD/HSIC
+projection removes it cheaply. When it is robustly, nonlinearly diffused and
+entangled with the task (HMDA/race), no frozen post-hoc erasure — blunt or smart —
+can remove it without destroying utility; the cost is fundamental and has to be paid
+at representation-training time, not bolted on afterward.
+
 ### Layout
 
 ```
@@ -233,6 +268,7 @@ experiments/noise_channel_test.py     # Experiment 2: noise-channel durability v
 experiments/stronger_attackers.py     # Experiment 3 Test A: attacker-robustness at fixed σ
 experiments/generalization_test.py    # Experiment 3 Test B: generalization to HMDA / Diabetes
 experiments/smart_erasure.py          # Experiment 4: targeted (MMD/HSIC) erasure vs noise on HMDA/race
+experiments/smart_erasure_control.py  # Experiment 4 positive control: same erasers on Adult/sex + contrast
 utils/pcrl_io.py                       # PCRL-specific glue (imports the read-only PCRL repo)
 results/                               # JSON curves + plots
 requirements.txt
