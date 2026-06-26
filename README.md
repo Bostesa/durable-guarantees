@@ -179,6 +179,52 @@ Adult/sex.**
 task signal. When they are comparably robust (HMDA/race), durability costs all the
 utility. The Adult/sex win is the exception, not the rule.
 
+## Experiment 4 — Can a *smarter* erasure beat blunt noise on HMDA/race?
+
+HMDA/race is the hard case from Experiment 3: race is robustly, nonlinearly
+encoded (attack R²=0.72 at rest while the linear certificate reads 0.040), and the
+only noise level that stops the attack (σ=8) destroys all task utility. Question:
+can a *targeted* erasure remove the nonlinear race signal **without** that utility
+collapse? `experiments/smart_erasure.py` tests two non-noise erasure modules as a
+frozen transform before the same ReLU attacker (3 seeds), all task-agnostic:
+
+1. **LEOPARD-style** — a learned orthogonal **rank-r projection** that removes the
+   subspace minimizing the **class-conditional MMD** of race (Gaussian kernel;
+   higher moments, not just LEACE's linear mean). Swept over r.
+2. **HSIC-style (Obliviator)** — the same rank-r projection, removing the subspace
+   minimizing **HSIC(repr, race)** (independence target). Swept over r.
+
+### Result (HMDA/underwriting/race) — `results/smart_erasure.png`
+
+| method | attacked R² | task lift over majority | stops attack (R²≤τ)? |
+|---|---|---|---|
+| no erasure (frozen repr) | 0.720 | +0.019 | no |
+| LEACE (linear) | 0.651 | +0.019 | no |
+| **noise σ=8 (baseline)** | **0.005** | **+0.000** | yes — but kills utility |
+| LEOPARD-MMD proj, r=8 | 0.393 | +0.019 | no |
+| LEOPARD-MMD proj, r=16 | 0.168 | +0.010 | no |
+| LEOPARD-MMD proj, r=32 | 0.171 | +0.012 | no |
+| HSIC proj, r=8 | 0.386 | +0.019 | no |
+| HSIC proj, r=16 | 0.174 | +0.010 | no |
+| HSIC proj, r=32 | 0.166 | +0.012 | no |
+
+**Verdict: the cost is FUNDAMENTAL on this cell — no smart erasure beats noise.**
+No targeted projection (LEOPARD-MMD or HSIC, any rank up to 32 of 64 dims) gets the
+attacked R² below τ=0.05; the best they reach is ~0.17 (still 3× τ), and pushing
+that far already starts eroding task lift (+0.019 → +0.010). LEACE barely dents it
+(0.72 → 0.65). **Only isotropic noise stops the attack, and it costs all utility.**
+
+Why: the race signal is **not** in a low-rank subspace separable from the task. The
+two objectives (MMD higher-moment matching and HSIC independence) find essentially
+the *same* directions and plateau at R²≈0.17 — after removing the ~16 most
+race-discriminative dimensions, a nonlinear attacker still reconstructs race from
+whatever remains. Removing more linear directions stops helping on race while it
+keeps hurting the task. On the frontier plot, the entire "stop the attack **and**
+keep utility" region (left of τ, high on y) is **empty** — every method that
+crosses τ sits at zero utility. The robust-nonlinear-encoding + task-entanglement
+that made HMDA/race the hard case is not something a cleverer *frozen, post-hoc*
+erasure removes; it would have to be addressed in how the representation is trained.
+
 ### Layout
 
 ```
@@ -186,6 +232,7 @@ experiments/falsification_attack.py   # Experiment 1: linear erasure is defeated
 experiments/noise_channel_test.py     # Experiment 2: noise-channel durability vs utility (Adult)
 experiments/stronger_attackers.py     # Experiment 3 Test A: attacker-robustness at fixed σ
 experiments/generalization_test.py    # Experiment 3 Test B: generalization to HMDA / Diabetes
+experiments/smart_erasure.py          # Experiment 4: targeted (MMD/HSIC) erasure vs noise on HMDA/race
 utils/pcrl_io.py                       # PCRL-specific glue (imports the read-only PCRL repo)
 results/                               # JSON curves + plots
 requirements.txt

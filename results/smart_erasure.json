@@ -1,0 +1,144 @@
+{
+  "experiment": "smart_erasure",
+  "cell": "hmda/underwriting/race",
+  "task": "loan_decision",
+  "tau": 0.05,
+  "sigma_h": 0.5209728479385376,
+  "task_majority": 0.8929204511584858,
+  "seeds": [
+    0,
+    1,
+    2
+  ],
+  "ranks": [
+    1,
+    2,
+    4,
+    8,
+    16,
+    32
+  ],
+  "rows": [
+    {
+      "method": "no erasure (frozen)",
+      "rank": null,
+      "attacked_r2": 0.7203979796347803,
+      "attacked_r2_std": 0.006309320830653493,
+      "task_lift": 0.019003583059581126,
+      "stops_attack": false
+    },
+    {
+      "method": "LEACE (linear)",
+      "rank": null,
+      "attacked_r2": 0.6505535719525329,
+      "attacked_r2_std": 0.0007851967311543889,
+      "task_lift": 0.018668932037849768,
+      "stops_attack": false
+    },
+    {
+      "method": "noise sigma=8.0",
+      "rank": null,
+      "attacked_r2": 0.005115831896396093,
+      "attacked_r2_std": 0.00019719590647854037,
+      "task_lift": 0.00013763170947345138,
+      "stops_attack": true
+    },
+    {
+      "method": "LEOPARD-MMD proj",
+      "rank": 1,
+      "attacked_r2": 0.6649029632851702,
+      "attacked_r2_std": 0.008704198641789574,
+      "task_lift": 0.018878088926431835,
+      "stops_attack": false
+    },
+    {
+      "method": "LEOPARD-MMD proj",
+      "rank": 2,
+      "attacked_r2": 0.5859343865587843,
+      "attacked_r2_std": 0.011576746380928024,
+      "task_lift": 0.018878088926431873,
+      "stops_attack": false
+    },
+    {
+      "method": "LEOPARD-MMD proj",
+      "rank": 4,
+      "attacked_r2": 0.49429676264552674,
+      "attacked_r2_std": 0.01052983268036386,
+      "task_lift": 0.01912907719273042,
+      "stops_attack": false
+    },
+    {
+      "method": "LEOPARD-MMD proj",
+      "rank": 8,
+      "attacked_r2": 0.3929058964784684,
+      "attacked_r2_std": 0.016069884098899704,
+      "task_lift": 0.018878088926431835,
+      "stops_attack": false
+    },
+    {
+      "method": "LEOPARD-MMD proj",
+      "rank": 16,
+      "attacked_r2": 0.16808869846477784,
+      "attacked_r2_std": 0.004667457478766382,
+      "task_lift": 0.010177162361415415,
+      "stops_attack": false
+    },
+    {
+      "method": "LEOPARD-MMD proj",
+      "rank": 32,
+      "attacked_r2": 0.17110841621340933,
+      "attacked_r2_std": 0.005868400617444272,
+      "task_lift": 0.012289646936094911,
+      "stops_attack": false
+    },
+    {
+      "method": "HSIC proj",
+      "rank": 1,
+      "attacked_r2": 0.6623773012906206,
+      "attacked_r2_std": 0.009946872761219522,
+      "task_lift": 0.018878088926431835,
+      "stops_attack": false
+    },
+    {
+      "method": "HSIC proj",
+      "rank": 2,
+      "attacked_r2": 0.5836480685994606,
+      "attacked_r2_std": 0.008199833252036052,
+      "task_lift": 0.018878088926431873,
+      "stops_attack": false
+    },
+    {
+      "method": "HSIC proj",
+      "rank": 4,
+      "attacked_r2": 0.49443179661104164,
+      "attacked_r2_std": 0.004958154956789709,
+      "task_lift": 0.01912907719273042,
+      "stops_attack": false
+    },
+    {
+      "method": "HSIC proj",
+      "rank": 8,
+      "attacked_r2": 0.38625815910159317,
+      "attacked_r2_std": 0.015519811669668565,
+      "task_lift": 0.018878088926431835,
+      "stops_attack": false
+    },
+    {
+      "method": "HSIC proj",
+      "rank": 16,
+      "attacked_r2": 0.17392381328338025,
+      "attacked_r2_std": 0.007130945626095303,
+      "task_lift": 0.010177162361415415,
+      "stops_attack": false
+    },
+    {
+      "method": "HSIC proj",
+      "rank": 32,
+      "attacked_r2": 0.1658343734228008,
+      "attacked_r2_std": 0.0017992706484757826,
+      "task_lift": 0.012289646936094875,
+      "stops_attack": false
+    }
+  ],
+  "verdict": "No smart erasure (LEOPARD-MMD or HSIC, any rank) stops the attack (R\u00b2\u2264\u03c4). The robust nonlinear race signal is NOT removable by a low-rank linear projection; only isotropic noise stops it, and that costs all utility (noise \u03c38 lift +0.0001). The cost appears FUNDAMENTAL on this cell."
+}
