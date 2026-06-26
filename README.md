@@ -276,14 +276,14 @@ avoid rigging the test, E runs at three power levels and λ sweeps the trade-off
 | train-time: **affine on h** (LEACE-init), λ=10⁴ | 0.133 | +0.018 | no (breaches τ) |
 | train-time: **MLP on h**, λ=10⁴ | 0.087 | +0.019 | no (breaches τ) |
 | train-time: **MLP on raw x** (from scratch), λ=10³ | 0.011 | +0.000 | stops, but utility gone |
-| train-time: **MLP on raw x** (from scratch), **λ=100** | **0.023** | **+0.018** | **YES — stops τ, 92% lift kept** |
+| train-time: **MLP on raw x** (from scratch), **λ=100** | **0.023** | **+0.018** | apparent **YES** — *overturned by hardening, see below* |
 
-**Verdict: YES — training-time intervention achieves durability where every post-hoc
-method (and every fix of the frozen rep) failed — but only by retraining the
-representation from raw inputs.** The from-scratch encoder at λ=100 drives the
-attacked race R² to 0.023 (below τ) while keeping +0.018 of the +0.019 task lift
-(92%). On the frontier plot it is the **only** point in the "left of τ AND high
-utility" region that was empty for every Stage-1 method.
+**Apparent verdict (rank-8 ReLU attacker / R² certificate): YES.** Measured the same
+way as every prior experiment, the from-scratch encoder at λ=100 drives the attacked
+race R² to 0.023 (below τ) while keeping +0.018 of the +0.019 task lift (92%) — the
+only point in the "left of τ AND high utility" region that was empty for every
+Stage-1 method. **But this verdict does not survive a stronger attacker — see the
+hardening test below, which overturns it.**
 
 Crucially, **neither** training-time fix of the *frozen* PCRL repr works: an affine
 E (even LEACE-initialized + jointly trained) plateaus at R²≈0.13, and a nonlinear
@@ -293,14 +293,62 @@ fresh representation from raw features — where the encoder is free to find a
 task-good basis that never encodes race — pays the bill (λ must be tuned: λ=100
 wins, λ≥10³ over-erases and zeroes utility).
 
-This completes the arc: the durability cost is **fundamental for anything downstream
-of a fixed representation** (post-hoc erasure *and* trained transforms of `h`), but
-it is **not fundamental in absolute terms** — a representation trained from scratch
-with the erasure objective in the loop can be both durable and useful on the hard
-HMDA/race case. (Honest caveats: a single training seed per config; HSIC with one
-kernel vs one ReLU attacker — a different adversary could differ; "from scratch"
-means abandoning the PCRL representation, i.e. the fix belongs in how the encoder is
-trained, not in PCRL's post-hoc machinery.)
+## Experiment 4 — Stage 2 *hardening*: the from-scratch "win" does not survive a real attacker
+
+The Stage-2 headline rested on one training seed and one rank-8 ReLU attacker — the
+same R²-certificate-shaped instrument that Experiment 1 already proved is blind to
+nonlinearly-encoded signal. `experiments/hardening_test.py` stress-tests it two ways.
+
+**Part A — error bars (3 training seeds).** The result is *reproducible*: all three
+seeds land below τ with essentially identical utility.
+
+| train seed | attacked R² (rank-8) | task lift |
+|---|---|---|
+| 0 | 0.0226 | +0.0175 |
+| 1 | 0.0187 | +0.0177 |
+| 2 | 0.0194 | +0.0174 |
+| **mean ± std** | **0.0202 ± 0.0017** | **+0.0175 ± 0.0001** |
+
+So it is *not* a lucky seed. But Part A only confirms the **rank-8 R² number** is stable — it says nothing about whether that number measures the right thing.
+
+**Part B — stronger attackers (vs the frozen from-scratch encoder, seed 0).** Replace
+the rank-8 ReLU probe with the full Experiment-3 battery. The R²-certificate attackers
+still read "stopped" — but an honest nonlinear classifier recovers race outright:
+
+| attacker | attacked R² | race acc | race AUC | verdict |
+|---|---|---|---|---|
+| rank-8 ReLU LoRA | 0.023 | 0.645 | 0.55 | ≤ τ (stops) |
+| rank-32 ReLU LoRA | 0.021 | 0.645 | 0.56 | ≤ τ (stops) |
+| **MLP probe (256-256)** | n/a | **0.730** | **0.74** | **recovers race** |
+| **XGBoost probe** | n/a | **0.860** | **0.91** | **recovers race** |
+| *ref:* MLP on raw `h` | n/a | 0.976 | 1.00 | (race present) |
+| *ref:* XGB on raw `h` | n/a | 0.984 | 1.00 | (race present) |
+
+*(race majority acc = 0.645; chance AUC = 0.5; the reference rows confirm the probes
+can find race when it is present, so they are not broken.)*
+
+**Verdict: the constructive Stage-2 result DOES NOT hold.** Against the rank-8 ReLU /
+R² certificate the from-scratch encoder looks durable; against a gradient-boosted
+probe, race is recovered at **86% accuracy (0.91 AUC)** from the *same* encoder. The
+HSIC training penalty drove down the kernel-dependence statistic and the linear R²,
+but left race trivially decodable by a tree ensemble. The apparent win was the
+certificate's blindness — the exact failure mode Experiment 1 falsified — reappearing
+in our *own* constructive result. The from-scratch encoder did remove *some* race
+(XGB AUC 1.00→0.91), but nowhere near hiding it.
+
+This completes the arc, and it is more honest and more decisive than the apparent
+Stage-2 win: **the durability cost on HMDA/race is fundamental even at training time,
+once you measure it with an honest attacker.** Race is entangled with the loan
+decision itself, so any underwriting-useful representation keeps enough signal for a
+strong probe to recover race; and pushing the HSIC penalty harder (λ ≥ 10³) only
+trades that leak for zero utility. The durability/utility frontier on HMDA/race is not
+escaped by post-hoc erasure, by trained transforms of `h`, **or** by a from-scratch
+encoder — the bill is fundamental, and the lesson loops back to Experiment 1: a
+guarantee is only as good as the strongest attacker you measure it against, and an
+R²/linear certificate is not that attacker. (Honest caveats: one HSIC kernel and one
+λ=100 setting; a different training objective — adversarial, or HSIC over a richer
+kernel family — might do better, but the burden of proof now sits with it, measured
+against XGBoost, not against the linear certificate.)
 
 ### Layout
 
@@ -311,7 +359,8 @@ experiments/stronger_attackers.py     # Experiment 3 Test A: attacker-robustness
 experiments/generalization_test.py    # Experiment 3 Test B: generalization to HMDA / Diabetes
 experiments/smart_erasure.py          # Experiment 4: targeted (MMD/HSIC) erasure vs noise on HMDA/race
 experiments/smart_erasure_control.py  # Experiment 4 positive control: same erasers on Adult/sex + contrast
-experiments/training_time_erasure.py  # Experiment 4 Stage 2: training-time two-component erasure (decisive)
+experiments/training_time_erasure.py  # Experiment 4 Stage 2: training-time two-component erasure
+experiments/hardening_test.py         # Experiment 4 Stage 2 hardening: seeds + stronger attackers (overturns the win)
 utils/pcrl_io.py                       # PCRL-specific glue (imports the read-only PCRL repo)
 results/                               # JSON curves + plots
 requirements.txt
