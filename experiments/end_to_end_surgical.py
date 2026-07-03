@@ -118,9 +118,12 @@ CELLS = [
 #  Arm D — the end-to-end trained surgical channel                             #
 # --------------------------------------------------------------------------- #
 def train_e2e_surgical(X_t, attr_np, task_np, n_attr, n_task, *, rank, sigma, lam,
-                       device, seed=0, steps=TRAIN_STEPS):
+                       device, seed=0, steps=TRAIN_STEPS, return_clean=False):
     """Jointly train encoder + learned attribute-subspace Q + task head through
-    subspace noise. Returns (exposed rep h', own-head logits), both np over all rows."""
+    subspace noise. Returns (exposed rep h', own-head logits), both np over all rows.
+    With return_clean=True additionally returns the PRE-noise rep h and the learned
+    subspace Q (needed by the Tier-2 channel-aware Gaussian-LRT attacker); the extra
+    captures consume no RNG, so the exposed rep is bit-identical either way."""
     torch.manual_seed(seed)
     d_in = X_t.shape[1]
     E = _mlp(d_in, 128, PUB_DIM).to(device)
@@ -155,15 +158,21 @@ def train_e2e_surgical(X_t, attr_np, task_np, n_attr, n_task, *, rank, sigma, la
     E.eval(); bn.eval()
     with torch.no_grad():
         Q, _ = torch.linalg.qr(M)
-        P_all, L_all = [], []
+        P_all, L_all, H_all = [], [], []
         for i in range(0, n, 4096):
             h = bn(E(X_t[i:i + 4096]))
             z = torch.randn(h.shape[0], rank, device=device)
             hn = h + sigma * (z @ Q.T)                  # one fresh draw per row (exposed)
             P_all.append(hn.cpu().numpy())
             L_all.append(D(hn).cpu().numpy())
-    return (np.concatenate(P_all).astype(np.float32),
-            np.concatenate(L_all).astype(np.float32))
+            if return_clean:
+                H_all.append(h.cpu().numpy())
+    P_np = np.concatenate(P_all).astype(np.float32)
+    L_np = np.concatenate(L_all).astype(np.float32)
+    if return_clean:
+        return P_np, L_np, np.concatenate(H_all).astype(np.float32), \
+            Q.cpu().numpy().astype(np.float64)
+    return P_np, L_np
 
 
 # --------------------------------------------------------------------------- #
@@ -326,6 +335,7 @@ def finalize_e2e(kind, chosen, X_t, attr, task, n_attr, n_task, task_maj, device
               f"lift={per['lift'][-1]:+.4f} (LR-through {per['lr_lift'][-1]:+.4f})", flush=True)
     final = {f"{k}_mean": float(np.mean(v)) for k, v in per.items()}
     final.update({f"{k}_std": float(np.std(v)) for k, v in per.items()})
+    final["per_seed"] = {k: [float(x) for x in v] for k, v in per.items()}
     final["rep_max_mean"] = float(max(final["rep_xgb_mean"], final["rep_mlp_mean"],
                                       final["rep_lora_mean"]))
     final["out_max_mean"] = float(max(final["out_xgb_mean"], final["out_mlp_mean"],

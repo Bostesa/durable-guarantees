@@ -54,6 +54,28 @@ artifacts** that an adapter can dissolve.
 > over the 0.55 bar), sharpening the honest scope of Exp 8/10: the verdicts are
 > battery-relative. Experiment 12 picks the two CelebA vision cells by measurement:
 > **Smiling→Young (predictor 0.522, low) and Attractive→Young (0.734, high)**.
+>
+> **The final block (Experiments 13–15) closes the loop.** The Gaussian-LRT joins the
+> battery as a standard member and the certification splits into **two explicit tiers**
+> (Tier 1 black-box = XGB+MLP+LoRA-32; Tier 2 informed = +LRT). Re-certified at both
+> tiers (Exp 14): Tier 2 costs real σ and utility on the blunt e2e channels (HMDA
+> loan_decision 95%→55%, loan_amount_band 57%→22%), and **every surgical channel —
+> post-hoc and end-to-end — holds Tier 1 but is demolished at Tier 2** (LRT 0.66–0.94):
+> with no noise in the surviving subspace, an informed adversary reads the complement
+> at full strength, and no in-family σ-escalation fixes it. Surgical destruction is a
+> black-box-tier method; only full-rank noise buys the informed tier. The CelebA run
+> (Exp 13) confirms the LOW cell prediction (Smiling→Young durable removal is cheap:
+> 99% utility, everything ≤0.55) but **falsifies the HIGH cell's numeric gauge**:
+> Attractive→Young cost 0.19 (predicted ≈1) with output floor ≈0.53 (predicted 0.73) —
+> because PCRL's vision representation only supports 0.565 task accuracy, and the
+> *achieved output's* coupling with Young (0.536–0.540) matches the measured floor
+> exactly. The footprint law survives in its causal (achieved-output) form; the
+> label-based predictor is an upper bound that is loose off the high-accuracy regime.
+> Hardening to 5 seeds (Exp 15) reproduces every headline except one, flagged: the
+> hard-cell e2e-surgical winner (r=32 σ=8) **flips to breaching at 5 seeds** (rep max
+> 0.552, 3/5 seeds over 0.55 via LoRA; all hold at 0.57); the robust operating point
+> is σ=16 — ≤0.55 on all 5 seeds at **85%±2** utility (vs the quoted 90% at the bar's
+> edge). Exp-8's HMDA headline hardens cleanly (95% at 5 seeds).
 
 ## Experiment 1 — Falsification attack on PCRL's compliance certificate
 
@@ -995,6 +1017,143 @@ PCRL's vision encoder forward passes over the 64×64 images (202k) to extract
 representations, then the standard pipeline — end-to-end noised channel + full
 battery (XGBoost + MLP + rank-32 LoRA) on representation and output.
 
+## Experiment 13 — the full CelebA pipeline: does the story survive a change of modality?
+
+The two scan-picked cells (Exp 12) get the complete standard pipeline
+(`experiments/celeba_pipeline.py`). X is the **frozen PCRL vision representation**
+(train partition, N=162,770, 128-d per purpose) extracted through PCRL's trained
+`celeba_v2` CNN encoder by `experiments/celeba_extract.py` (checkpointed forward pass
+over all 202,599 images, deterministic eval transform, both purposes in one pass).
+Protocol identical to Exp 10: the 2×2 {blunt, surgical} × {post-hoc, e2e}, Tier-1
+vetted (XGB + MLP + LoRA-32 ≤ 0.55, e2e winners over 3 training seeds, rep AND output
+batteries), plus the Tier-2 (LRT) add-on and the output footprint.
+
+**Scope fact discovered up front: the vision input is already partially scrubbed.**
+Both purposes list Young as a disallowed attribute, so PCRL's purpose training already
+suppressed it: Young is recoverable from raw X at only XGB **0.571 / 0.608**
+(smile / attractiveness purpose), and the tasks themselves are only weakly present
+(Smiling 0.674, Attractive 0.633). This is the realistic vision regime — and it is
+exactly what breaks the numeric gauge below.
+
+**Utility kept at Tier-1 (≤0.55) protection, % of each family's clean lift:**
+
+| cell (predictor) | post-hoc blunt | post-hoc surgical | e2e blunt | e2e surgical |
+|---|---|---|---|---|
+| Smiling→Young (0.522) | 23% | **98%** (r=8, σ=16) | 29% | **99%** (r=8, σ=4, λ=100) |
+| Attractive→Young (0.734) | 28% | **81%** (r=32, σ=16) | 51% | **78%** (r=32, σ=8, λ=10) |
+
+*(all winners LoRA-vetted; outputs of every winner ≤ 0.515 (low cell) / ≤ 0.553 (high
+cell). Own-head e2e lift is unstable on CelebA (some seeds' heads undertrain, e.g. e2e
+blunt lift std ±0.03–0.04); the retrained-LR cross-check is stable and agrees with the
+post-hoc numbers, so the arm comparison uses both.)*
+
+**Prediction verdicts:**
+
+1. **Smiling→Young removal is CHEAP — HELD.** 98–99% of the lift kept with the
+   representation AND output at ≈ chance (≤ 0.515), reproducing the tabular
+   below-the-wall pattern on vision.
+2. **Attractive→Young costs ≈1 with an output floor near 0.73 — DID NOT HOLD.**
+   Measured Tier-1 cost is **0.19** (81% kept) and the output floor is **0.526–0.553**,
+   nowhere near 0.73. Even the *clean, unprotected* model's output leaks Young at only
+   0.561. **Why (reconciliation, measured):** the footprint law ties output leakage to
+   how much the *decision* carries the attribute. The label couples with Young at 0.734,
+   but the achievable model is weak (accuracy 0.565 vs majority 0.514 — the purpose rep
+   was never a strong Attractive predictor), and the coupling of the model's **achieved
+   predictions** with Young is **0.536 (clean) / 0.540 (winner)** — matching the
+   measured output floor almost exactly (low cell: 0.502–0.505 vs floor ≈ 0.51). So the
+   law survives in its causal form — *the output leaks what the output actually encodes
+   of the label* — but the label-based predictor is an **upper bound** on the floor and
+   the cost, and it is loose whenever the task is only weakly learnable from the
+   deployed representation. This is the block's most important scope discovery: the
+   diagnostic's impossibility half ("predictor > 0.55 ⇒ durable removal costs ~all
+   utility") presumes the model can approach the label; on an already-scrubbed,
+   hard-task vision representation it can't, and durable removal gets *cheaper* than
+   the gauge says, never more expensive.
+
+**Tabular patterns checked on vision:** **surgical-beats-blunt generalizes** (98 vs 23,
+81 vs 28 post-hoc; 99 vs 29, 78 vs 51 e2e) — the biggest arm gaps in the project,
+because blunt noise must drown a 0.57-leak rep to reach the bar while the HSIC subspace
+is small. **e2e-beats-post-hoc does NOT generalize: it ties** (99 vs 98, 78 vs 81) —
+on a frozen, already-shaped vision rep there is little left for end-to-end shaping to
+re-route (deviation noted as scope, consistent with the mechanism). **Tier 2 behaves
+exactly as in Exp 14:** the blunt arms reach Tier 2 (low cell: at the Tier-1 winner
+itself, LRT 0.521–0.522; high cell: iso σ=16 / e2e σ=16 at 10–41% utility), the
+surgical arms breach it (LRT 0.552–0.621) with no in-family fix — though far more
+mildly than tabular (0.56–0.62 vs 0.79–0.94) because the complement only ever held a
+0.57–0.61 leak.
+
+## Experiment 14 — two-tier certification: the battery grows the LRT, and every key operating point is re-certified
+
+Experiment 11's side finding (the channel-aware Gaussian-LRT beats the battery at
+operating σ) is now institutionalized (`utils/battery.py`,
+`experiments/two_tier_certification.py`): the LRT — fit class Gaussians
+`N(μ_k, Σ_k + Σ_noise)` on the **clean pre-noise representation**, integrate the known
+channel analytically (`Σ_noise = σ²I` blunt; `σ²QQᵀ` surgical), score held-out noised
+rows — joins XGB + MLP + LoRA-32 as a standard member, and every verdict now names its
+tier:
+
+* **TIER 1 (black-box):** XGB + MLP + LoRA-32 — the attacker sees only the deployed
+  noised representation (the standing battery of Exp 5–10).
+* **TIER 2 (informed):** + Gaussian-LRT — the attacker also has clean-representation
+  side information and knows the channel (the vendor themselves, a pipeline auditor, or
+  an attacker who can average repeated fresh-noise queries).
+
+**The two-tier table** (e2e cells: 5 training seeds, mean±std; utility = own-head lift,
+% of the 5-seed clean lift):
+
+| cell | Tier-1 point | utility @ T1 | Tier-2 point | utility @ T2 |
+|---|---|---|---|---|
+| e2e hmda/race/loan_decision (pred 0.514) | σ=8 | +0.0211±0.0005 (**95%**) | σ=20 | +0.0124±0.0010 (**55%**) |
+| e2e hmda/race/loan_amount_band (0.584) | σ=12 | +0.2315±0.0029 (**57%**) | σ=24 | +0.0889±0.0020 (**22%**) |
+| e2e adult/sex/income (0.603) | σ=32 | −0.0008±0.0021 (−1%) | σ=64 | −0.0100±0.0022 (−7%) |
+| post-hoc surgical easy (winner r=16 σ=16) | winner | +0.0184 (88%) | sub r=64 σ=32 | −0.0000 (0%) |
+| post-hoc surgical middle (r=8 σ=16) | winner | +0.3327 (81%) | sub r=64 σ=16 | +0.0760 (19%) |
+| post-hoc surgical hard (r=32 σ=16) | winner | +0.0778 (53%) | iso σ=32 | +0.0001 (0%) |
+
+*(Tier-1 points match the published results — Exp-8's σ=8/96% reproduces as 95%±;
+at those points the LRT reads 0.578–0.585, i.e. every Tier-1 headline is genuinely
+Tier-1-only. "sub r=64" of a 64-dim rep is full-rank anisotropic noise — the surgical
+family collapses onto blunt noise to buy Tier 2.)*
+
+**The structural finding — surgical channels are a Tier-1 technology.** The Exp-9
+post-hoc surgical winners hold Tier 1 exactly as published, but the informed LRT
+recovers the attribute from them at **0.923 / 0.944 / 0.793** — near-clean recovery —
+because subspace noise leaves the complement noise-free and an informed adversary reads
+it at full strength. No surgical σ-escalation helps (σ_rel up to 64: LRT unchanged).
+The Exp-10 **e2e** surgical winners breach Tier 2 the same way (LRT **0.841 / 0.855 /
+0.663**, no fix within σ ≤ 128–256): HSIC shaping concentrated everything the *battery*
+could see into the destroyed subspace, but not the Gaussian class structure the LRT
+reads. This is Exp-11's "surgical channels have no DPI ceiling" made empirical, and the
+honest scope of Exp 9/10 sharpened: **surgical destruction's near-free protection is
+real at the black-box tier and does not exist at the informed tier; at Tier 2 the only
+mechanism is full-rank noise, at full-rank prices** (55% easy / 22% middle / ~0% hard).
+
+## Experiment 15 — hardening: every headline number at 5 training seeds
+
+`experiments/hardening_seeds.py` re-runs the Exp-10 e2e winners (both arms), the
+hard-cell edge case, and Exp-8's HMDA Part A at **5 training seeds**
+(`results/hardening_seeds.json`, per-seed values stored):
+
+| cell | e2e blunt (C) | e2e surgical (D) | D rep_max | D out_max |
+|---|---|---|---|---|
+| easy hmda/race/loan_decision | 95%±2 | **102%±3** | 0.509 | 0.525 |
+| middle hmda/race/loan_amount_band | 39%±1 | **100%±1** | 0.531 | **0.700** |
+| hard adult/sex/income | −1%±1 | **90%±3** | **0.552** | 0.613 |
+
+* **Everything reproduces** (3-seed headline 104/100/90 → 5-seed 102/100/90; clean
+  lifts and the footprint floors move by ≤0.01) — **except one number, flagged loudly:**
+* **The hard-cell winner (r=32 σ=8 λ=100) flips its bar verdict at 5 seeds.** Per-seed
+  rep max: 0.547 / 0.540 / **0.561** / **0.554** / **0.558** — 3/5 seeds breach 0.55
+  (always via the LoRA), mean 0.552; all 5 hold at a 0.57 bar. Exp-10's "at the bar,
+  not comfortably under it" caveat was the right call, and 5 seeds settle it: **at the
+  0.55 bar the σ=8 config does not certify.** The robust operating point is **σ=16**:
+  rep max per seed 0.537/0.536/0.537/0.528/0.540 (worst 0.540 — holds on every seed),
+  utility **85%±2** (lift +0.1225±0.0031 of clean +0.1435). The honest hard-cell
+  headline is therefore **85% at a robust ≤0.55, or 90% at a 0.57 bar** — not 90% at 0.55.
+* **Exp-8's HMDA constructive headline hardens cleanly:** at 5 seeds, P max 0.535 /
+  output max 0.539 (all attackers 0.529–0.539), lift +0.0211±0.0005 = **95%** of clean
+  (3-seed: ~0.53 / 96%).
+
 ### Layout
 
 ```
@@ -1017,6 +1176,11 @@ experiments/surgical_vs_blunt.py      # Experiment 9 Goal 3: HSIC-subspace vs is
 experiments/end_to_end_surgical.py    # Experiment 10: end-to-end trained surgical channel vs post-hoc (2x2 factorial)
 experiments/mi_ceiling.py             # Experiment 11: the DPI certificate is VACUOUS at operating σ (theory check)
 experiments/celeba_coupling_scan.py   # Experiment 12 (scan): label-only coupling scan to pick the two CelebA cells
+experiments/celeba_extract.py         # Experiment 13 (step 1): checkpointed CelebA forward pass through PCRL's vision encoder
+experiments/celeba_pipeline.py        # Experiment 13: the full CelebA pipeline on both cells (2x2 + tiers + footprint)
+experiments/two_tier_certification.py # Experiment 14: two-tier (black-box vs informed-LRT) re-certification of the key operating points
+experiments/hardening_seeds.py        # Experiment 15: every headline number at 5 training seeds (hard-cell edge case settled)
+utils/battery.py                       # the standing battery: Tier 1 (XGB+MLP+LoRA32) and Tier 2 (+ channel-aware Gaussian-LRT)
 utils/pcrl_io.py                       # PCRL-specific glue (imports the read-only PCRL repo)
 results/                               # JSON curves + plots
 requirements.txt

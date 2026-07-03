@@ -94,7 +94,28 @@ _LOADER_CACHE: dict[str, list] = {}
 #  Data + probes                                                              #
 # --------------------------------------------------------------------------- #
 def load_cell(dataset, attr_name, task_name):
-    """Raw features X, attribute, task label, class counts, and majorities."""
+    """Raw features X, attribute, task label, class counts, and majorities.
+
+    dataset="celeba" (Experiment 13): X is the frozen PCRL vision representation
+    of the train partition, extracted once by experiments/celeba_extract.py
+    (per-purpose 128-d; the purpose is implied by the task). Labels are PCRL's
+    own 0/1 CelebA labels. Everything downstream is unchanged."""
+    if dataset == "celeba":
+        cache = REPO_ROOT / "data_cache" / "celeba" / "train.npz"
+        if not cache.exists():
+            raise FileNotFoundError(
+                f"{cache} missing — run experiments/celeba_extract.py first")
+        purpose = {"Smiling": "smile_detection",
+                   "Attractive": "attractiveness_prediction"}[task_name]
+        d = np.load(cache)
+        X = d[f"rep_{purpose}"].astype(np.float32)
+        attr = d[f"label_{attr_name}"].astype(np.int64)
+        task = d[f"label_{task_name}"].astype(np.int64)
+        n_attr = int(attr.max()) + 1
+        n_task = int(task.max()) + 1
+        attr_maj = float(np.bincount(attr).max() / len(attr))
+        task_maj = float(np.bincount(task).max() / len(task))
+        return X, attr, task, n_attr, n_task, attr_maj, task_maj
     if dataset not in _LOADER_CACHE:
         _, _, loader = build_train_loader(dataset)
         _LOADER_CACHE[dataset] = list(loader)
