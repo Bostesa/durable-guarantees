@@ -34,6 +34,15 @@ artifacts** that an adapter can dissolve.
 > (HSIC-subspace) noise beats blunt isotropic noise at matched full-battery protection on
 > every cell tested** (89/88/81/53% vs 57/1/36/3% utility kept, LoRA-32 vetted) — blunt
 > noise is not the post-hoc floor. The floor that remains is the footprint law.
+>
+> **Experiment 10: the surgery is better built in than bolted on.** Training the
+> surgical channel **end-to-end** — a learned attribute subspace, destroyed by noise,
+> with HSIC shaping pushing the attribute into it — beats post-hoc surgical noise on
+> every cell (104/100/90% vs 88/81/53% utility kept at full-battery ≤0.55, 3 seeds),
+> collapsing the representation-channel cost to ≈0 across the tested band. The λ=0
+> ablation shows the shaping term earns it, the rank-32 LoRA catches configs XGB+MLP
+> miss (first LoRA-only breaches), and the **output** still leaks the attribute at the
+> footprint floor (0.71/0.61 on above-the-wall cells) — the wall stands.
 
 ## Experiment 1 — Falsification attack on PCRL's compliance certificate
 
@@ -783,6 +792,77 @@ and there it beats blunt noise everywhere we looked.
    law: no representation-side mechanism, surgical or blunt, hides an attribute the
    decision itself needs.
 
+## Experiment 10 — can surgical destruction be trained END-TO-END, and does it beat post-hoc?
+
+Post-hoc surgical noise (Exp 9's winner) is limited to whatever directions a *fixed*
+representation happened to use. Experiment 10 (`experiments/end_to_end_surgical.py`)
+tests whether a representation trained from scratch to *build the surgery in* does
+better: an encoder → BatchNorm → **learned** orthonormal rank-r subspace Q
+(differentiable QR) → Gaussian noise confined to span(Q) (fresh every forward) → task
+head, all trained **jointly** with a λ·HSIC(h⊥, attr) term that pushes attribute
+information out of the surviving directions while the task CE (trained through the
+noise) pulls task information into them. The noise still does the destruction —
+attacker-agnostically; HSIC only decides *where* information sits, so the probe-shaped
+-eraser trap of Exp 4/5 does not apply (and the honest battery checks anyway).
+
+Design: a 2×2 factorial {blunt, surgical} × {post-hoc, end-to-end} on the three Exp-9
+trained-P cells, so any gain is attributable to e2e-ness vs surgical-ness. Protocol
+unchanged from Exp 9: XGB + deep MLP candidacy at ≤ 0.55, best-utility candidate must
+hold the rank-32 LoRA, never R²; e2e winners retrained over 3 seeds with the full
+battery on representation **and** output; λ piloted per cell over {0, 10, 100} (λ=0 =
+the shaping ablation).
+
+**Utility kept at full-battery honest protection (XGB + MLP + LoRA-32 ≤ 0.55):**
+
+| cell | predictor | post-hoc blunt | post-hoc surgical (Exp-9) | e2e blunt (Exp-8) | **e2e surgical (new)** |
+|---|---|---|---|---|---|
+| easy hmda/race/loan_decision | 0.514 | 1% | 88% | 98%±2 | **104%±3** |
+| middle hmda/race/loan_amount_band | 0.584 | 36% | 81% | 39%±1 | **100%±0** |
+| hard adult/sex/income | 0.603 | 3% | 53% | 0%±1 | **90%±3** |
+
+*(e2e arms: mean±std over 3 training seeds; % of each family's clean lift — post-hoc:
+retrained-LR head, e2e: own head. The retrained-LR cross-check on the e2e-surgical
+winners matches or exceeds the own-head numbers — e.g. hard cell +0.135 LR-through vs
++0.128 own-head — so the gap is not an estimator artifact.)*
+
+**Verdict: YES — end-to-end surgical training beats post-hoc surgical noise everywhere,
+and by a lot where it matters.** On the middle cell it keeps **100%** of the task lift
+(+0.411 vs clean +0.409, rep hidden at ≤0.535 incl. LoRA) vs post-hoc's 81%; on the
+hard cell **90%** vs 53%. The factorial attributes the gain: it is the *combination* —
+e2e blunt (the Exp-8 channel) collapses on the middle (39%) and hard (0%) cells, and
+post-hoc surgical can only noise the subspace the frozen encoder used. Letting the
+encoder *choose* a basis where attribute and task separate, knowing the attribute
+subspace will be destroyed, moves the representation-channel ramp down to
+near-zero cost across the tested band (predictor 0.51–0.60).
+
+Three supporting findings:
+
+1. **The shaping term is what earns it (ablation).** On the hard cell with λ=0 the
+   exposed rep leaks sex at XGB 0.87 / MLP 0.99; λ=10 still leaks (MLP 0.74); only
+   λ=100 concentrates the attribute into the destroyed subspace (≤ 0.55). The
+   architecture alone does nothing — noise-in-a-learned-subspace without HSIC pressure
+   leaves the attribute in the surviving directions.
+2. **The LoRA attacker earned its place in the battery.** On the hard cell, the three
+   best-utility e2e-surgical candidates passed XGB + MLP but **breached the rank-32
+   LoRA** (0.571–0.575) — the first LoRA-only breaches in the project. Widening the
+   destroyed subspace (r=32, σ=8) closes the adapter's route (0.547). A two-probe
+   battery would have shipped a leaking config.
+3. **The footprint law still bounds the output — no method beats the wall.** On the
+   above-the-wall cells the winning e2e-surgical model's *output* still leaks the
+   attribute at 0.710 (middle) and 0.605 (hard), at/above the label predictor (0.584,
+   0.603), exactly as the law demands of a model that keeps the utility. On the easy
+   (below-the-wall) cell everything including the output sits ≤ 0.54. Representation
+   protection got dramatically cheaper; output leakage did not move.
+
+Honest scope: (1) hard-cell protection sits at the bar's edge — rep LoRA 0.549±0.009
+over training seeds, so the *worst* seed grazes ~0.55–0.56; call it "at the bar", not
+comfortably under it. (2) The easy cell's 104% is noise-as-regularizer (within ~2σ of
+100%). (3) "Hidden" still means ~0.50–0.55 residual AUC against this battery, not
+provably zero, and Q/HSIC are fit on the same data. (4) This is the representation
+channel only: for a *deployed decision* on an above-the-wall cell, the output floor is
+untouched — the honest offer remains "utility-free representation scrubbing, output
+leaks what the label needs" (middle cell: 100% utility, rep ≤ 0.535, output 0.71).
+
 ### Layout
 
 ```
@@ -802,6 +882,7 @@ experiments/_scout_predictor.py       # Experiment 8 cell-selection scout: XGB A
 experiments/continuous_cost.py        # Experiment 9 Goal 1: predictor vs CONTINUOUS removal cost, 20 cells (non-circular)
 experiments/cliff_or_ramp.py          # Experiment 9 Goal 2: constructed middle-zone cells — the cost curve is a steep RAMP
 experiments/surgical_vs_blunt.py      # Experiment 9 Goal 3: HSIC-subspace vs isotropic noise, full battery incl. LoRA-32
+experiments/end_to_end_surgical.py    # Experiment 10: end-to-end trained surgical channel vs post-hoc (2x2 factorial)
 utils/pcrl_io.py                       # PCRL-specific glue (imports the read-only PCRL repo)
 results/                               # JSON curves + plots
 requirements.txt
