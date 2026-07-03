@@ -76,6 +76,21 @@ artifacts** that an adapter can dissolve.
 > 0.552, 3/5 seeds over 0.55 via LoRA; all hold at 0.57); the robust operating point
 > is σ=16 — ≤0.55 on all 5 seeds at **85%±2** utility (vs the quoted 90% at the bar's
 > edge). Exp-8's HMDA headline hardens cleanly (95% at 5 seeds).
+>
+> **The final experiment (16) runs the field itself through the battery.** The
+> published fair-representation / erasure methods — LAFTR, VFAE, full-strength
+> adversarial forgetting, LEACE — get their best shot (knob sweeps, best honest
+> operating point per tier, 3-seed certification) on the three headline cells.
+> **One of 24 method×cell×tier combinations certifies:** VFAE holds Tier 1 on the
+> easy cell at 72% utility — and not because of its fairness penalty (the
+> posterior-mean exposure leaks at ~1.00 at every β, and protection *degrades* as β
+> rises) but because its stochastic encoder is an accidental heteroscedastic
+> Gaussian noise channel. It has no σ knob, so it fails the middle/hard cells
+> (0.585/0.587) and misses Tier 2 by a hair (LRT 0.551–0.558). Everything else —
+> LAFTR (0.995–1.000 at every γ), deep-adversary scrubbing (plateaus 0.61–0.66 at
+> 42–69% utility), LEACE (0.995–0.998, ≈ unprotected) — fails Tier 1 everywhere.
+> The field's own methods confirm the thesis: only noise survives honest
+> measurement, and the purpose-built channel dominates the accidental one.
 
 ## Experiment 1 — Falsification attack on PCRL's compliance certificate
 
@@ -1154,6 +1169,111 @@ hard-cell edge case, and Exp-8's HMDA Part A at **5 training seeds**
   output max 0.539 (all attackers 0.529–0.539), lift +0.0211±0.0005 = **95%** of clean
   (3-seed: ~0.53 / 96%).
 
+## Experiment 16 — the baseline gauntlet: do the field's published methods certify under honest two-tier evaluation?
+
+Every wall in this project was demonstrated against our own reconstructions of the
+competing ideas (probe-shaped projections, a minimal GRL scrub, blunt noise). The
+gauntlet (`experiments/baseline_gauntlet.py`) closes that gap: the field's actual
+named methods, implemented faithfully at published-recommended settings, on the
+three headline tabular cells, under the exact standard our methods face — knob
+swept per cell (train seed 0), the best honest operating point per tier certified
+over **3 training seeds** with the full two-tier battery on the representation
+**and** the output logits, utility normalized by the same clean e2e lift as the
+Exp-14 table. Baselines and (noted, favorable-or-neutral) deviations:
+
+1. **LAFTR** (Madras et al. 2018) — encoder + task head + adversary, alternating
+   min-max; adversary objective group-balanced (their group-normalized ℓ1,
+   generalized to 5-class race as macro-averaged per-group CE). γ ∈ {0.5…8}
+   (paper sweeps to 4; 8 added so "leaks at every knob" can't be a sweep artifact).
+2. **VFAE** (Louizos et al. 2016) — q(z|x,s) + p(x|z,s) + q(y|z) + MMD on q(z)
+   across s groups (Gaussian-kernel median-heuristic MMD; single stochastic
+   layer). β ∈ {1, 10, 100, 1000}, **two deployment exposures per β**: sampled z
+   (the stochastic encoder as shipped) and posterior mean μ (the common
+   deterministic deployment).
+3. **Adversarial forgetting / gradient-reversal scrubbing at full published
+   strength** — deep 256-256 adversary, proper alternating schedule (5 adversary
+   steps per encoder step), λ ∈ {1…20}. Strictly stronger than Exp-7's minimal
+   GRL scrub.
+4. **LEACE** (Belrose et al. 2023) — the closed-form eraser (`concept_erasure`),
+   as published, on the clean trained P; utility + logits from a retrained LR head.
+
+All baselines get project-standard encoder capacity (same as our channels) and
+utility = best of own-head / retrained-LR lift. Tier-2 LRT side information: for
+deterministic representations exposed = clean, so Σ_noise = 0 (the informed
+attacker degenerates to a QDA probe — the collapse is real, not an artifact); for
+VFAE sampled-z, H_clean = μ and Σ_noise = diag(E[σ²]) (moment-matched known channel).
+
+**Master table — best honest operating point per tier; "T1" = max(XGB, MLP,
+LoRA-32) on the representation, 3-seed mean where certified; utility = % of the
+cell's clean e2e lift** (failing methods shown at their best-protected knob, with
+the utility that knob keeps):
+
+| method | easy hmda/loan_decision (pred 0.514) | middle hmda/loan_amount_band (0.584) | hard adult/sex/income (0.603) |
+|---|---|---|---|
+| LAFTR | 1.000 ✗ (66% @ γ=8) | 1.000 ✗ (86% @ γ=2) | 0.995 ✗ (76% @ γ=4) |
+| **VFAE (sampled z)** | **0.535 ✓ TIER 1 @ 72%** — T2 0.553 ✗ | 0.585 ✗ (79% @ β=1) | 0.587 ✗ (68% @ β=1000) |
+| VFAE (mean z) | 1.000 ✗ (every β) | 1.000 ✗ | 1.000 ✗ |
+| adv. forgetting (deep, 5:1) | 0.664 ✗ (42% @ λ=20) | 0.624 ✗ (69% @ λ=20) | 0.610 ✗ (43% @ λ=20) |
+| LEACE | 0.995 ✗ (101%) | 0.997 ✗ (97%) | 0.998 ✗ (82%) |
+| *ours: e2e blunt (Exp 14)* | *T1 ✓ 95% · T2 ✓ 55%* | *T1 ✓ 57% · T2 ✓ 22%* | *T1 ✓ −1% · T2 ✓ −7%* |
+| *ours: e2e surgical (Exp 15, Tier-1-only)* | *✓ 102%* | *✓ 100%* | *✓ 85% (σ=16, robust)* |
+
+*(full sweeps, per-seed certification values and output batteries in
+`results/baseline_gauntlet.json`; frontier plot in `results/baseline_gauntlet.png`.)*
+
+**Verdict: one of 24 method×cell×tier combinations certifies.** The detail is the
+finding:
+
+1. **LAFTR fails Tier 1 everywhere, at every knob — race/sex recovered at
+   0.995–1.000.** The adversary reliably fools *itself* (its own training loss
+   converges) while XGBoost reads the attribute at the unprotected level. This is
+   the Exp-7 gradient-reversal result on the published method at published
+   strength, ×3 cells ×5 knobs.
+2. **Full-strength adversarial forgetting is better scrubbing and still nowhere
+   near the bar.** The deep 5:1-schedule adversary genuinely removes signal
+   (1.00 → 0.61–0.66 at λ=20) — far more than the minimal GRL — but it plateaus
+   3–4× the bar's distance above chance while utility falls to 42–69%. No λ
+   trades further leak for further utility: the curve flattens, exactly the
+   probe-shaped-eraser wall.
+3. **LEACE is certificate theater on trained representations: 0.995–0.998,
+   statistically the unprotected level, at ~full utility.** As published it
+   removes the linear subspace; the trained P encodes race/sex nonlinearly and a
+   tree re-derives it whole. (Its *output* footprint on the middle cell is 0.820
+   — the 8-class logits are a rich channel — vs LAFTR's 0.931 there; the
+   footprint law applies to baselines too.)
+4. **VFAE is the one survivor, and for the project's reason, not its own.** Its
+   sampled-z exposure certifies Tier 1 on the easy cell at 72% utility (3-seed
+   LoRA 0.522–0.532, output ≤ 0.533). But (a) the posterior-**mean** exposure
+   leaks at ~1.00 at every β — the MMD fairness penalty contributes nothing an
+   honest probe notices; (b) Tier-1 recovery **worsens monotonically in β**
+   (0.536 → 0.583 → 0.661 → 0.743 on the easy cell): pushing the fairness knob
+   *shrinks the posterior noise* faster than it matches groups, so the β=1 model
+   — the least "fair" by its own objective — is the one that certifies; (c) the
+   noise budget is set by the ELBO, not by an erasure requirement, so it cannot
+   escalate: it fails the middle/hard cells (0.585/0.587 best) and misses Tier 2
+   on the easy cell by a hair (LRT 0.551–0.558 across seeds — at the bar, not
+   under it). VFAE certifies exactly where the diagnostic says removal is cheap,
+   at worse utility than the purpose-built channel (72% vs 95%), and nowhere else.
+
+**Bottom line.** No published method beats, or reaches, the purpose-built noised
+channel anywhere on the grid; the only baseline that certifies anything does so
+via an *accidental, unadjustable* noise channel. The gauntlet is the project's
+thesis run on the field's own methods: hiding-based and linear guarantees are
+probe-shaped and dissolve under an honest attacker; attacker-agnostic noise is
+the only surviving mechanism, and building it in on purpose — with a σ knob and
+the diagnostic to say where it is affordable — is what turns "survives Tier 1 on
+one cell" into certified operating points on every achievable cell at both tiers.
+
+Honest scope: faithful-minimal reimplementations at project-standard capacity,
+not the authors' code (deviations listed above, all favorable or neutral —
+notably VFAE runs without its second stochastic layer, and LAFTR's adversary
+objective is the multiclass generalization of their binary one); knob grids are
+finite (5 values/knob, the same budget our own methods got); VFAE's Tier-2 miss
+is by 0.001–0.008 — call it "at the bar", the honest statement is that its noise
+is not *reliably* below it; the failing methods' utility numbers are read at
+their most-protected knob, not at matched protection (matched protection does
+not exist for them — they never reach the bar).
+
 ### Layout
 
 ```
@@ -1180,6 +1300,7 @@ experiments/celeba_extract.py         # Experiment 13 (step 1): checkpointed Cel
 experiments/celeba_pipeline.py        # Experiment 13: the full CelebA pipeline on both cells (2x2 + tiers + footprint)
 experiments/two_tier_certification.py # Experiment 14: two-tier (black-box vs informed-LRT) re-certification of the key operating points
 experiments/hardening_seeds.py        # Experiment 15: every headline number at 5 training seeds (hard-cell edge case settled)
+experiments/baseline_gauntlet.py      # Experiment 16: LAFTR/VFAE/adv-forgetting/LEACE under the two-tier battery (1/24 certifies)
 utils/battery.py                       # the standing battery: Tier 1 (XGB+MLP+LoRA32) and Tier 2 (+ channel-aware Gaussian-LRT)
 utils/pcrl_io.py                       # PCRL-specific glue (imports the read-only PCRL repo)
 results/                               # JSON curves + plots
