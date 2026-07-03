@@ -26,6 +26,14 @@ artifacts** that an adapter can dissolve.
 > The honest story is problem + solution: *certificates lie and hiding fails* (problem);
 > *durable removal is achievable and verifiable in the label-independent case, and a
 > diagnostic predicts when* (solution).
+>
+> **Experiment 9 hardens the solution.** The diagnostic survives de-circularization — it
+> predicts a *continuous* removal cost (Pearson r≈0.80, Spearman ρ≈0.85 over 20 natural
+> cells); the cost landscape is a **steep ramp, not a cliff** (confirmed causally with
+> constructed cells that tune only the label↔attribute coupling); and **surgical
+> (HSIC-subspace) noise beats blunt isotropic noise at matched full-battery protection on
+> every cell tested** (89/88/81/53% vs 57/1/36/3% utility kept, LoRA-32 vetted) — blunt
+> noise is not the post-hoc floor. The floor that remains is the footprint law.
 
 ## Experiment 1 — Falsification attack on PCRL's compliance certificate
 
@@ -661,6 +669,120 @@ coincides with the recovery bar by construction — its content is the *law* tyi
 leakage to label leakage, which is mechanism-agnostic because it is a property of the
 label, not the model.)
 
+## Experiment 9 — de-circularizing the diagnostic, mapping the cost landscape, and surgical destruction
+
+Experiment 8 left three loose ends: the diagnostic predicted a pass/fail defined at the
+same 0.55 bar it thresholds on (partly circular); the cheap-vs-impossible split looked
+like a cliff but the middle was barely sampled; and Exp 6's "surgical noise beats blunt"
+result existed on one cell, without a LoRA attacker, and was bar-fragile. Experiment 9
+resolves all three. Everything is measured with the strong battery (XGBoost + deep MLP,
+plus rank-32 LoRA on every winning Goal-3 config) — never R².
+
+### Goal 1 — the diagnostic predicts a CONTINUOUS cost (non-circular) (`experiments/continuous_cost.py`)
+
+**Fix:** the outcome is now a *continuous* utility cost — the fraction of clean task lift
+lost at the noise level where strong-attacker attribute recovery first reaches ≤ 0.55
+(linearly interpolated between swept σ, clipped to [0,1]; the 0.55 crossing only *locates*
+the noise level, the outcome value is a utility fraction, so predictor and outcome no
+longer share a threshold). Mechanism: the Exp-8 from-raw-x noised channel, retrained per σ
+on an adaptive grid extended to σ ≤ 192 so *every* cell gets a finite crossing. Measured
+on **20 natural cells** spanning predictor 0.503–0.688 across all three datasets
+(scouted live over all 30 attr×task pairs).
+
+| outcome | Pearson r | Spearman ρ | n |
+|---|---|---|---|
+| cost to hide the representation | **+0.755** (p=1.2e-4) | +0.767 (p=7.8e-5) | 20 |
+| cost of durable removal (rep **and** output) | **+0.795** (p=2.8e-5) | **+0.848** (p=2.3e-6) | 20 |
+
+**Verdict: genuinely predictive, and non-circular.** A one-number, model-free label
+statistic explains most of the ordering of a continuous utility cost measured by training
+dozens of models (`results/continuous_cost.png`). The extended grid also resolves Exp 8's
+"unreachable" verdicts into finite numbers: adult/sex/income's *representation* does hide,
+but only at σ≈25 for 89% of the lift (durable: cost 1.0 at σ≈36).
+
+**Honest scatter — the predictor is not the whole story.** Residuals are real and
+systematic: tasks with huge clean lift stay cheap past their predictor
+(adult/race/education_level: predictor 0.589, durable cost 0.018 — education is encoded so
+redundantly that the channel keeps it long after race is gone; the 5-class macro-OVR
+predictor is also inflated by one small race class), while low-lift tasks are expensive
+early (hmda/race/tract_denial_high: predictor 0.518, durable cost 0.47). The predictor
+sets the *trend*; the task's own signal robustness sets a family-specific offset.
+
+### Goal 2 — cliff or ramp? A (steep) RAMP (`experiments/cliff_or_ramp.py`)
+
+To sample the middle densely *and causally*, 9 **constructed** cells (clearly labelled,
+not natural) subsample three real cells to tune the (attr, label) joint to
+`(1−t)·p(a,y) + t·p(a)p(y)` — same features, same task, only the label↔attribute coupling
+moves. Combined with the 20 natural cells (`results/cliff_or_ramp.png`):
+
+| family (constructed, t: natural→independent) | predictor → durable cost |
+|---|---|
+| adult/sex/income | 0.526→0.25, 0.554→0.64, 0.567→0.96, 0.603 (nat)→1.00 |
+| adult/marital_status/income | 0.546→0.69, 0.571→0.84, 0.622→1.00, 0.688 (nat)→1.00 |
+| hmda/ethnicity/loan_amount_band | 0.534→0.26, 0.576→0.68, 0.623 (nat)→0.80 |
+
+**Verdict: a RAMP, not a cliff — but a steep one.** 8/17 middle-zone cells
+(predictor 0.55–0.68) land at intermediate durable cost (0.25–0.85), and within each
+constructed family the cost rises smoothly and monotonically with the predictor. There
+*is* a usable middle ground — roughly predictor 0.52–0.60, where durable removal is real
+but costs ~25–85% of the lift — and by predictor ≈0.62 the cost saturates at ~1 in the
+income families. The constructed families also upgrade the diagnostic from correlation to
+**causation**: moving *only* the label↔attribute coupling moves the removal cost. (The
+Exp-8 "cliff" was an artifact of 6 cells and a σ≤12 grid; the ramp's steepness varies by
+family — the vertical scatter of Goal 1 applies here too.)
+
+### Goal 3 — surgical destruction beats blunt noise EVERYWHERE tested (`experiments/surgical_vs_blunt.py`)
+
+Exp 6's best surgical method (Gaussian noise confined to the rank-r most-attribute-
+carrying HSIC subspace — destroying, not deleting) head-to-head against isotropic noise,
+post-hoc on a fixed representation, across the spectrum. Utility = lift of a logistic head
+retrained through the channel; every winning config must hold **XGBoost + MLP + rank-32
+LoRA ≤ 0.55** (candidates that fail the LoRA check are discarded — none did).
+
+| cell (base representation) | predictor | utility kept @ full-battery ≤0.55: **blunt** | **surgical** |
+|---|---|---|---|
+| anchor: adult/sex/income (frozen PCRL rep — the Exp-6 setting + LoRA) | 0.603 | 57% (iso σ=4) | **89%** (r=16, σ=32) |
+| easy: hmda/race/loan_decision (clean trained channel P) | 0.514 | 1% (iso σ=16) | **88%** (r=16, σ=16) |
+| middle: hmda/race/loan_amount_band (clean trained P) | 0.584 | 36% (iso σ=8) | **81%** (r=8, σ=16) |
+| hard: adult/sex/income (clean trained P) | 0.603 | 3% (iso σ=16) | **53%** (r=32, σ=16) |
+
+**Verdict: surgical destruction earns its keep — blunt noise is NOT the post-hoc floor.**
+The advantage generalizes across datasets, attributes (binary sex, 5-class race), task
+types, and base representations, and survives the LoRA attacker Exp 6 never ran. Exp 6's
+bar-fragility caveat also dissolves off the frozen rep: at a stricter **0.53** bar,
+surgical still keeps 88% / 81% / 52% vs blunt's 1% / 18% / 3% on the three trained-P cells
+(all stricter-bar winners LoRA-vetted too, ≤0.524 —
+`results/surgical_vs_blunt_lora_extra.json`); only the frozen-PCRL anchor loses its edge
+there (23% vs 19%), which is where the fragility lived. On the clean trained
+representations — which leak the attribute at XGB AUC ≈1.00, far above the frozen rep's
+0.68 — blunt noise must drown *everything* to reach the bar, while noise aimed at the
+attribute subspace pays a fraction.
+
+**Honest scope.** (1) This protects the *representation* channel of a fixed encoder; the
+output footprint law (Exp 7/8) still governs the decision itself — surgical noise does not
+(and cannot) reduce output leakage, so above-the-wall cells stay above it. (2) "Hidden"
+means ~0.50–0.53 residual AUC against this battery, not provably zero; the HSIC subspace
+is fit on the same data. (3) Where the end-to-end noised channel applies (below-the-wall
+cells), it can still be cheaper on *both* channels (HMDA loan_decision: 96% at σ=8
+end-to-end); surgical post-hoc noise is the tool for representations you cannot retrain —
+and there it beats blunt noise everywhere we looked.
+
+### Bottom line after Experiment 9
+
+1. **An honest, non-circular predictive diagnostic — yes.** One pre-training number (XGB
+   AUC of attr from the task label) predicts the *continuous* utility cost of honest
+   durable removal at r≈0.8 / ρ≈0.85 over 20 natural cells, with known, systematic
+   residuals (task-signal redundancy).
+2. **A clear cost landscape — yes, and it is a steep ramp.** Cost rises smoothly through a
+   usable middle (predictor ~0.52–0.60, cost ~25–85%) and saturates near ~0.62; confirmed
+   causally by constructed families that tune only the label↔attribute coupling.
+3. **A real surgical-destruction method — yes, for the representation channel.** HSIC-
+   subspace noise beats blunt isotropic noise at matched full-battery protection on all
+   four cells tested (89/88/81/53% vs 57/1/36/3% kept), robust to a stricter bar off the
+   frozen rep. Blunt noise is *not* the floor; the floor that remains is the footprint
+   law: no representation-side mechanism, surgical or blunt, hides an attribute the
+   decision itself needs.
+
 ### Layout
 
 ```
@@ -677,6 +799,9 @@ experiments/targeted_noise.py         # Experiment 6: anisotropic vs isotropic n
 experiments/sealed_channel.py         # Experiment 7: sealed-channel / footprint test (output leaks attr ∝ task's use of it)
 experiments/diagnostic.py             # Experiment 8: the diagnostic — label↔attr predicts durable-removal cost; footprint law across 6 cells
 experiments/_scout_predictor.py       # Experiment 8 cell-selection scout: XGB AUC(attr|label) across candidate cells
+experiments/continuous_cost.py        # Experiment 9 Goal 1: predictor vs CONTINUOUS removal cost, 20 cells (non-circular)
+experiments/cliff_or_ramp.py          # Experiment 9 Goal 2: constructed middle-zone cells — the cost curve is a steep RAMP
+experiments/surgical_vs_blunt.py      # Experiment 9 Goal 3: HSIC-subspace vs isotropic noise, full battery incl. LoRA-32
 utils/pcrl_io.py                       # PCRL-specific glue (imports the read-only PCRL repo)
 results/                               # JSON curves + plots
 requirements.txt
