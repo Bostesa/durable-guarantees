@@ -43,6 +43,17 @@ artifacts** that an adapter can dissolve.
 > ablation shows the shaping term earns it, the rank-32 LoRA catches configs XGB+MLP
 > miss (first LoRA-only breaches), and the **output** still leaks the attribute at the
 > footprint floor (0.71/0.61 on above-the-wall cells) — the wall stands.
+>
+> **Experiment 11 (theory check): the DPI bound cannot be featured as a numeric
+> proposition.** The distribution-free MI certificate for the Gaussian channel is
+> **vacuous at every operating σ** (ceiling = 1.0 AUC where the battery reads ~0.53),
+> becomes meaningful only far past the utility cliff, and provably cannot be tightened
+> from second moments alone. The DPI stays as the qualitative *reason* noise survives;
+> the guarantee itself is, and remains, empirical. A channel-aware Gaussian-LRT
+> attacker also sits 0.02–0.05 *above* the battery at operating σ (HMDA σ=8: 0.574 —
+> over the 0.55 bar), sharpening the honest scope of Exp 8/10: the verdicts are
+> battery-relative. Experiment 12 picks the two CelebA vision cells by measurement:
+> **Smiling→Young (predictor 0.522, low) and Attractive→Young (0.734, high)**.
 
 ## Experiment 1 — Falsification attack on PCRL's compliance certificate
 
@@ -863,6 +874,127 @@ channel only: for a *deployed decision* on an above-the-wall cell, the output fl
 untouched — the honest offer remains "utility-free representation scrubbing, output
 leaks what the label needs" (middle cell: 100% utility, rep ≤ 0.535, output 0.71).
 
+## Experiment 11 — is the DPI recovery bound a usable *theorem*, or only a mechanism? (VACUOUS at operating σ)
+
+The noise channel is the one mechanism in this project with a principled guarantee:
+`h̃ = h + N(0, σ²I)` caps `I(h̃; A)` by the data-processing inequality, no matter how
+the attacker is built. We planned to feature a proposition instantiating that
+guarantee numerically — σ in, attacker-agnostic recovery ceiling out. Experiment 11
+(`experiments/mi_ceiling.py`) derives the tightest clean **distribution-free** version
+of that proposition and computes it at the exact σ our experiments ran. Honest
+question: does the *theorem* separate us from full recovery at the operating σ, or
+only the *measurement*?
+
+**The proposition (distribution-free, needs only per-dim variances s²ᵢ of the
+pre-noise representation):**
+
+1. `I(h̃;A) ≤ I_cap = ½ Σᵢ log(1 + s²ᵢ/σ²)` (variational MI bound with a Gaussian
+   reference + the entropy floor `h(P̃ₐ) ≥ h(N(0,σ²I))`; for anisotropic full-rank
+   noise replace `s²ᵢ/σ²` by `s²ᵢ/σ²ᵢ`).
+2. Accuracy ceiling via Fano; AUC ceiling per class via
+   `TV ≤ √(I_cap/8)/(π_k(1−π_k))` (joint-Pinsker) and `AUC ≤ ½ + TV − TV²/2`
+   (ROC dominance); macro-OVR average for multiclass.
+3. **Tightness floor:** the two-point distribution `h = ±μ`, `‖μ‖² = Σᵢs²ᵢ` matches
+   the same moments, and there an optimal attacker genuinely achieves
+   `AUC = Φ(√(2Σᵢs²ᵢ)/σ)`. So the vacuousness below is not sloppy accounting — *any*
+   certificate that sees only second moments concedes at least this.
+4. **Surgical channels have no such certificate at all**: with σ=0 in the surviving
+   subspace the bound diverges. The Exp-9/10 surgical results' guarantee is, and
+   remains, the empirical battery (+ HSIC shaping) — consistent with the LoRA-only
+   breaches Exp 10 caught.
+
+**σ vs empirical battery vs theoretical ceiling** (condensed; full tables in
+`results/mi_ceiling.json`, plot in `results/mi_ceiling.png`):
+
+| channel | σ | battery max AUC | Gaussian-LRT (est.) | **cert AUC ceiling** | moment worst case |
+|---|---|---|---|---|---|
+| adult/sex frozen rep (Exp 2/5) | σ_rel=4 | 0.547 | 0.555 | **1.000** (I_cap=2.02 ≥ H(A)=0.63) | 0.998 |
+| adult/sex frozen rep | σ_rel=8 | 0.518 | 0.543 | **1.000** (I_cap=0.52) | 0.926 |
+| hmda/race/loan_decision e2e (Exp 8) | σ=8 | 0.530 (LoRA 0.528) | 0.574 | **1.000** (I_cap=1.48 ≥ H(A)=0.92) | 0.993 |
+| hmda e2e | σ=24 | 0.504 (LoRA 0.501) | 0.531 | 0.983 | 0.804 |
+| hmda e2e | σ=48 | 0.501 (LoRA 0.494) | 0.510 | 0.888 | 0.618 |
+| adult/sex/income e2e (Exp 9) | σ=24 | 0.554 | 0.611 | 0.957 | 0.809 |
+| adult/sex/income e2e | σ=32 | 0.528 | 0.580 | 0.856 | 0.717 |
+
+**Verdict: VACUOUS at every operating σ — cite the DPI principle qualitatively; do
+not feature a numeric proposition.** At the σ where the strong battery is empirically
+at ~0.53 (σ_rel=4–8 frozen; σ=8 e2e), the provable ceiling is exactly 1.0 — the MI
+bound doesn't even drop below H(A). The certificate first reaches a *meaningful*
+ceiling (≤0.7 AUC) at σ\* ≈ 15.4 (σ_rel≈42) on the frozen rep, σ\* ≈ 54 on the adult
+e2e channel (where task lift is already ≈0 from σ=32), and σ\* ≈ 334 on HMDA
+(macro-OVR is dominated by the rare race classes, π=0.008–0.06, which Pinsker cannot
+bound tightly). Everywhere, the theorem becomes non-vacuous only far past the utility
+cliff. The reason is structural, not fixable by better algebra: a distribution-free
+bound must budget for **all** 64 BN-normalized dimensions of representation variance
+(`I_cap ≈ d/2σ²`) because it cannot tell task signal from attribute signal — and the
+two-point construction shows a moment-matched distribution where an attacker really
+does recover the attribute at 0.93–1.00 AUC at our operating σ. A meaningful theorem
+would need distributional assumptions, at which point it is an estimate, not a
+certificate.
+
+**Side finding — the battery is not the ceiling (honest sharpening of Exp 8/10).**
+The Gaussian-LRT column is a channel-aware attacker: fit `N(μ_k, Σ_k + σ²I)` per
+class on the *clean* representation, score noised rows by posterior. At every
+operating point it beats the trained battery: **0.574 vs 0.530 on HMDA at σ=8 — above
+the 0.55 bar the battery certifies**; 0.580 vs 0.528 on adult e2e at σ=32. Threat-model
+caveat: it uses clean-representation side information (the vendor themselves, or an
+attacker who can average repeated queries of the same row through the fresh-noise
+channel), which the standing deployed-dataset battery does not grant. But as an
+estimate of the true information ceiling it says: the honest-bar verdicts are
+battery-relative, an informed attacker sits ~0.02–0.05 higher at operating σ, and
+driving *it* below 0.55 on HMDA needs σ between 12 and 24 (utility 83% → 35%). This
+is the project's own thesis biting our constructive result — a guarantee is only as
+strong as the strongest attacker used to certify it — and since Experiment 11 shows
+the theory cannot take over, the practical consequence is that the battery should
+grow a channel-aware LRT member, not that the mechanism is wrong. (The gap also
+confirms the battery sits close to, not at, the ceiling: at σ≥24 all attackers and
+the LRT converge to ~0.50–0.53.)
+
+## Experiment 12 — CelebA coupling scan: picking the two vision cells (scan only)
+
+The paper adds one low-coupling and one high-coupling CelebA task/attribute pair as
+the non-tabular modality check. Per the standing methodology, the cells are picked by
+**measurement**: the predictor = AUC recovering the protected attribute from the task
+LABEL alone, computed on the CelebA train partition (162,770 rows) loaded exactly as
+PCRL's `pcrl/data/celeba.py` loads it (labels only — no images, no representations,
+no removal pipeline yet). For a 1-binary-feature predictor the population AUC is
+closed-form (`½ + |P(f=1|a=1) − P(f=1|a=0)|/2`), used to rank **all** (task ×
+{Male, Young, Pale_Skin}) pairs; the shortlist is then re-measured with the project's
+actual XGB predictor instrument (3 held-out splits) — agreement is ±0.003 everywhere.
+`experiments/celeba_coupling_scan.py`, ranked table in
+`results/celeba_coupling_scan.json`/`.png`.
+
+Sanity screens: **Pale_Skin is excluded as a protected attribute** (4.3% positive,
+below the 5% floor — as are Bald/Double_Chin/Gray_Hair/Mustache/Wearing_Hat as
+tasks); near-duplicate pairs are flagged (|φ|>0.45 or gender-coded grooming
+synonyms): **Wearing_Lipstick→Male (0.899) and Heavy_Makeup→Male (0.828) top the
+ranking but are the attribute in disguise** — flagged, not eligible.
+
+| task → protected (eligible, condensed) | predictor (XGB) | φ | verdict |
+|---|---|---|---|
+| Attractive → Young | **0.734** | +0.39 | **HIGH cell (recommended)** |
+| Attractive → Male | 0.704 | −0.40 | high backup |
+| Arched_Eyebrows → Male | 0.681 | −0.41 | grooming-adjacent |
+| Big_Nose → Male | 0.661 | +0.37 | high alternative |
+| Smiling → Male | 0.569 | −0.14 | middle |
+| **Smiling → Young** | **0.522** | −0.03 | **LOW cell (recommended)** |
+| High_Cheekbones → Young | 0.508 | −0.01 | low alternative (Smiling-correlated task) |
+
+**Recommended cells: task=Smiling (predictor 0.522) and task=Attractive (predictor
+0.734), both with protected=Young.** Reasons: (1) both tasks are canonical, balanced
+CelebA tasks (48%/51% positive; Young 78% positive, within the balance window);
+(2) sharing the protected attribute makes the pair a controlled contrast — only the
+task changes, exactly like Exp 9's constructed families; (3) both pairs are already
+PCRL CelebA purposes (`smile_detection` and `attractiveness_prediction` both list
+Young as a disallowed attribute), so the full run can reuse PCRL's purpose specs
+unchanged; (4) neither is a near-synonym pair (φ = −0.03 / +0.39). From the tabular
+ramp (Exp 9), the prediction to test: Smiling/Young durable removal should be cheap
+(predictor ≈ 0.52), Attractive/Young should cost ≈ all the lift (0.734 is far above
+the ≈0.62 saturation) with an output-leak floor near 0.73. The full CelebA run needs:
+PCRL's vision encoder forward passes over the 64×64 images (202k) to extract
+representations, then the standard pipeline — end-to-end noised channel + full
+battery (XGBoost + MLP + rank-32 LoRA) on representation and output.
+
 ### Layout
 
 ```
@@ -883,6 +1015,8 @@ experiments/continuous_cost.py        # Experiment 9 Goal 1: predictor vs CONTIN
 experiments/cliff_or_ramp.py          # Experiment 9 Goal 2: constructed middle-zone cells — the cost curve is a steep RAMP
 experiments/surgical_vs_blunt.py      # Experiment 9 Goal 3: HSIC-subspace vs isotropic noise, full battery incl. LoRA-32
 experiments/end_to_end_surgical.py    # Experiment 10: end-to-end trained surgical channel vs post-hoc (2x2 factorial)
+experiments/mi_ceiling.py             # Experiment 11: the DPI certificate is VACUOUS at operating σ (theory check)
+experiments/celeba_coupling_scan.py   # Experiment 12 (scan): label-only coupling scan to pick the two CelebA cells
 utils/pcrl_io.py                       # PCRL-specific glue (imports the read-only PCRL repo)
 results/                               # JSON curves + plots
 requirements.txt
