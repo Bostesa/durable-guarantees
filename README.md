@@ -14,6 +14,18 @@ artifacts** that an adapter can dissolve.
 > it; only an attacker-agnostic mechanism (noise / a data-processing bound) genuinely
 > hides an attribute, and only at a real utility cost.** Read the experiments below in
 > order — several "wins" are explicitly overturned by later sections.
+>
+> **Solution half (Experiment 8).** The cost is not arbitrary — it is *predictable*. The
+> task output leaks the attribute to the extent the task **label** correlates with it
+> (the footprint law, now confirmed on 6 cells across 3 datasets). So a one-number,
+> **model-free** diagnostic — XGBoost AUC recovering the attribute from the task label
+> alone — predicts *in advance* whether durable removal is cheap (predictor ≤ 0.55) or
+> impossible at positive utility (predictor > 0.55). In the achievable case a from-raw-x
+> **noised channel** delivers it: on HMDA it hides race from XGBoost + MLP + rank-32 LoRA
+> on **both** representation and output (1.00 → ~0.53) at **96% utility**, over 3 seeds.
+> The honest story is problem + solution: *certificates lie and hiding fails* (problem);
+> *durable removal is achievable and verifiable in the label-independent case, and a
+> diagnostic predicts when* (solution).
 
 ## Experiment 1 — Falsification attack on PCRL's compliance certificate
 
@@ -535,6 +547,120 @@ adversarial scrubbing fooled its own discriminator but not a fresh tree; only th
 channel hid the public representation — and on Adult only the *sealed* architecture, which
 frees P from carrying sex, pushed P near the bar.)
 
+## Experiment 8 — The diagnostic: does label↔attribute correlation predict when durable removal is possible? (the *solution* half)
+
+Experiments 1–7 are the **problem**: R²/linear certificates are blind to nonlinear
+recovery (Exp 1, 5); every probe-shaped eraser only fools its own probe (Exp 4, 5);
+only isotropic noise (a data-processing bound) genuinely hides an attribute (Exp 5),
+and even then the **output** leaks it to the extent the task uses it (Exp 7 footprint
+law). Exp 7 measured that footprint on two cells — two points. Experiment 8
+(`experiments/diagnostic.py`) turns it into a **predictive diagnostic** and tests the
+constructive case rigorously.
+
+The construction under test is the one mechanism that survives honest measurement,
+trained *end-to-end from raw features x* (not bolted onto the frozen PCRL rep): a
+single **noised channel** `E_pub(x) → BatchNorm → + N(0,σ²) → head`, with fresh
+per-forward channel noise. Everything is measured with **XGBoost + deep MLP +
+rank-32 LoRA — never R²**. Candidate cells were scouted with
+`experiments/_scout_predictor.py` and 6 were chosen to span the predictor axis and
+cross the 0.55 bar, balanced across all three datasets.
+
+### Part A — the constructive result, hardened (HMDA/underwriting/race)
+
+3 training seeds, full attacker battery on the **public representation P** *and* the
+**task output** (logits):
+
+| variant | target | XGBoost | MLP (256-256) | rank-32 LoRA | task lift |
+|---|---|---|---|---|---|
+| clean σ=0 | public P | 1.000 | 1.000 | 1.000 | **+0.0223 ± 0.0003** |
+| clean σ=0 | **output** | 0.687 | 0.685 | 0.602 | |
+| **noised σ=8** | public P | **0.532 ± 0.005** | **0.527 ± 0.003** | **0.528 ± 0.003** | **+0.0213 ± 0.0004** |
+| **noised σ=8** | **output** | **0.530 ± 0.003** | **0.535 ± 0.007** | **0.534 ± 0.004** | |
+
+*(race majority acc 0.645; 5-class macro-OVR AUC; chance 0.5; bar ≤ 0.55; label↔race
+predictor = 0.514.)*
+
+**Verdict: DURABLE — and it holds up.** The noised channel drives race recovery from
+**1.00 (rep) / 0.69 (output)** down to **~0.53 on both channels**, below the 0.55 bar
+for *every* attacker including the rank-32 LoRA and the tree that broke every earlier
+"win", while keeping **96%** of the loan-decision lift, reproducibly over 3 seeds
+(tight error bars). This is the **first result in the project that survives the full
+honest battery *and* keeps utility.** It works precisely because HMDA's loan label
+barely needs race (predictor 0.514) — so the encoder can find a task-good basis that
+drops race without touching the decision. (Honest scope: 0.55 is a generous bar; ~0.53
+is near-chance for a 5-class attribute, not provably zero. There is headroom — the
+sweep keeps utility flat, +0.019 to +0.024, all the way to σ=12 where P falls to 0.522.)
+
+### Part B — the diagnostic is predictive
+
+**Predictor** = XGBoost AUC recovering the attribute from the **task label alone** (one
+1-feature fit, *no model trained*). **Outcome** = utility cost of driving attribute
+recovery ≤ 0.55 (fraction of clean task lift lost), for the representation, and for
+honest durable removal (representation **and** output):
+
+| cell | predictor | clean lift | cost: hide rep | cost: hide rep **+ output** (durable) |
+|---|---|---|---|---|
+| diabetes / gender / medication_change | 0.509 | +0.448 | 0.00 (σ=2) | **0.00** |
+| hmda / race / loan_decision | 0.514 | +0.022 | −0.06 (σ=6) | **−0.06** |
+| diabetes / gender / primary_diagnosis | 0.543 | +0.137 | 0.07 (σ=2) | **0.20 (σ=4)** |
+| hmda / race / loan_amount_band | 0.584 | +0.409 | 0.44 (σ=12) | **unreachable** |
+| adult / sex / income | 0.603 | +0.142 | unreachable | **unreachable** |
+| adult / sex / occupation_group | 0.676 | +0.716 | unreachable | **unreachable** |
+
+**Verdict: the predictor predicts durability cost, with a sharp threshold at the bar.**
+Below 0.55, durable removal is free-to-cheap — both channels hidden for ≤ 0.20 of the
+lift (often 0). Above 0.55, the **output cannot be driven ≤ 0.55 at any positive
+utility** (durable removal would require collapsing the task → cost 1.0), and for the
+two highest cells even the *representation* cannot be hidden within σ ≤ 12. A single
+XGBoost fit on the task label — computed **before training anything** — tells you which
+side of the wall a cell is on. (Cells with tiny clean lift, e.g. hmda/race/loan_decision
++0.022, have noisier cost estimates; the negative cost is noise-as-regularizer.)
+
+### Part C — the footprint law confirmed across 6 cells
+
+Output-leak **floor** (attribute recovered from the logits once the representation is
+hidden) vs the label↔attribute predictor tracks **y = x**:
+
+| cell | predictor | output-leak floor |
+|---|---|---|
+| diabetes / gender / medication_change | 0.509 | 0.509 |
+| hmda / race / loan_decision | 0.514 | 0.533 |
+| diabetes / gender / primary_diagnosis | 0.543 | 0.557 |
+| hmda / race / loan_amount_band | 0.584 | 0.571 |
+| adult / sex / income | 0.603 | 0.679 |
+| adult / sex / occupation_group | 0.676 | 0.629 |
+
+**Verdict: it is a law, not two points.** The output betrays the attribute to almost
+exactly the extent the task label needs it — six cells along the diagonal, spanning
+three datasets. (Caveat: for the two adult cells the representation could not be fully
+hidden within σ ≤ 12, so their floors are measured with the rep only partly scrubbed —
+upper-ish estimates; the qualitative law is unaffected. See `results/diagnostic.png`.)
+
+### Bottom line — an honest problem-plus-solution story
+
+- **Problem (Exp 1–7):** a compliance guarantee is exactly as strong as the attacker
+  used to certify it; R²/linear certificates certify almost nothing; every
+  probe-shaped eraser only fools its own probe; and the decision itself leaks the
+  attribute whenever it genuinely uses it.
+- **Solution (Exp 8):** durable removal *is* achievable and verifiable in the
+  label-independent case — a from-raw-x noised channel hides race on HMDA from
+  XGBoost + MLP + rank-32 LoRA, on **both** representation and output, at 96% utility
+  (Part A) — **and** a cheap, model-free diagnostic (XGB AUC of the attribute from the
+  task label alone) predicts, *before any model is trained*, whether a cell sits on the
+  achievable side (predictor ≤ 0.55) or the impossible side (predictor > 0.55) of the
+  wall (Part B), because output leakage obeys the footprint law (Part C).
+
+The solution is a **characterization of *when* durable removal is possible plus a
+constructive method for the possible case** — not a way to beat the wall when the task
+genuinely needs the attribute. When predictor > 0.55, no representation scrubbing hides
+the attribute in a *useful* output, exactly as the footprint law predicts. What Exp 8
+adds is that this impossibility, and the cost when removal *is* possible, are now
+**predictable in advance** from one number you can compute without training a model.
+(Scope: one noise mechanism and one architecture family; the diagnostic threshold
+coincides with the recovery bar by construction — its content is the *law* tying output
+leakage to label leakage, which is mechanism-agnostic because it is a property of the
+label, not the model.)
+
 ### Layout
 
 ```
@@ -549,6 +675,8 @@ experiments/hardening_test.py         # Experiment 4 Stage 2 hardening: seeds + 
 experiments/honest_reaudit.py         # Experiment 5: re-audit all R²-"stopped" verdicts with XGBoost/MLP (3/21 survive)
 experiments/targeted_noise.py         # Experiment 6: anisotropic vs isotropic noise (subspace noise beats blunt, at the 0.55 bar)
 experiments/sealed_channel.py         # Experiment 7: sealed-channel / footprint test (output leaks attr ∝ task's use of it)
+experiments/diagnostic.py             # Experiment 8: the diagnostic — label↔attr predicts durable-removal cost; footprint law across 6 cells
+experiments/_scout_predictor.py       # Experiment 8 cell-selection scout: XGB AUC(attr|label) across candidate cells
 utils/pcrl_io.py                       # PCRL-specific glue (imports the read-only PCRL repo)
 results/                               # JSON curves + plots
 requirements.txt
