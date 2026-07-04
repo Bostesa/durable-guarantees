@@ -1,0 +1,59 @@
+====================================================================================================================================
+MASTER GAUNTLET TABLE — published methods vs ours, two-tier battery, with provenance (utility = % of clean e2e lift kept)
+====================================================================================================================================
+
+hmda/race/loan_decision  (predictor 0.514, clean e2e lift +0.0223)
+  cell / method                                 op. point       util  T1 rep  T2 rep  out T2         verdict provenance
+------------------------------------------------------------------------------------------------------------------------------------
+  LAFTR [official TF code] [T1]                     (γ=1)       102%   0.967   0.967   0.505     fails 0.967 official code
+  LAFTR [official TF code] [T2]                     (γ=1)       102%   0.967   0.967   0.505     fails 0.967 official code
+  LAFTR [reimpl, 5-class adversary] [T1]            (γ=8)        66%   1.000   1.000   0.671     fails 1.000 validated reimplementation
+  LAFTR [reimpl, 5-class adversary] [T2]            (γ=2)        79%   1.000   1.000   0.694     fails 1.000 validated reimplementation
+  VFAE [T1]                                 β=1 sampled-z        72%   0.535   0.553   0.533   CERTIFIES @T1 validated reimplementation
+  VFAE [T2]                               (β=1 sampled-z)        71%   0.536   0.558   0.529     fails 0.558 validated reimplementation
+  DANN-style adv. scrubbing (full) [T1]            (λ=20)        42%   0.664   0.664   0.523     fails 0.664 generic mechanism
+  DANN-style adv. scrubbing (full) [T2]            (λ=20)        42%   0.664   0.664   0.523     fails 0.664 generic mechanism
+  LEACE [T1]                                (closed-form)       101%   0.995   0.995   0.586     fails 0.995 official code (concept-erasure lib)
+  LEACE [T2]                                (closed-form)       101%   0.995   0.995   0.586     fails 0.995 official code (concept-erasure lib)
+  Obliviator (NeurIPS'25) [T1]                  (iter 15)        92%   0.983   0.983   0.554     fails 0.983 official code
+  Obliviator (NeurIPS'25) [T2]                  (iter 15)        92%   0.983   0.983   0.554     fails 0.983 official code
+  OURS e2e noised channel [T1]                        σ=8        95%    ≤.55       —       —   CERTIFIES @T1 —
+  OURS e2e noised channel [T2]                       σ=20        55%    ≤.55    ≤.55       —   CERTIFIES @T2 —
+
+hmda/race/loan_amount_band  (predictor 0.584, clean e2e lift +0.4091)
+  cell / method                                 op. point       util  T1 rep  T2 rep  out T2         verdict provenance
+------------------------------------------------------------------------------------------------------------------------------------
+  LAFTR [official TF code] [T1]                     (γ=1)        79%   0.949   0.949   0.526     fails 0.949 official code
+  LAFTR [official TF code] [T2]                     (γ=1)        79%   0.949   0.949   0.526     fails 0.949 official code
+  LAFTR [reimpl, 5-class adversary] [T1]            (γ=2)        86%   1.000   1.000   0.931     fails 1.000 validated reimplementation
+  LAFTR [reimpl, 5-class adversary] [T2]            (γ=2)        86%   1.000   1.000   0.931     fails 1.000 validated reimplementation
+  VFAE [T1]                               (β=1 sampled-z)        79%   0.585   0.613   0.603     fails 0.585 validated reimplementation
+  VFAE [T2]                               (β=1 sampled-z)        79%   0.585   0.613   0.603     fails 0.613 validated reimplementation
+  DANN-style adv. scrubbing (full) [T1]            (λ=20)        69%   0.624   0.624   0.526     fails 0.624 generic mechanism
+  DANN-style adv. scrubbing (full) [T2]            (λ=20)        69%   0.624   0.624   0.526     fails 0.624 generic mechanism
+  LEACE [T1]                                (closed-form)        97%   0.997   0.997   0.820     fails 0.997 official code (concept-erasure lib)
+  LEACE [T2]                                (closed-form)        97%   0.997   0.997   0.820     fails 0.997 official code (concept-erasure lib)
+  Obliviator (NeurIPS'25) [T1]                  (iter 15)        99%   0.968   0.968   0.809     fails 0.968 official code
+  Obliviator (NeurIPS'25) [T2]                  (iter 15)        99%   0.968   0.968   0.809     fails 0.968 official code
+  OURS e2e noised channel [T1]                       σ=12        57%    ≤.55       —       —   CERTIFIES @T1 —
+  OURS e2e noised channel [T2]                       σ=24        22%    ≤.55    ≤.55       —   CERTIFIES @T2 —
+
+adult/sex/income  (predictor 0.603, clean e2e lift +0.1435)
+  cell / method                                 op. point       util  T1 rep  T2 rep  out T2         verdict provenance
+------------------------------------------------------------------------------------------------------------------------------------
+  LAFTR [official TF code] [T1]                     (γ=8)        80%   0.846   0.846   0.607     fails 0.846 official code
+  LAFTR [official TF code] [T2]                     (γ=8)        80%   0.846   0.846   0.607     fails 0.846 official code
+  LAFTR [reimpl, 5-class adversary] [T1]            (γ=4)        76%   0.995   0.997   0.641     fails 0.995 validated reimplementation
+  LAFTR [reimpl, 5-class adversary] [T2]            (γ=4)        76%   0.995   0.997   0.641     fails 0.997 validated reimplementation
+  VFAE [T1]                              (β=1000 sampled-z)        68%   0.587   0.622   0.626     fails 0.587 validated reimplementation
+  VFAE [T2]                              (β=1000 sampled-z)        68%   0.587   0.622   0.626     fails 0.622 validated reimplementation
+  DANN-style adv. scrubbing (full) [T1]            (λ=20)        43%   0.610   0.610   0.514     fails 0.610 generic mechanism
+  DANN-style adv. scrubbing (full) [T2]            (λ=20)        43%   0.610   0.610   0.514     fails 0.610 generic mechanism
+  LEACE [T1]                                (closed-form)        82%   0.998   0.998   0.604     fails 0.998 official code (concept-erasure lib)
+  LEACE [T2]                                (closed-form)        82%   0.998   0.998   0.604     fails 0.998 official code (concept-erasure lib)
+  Obliviator (NeurIPS'25) [T1]                  (iter 15)        92%   0.997   0.997   0.782     fails 0.997 official code
+  Obliviator (NeurIPS'25) [T2]                  (iter 15)        92%   0.997   0.997   0.782     fails 0.997 official code
+  OURS e2e noised channel [T1]                       σ=32        -1%    ≤.55       —       —   CERTIFIES @T1 —
+  OURS e2e noised channel [T2]                       σ=64        -7%    ≤.55    ≤.55       —   CERTIFIES @T2 —
+------------------------------------------------------------------------------------------------------------------------------------
+provenance: official code = authors' release run at the data boundary only; validated reimplementation = ours, validated head-to-head against the official code (LAFTR, adult cell) or against the paper's own Adult experiment (VFAE — no official release exists; results/vfae_calibration.json); generic mechanism = a mechanism-class baseline, not a published system (DANN-style scrubbing). T1 = max(XGB, MLP, LoRA-32) on the representation; T2 adds the informed Gaussian-LRT; out T2 = same battery on the task logits. Verdict on the representation at ≤0.55, 3-seed mean.

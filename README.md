@@ -79,7 +79,7 @@ artifacts** that an adapter can dissolve.
 >
 > **The final experiment (16) runs the field itself through the battery.** The
 > published fair-representation / erasure methods — LAFTR, VFAE, full-strength
-> adversarial forgetting, LEACE — get their best shot (knob sweeps, best honest
+> DANN-style adversarial scrubbing, LEACE — get their best shot (knob sweeps, best honest
 > operating point per tier, 3-seed certification) on the three headline cells.
 > **One of 24 method×cell×tier combinations certifies:** VFAE holds Tier 1 on the
 > easy cell at 72% utility — and not because of its fairness penalty (the
@@ -91,6 +91,26 @@ artifacts** that an adapter can dissolve.
 > 42–69% utility), LEACE (0.995–0.998, ≈ unprotected) — fails Tier 1 everywhere.
 > The field's own methods confirm the thesis: only noise survives honest
 > measurement, and the purpose-built channel dominates the accidental one.
+>
+> **The provenance repair + Experiment 17 close the audit.** Every gauntlet row
+> now carries an exact provenance tag (`results/master_gauntlet_table.txt`).
+> LAFTR re-run on the **official Vector Institute code** (TF1 release under a
+> compat shim, calibrated to the paper's own Adult numbers): fails Tier 1 on all
+> three cells at every γ — **no verdict changes**; its best reading anywhere is
+> 0.846, and at γ≥2 on the easy cell it "wins" its min-max by zeroing utility
+> while the representation still leaks at ~1.0. VFAE verified to have **no
+> official release**; our reimplementation reproduces the paper's own Adult
+> experiment under the paper's own LR/RF probes (s→majority, discrimination
+> 0.14→0.01), and the certifying easy-cell result re-certifies. The scrubbing
+> baseline is renamed **DANN-style adversarial scrubbing (generic mechanism)** —
+> it is not Jaiswal et al.'s method and is no longer named as such. And
+> **Obliviator (NeurIPS 2025, official code, supervised mode)** — the field's
+> strongest HSIC eraser, the "Exp-4 idea done seriously" — fails Tier 1 on all
+> three cells at 0.97–1.00 across all 15 iterations at 85–99% utility, with its
+> own stopping probe never satisfied (reads 0.94–0.99 throughout): the Exp-4/5
+> lesson that probe-shaped erasure only fools its own probe is confirmed on the
+> authors' own code. Final scoreboard: **1 of 36 method×cell×tier combinations
+> certifies** — VFAE's accidental noise channel, Tier 1, easy cell only.
 
 ## Experiment 1 — Falsification attack on PCRL's compliance certificate
 
@@ -1190,10 +1210,14 @@ Exp-14 table. Baselines and (noted, favorable-or-neutral) deviations:
    layer). β ∈ {1, 10, 100, 1000}, **two deployment exposures per β**: sampled z
    (the stochastic encoder as shipped) and posterior mean μ (the common
    deterministic deployment).
-3. **Adversarial forgetting / gradient-reversal scrubbing at full published
-   strength** — deep 256-256 adversary, proper alternating schedule (5 adversary
-   steps per encoder step), λ ∈ {1…20}. Strictly stronger than Exp-7's minimal
-   GRL scrub.
+3. **DANN-style adversarial scrubbing (full strength)** — the *generic*
+   gradient-reversal / alternating-adversary mechanism (the DANN family, Ganin &
+   Lempitsky 2015, as used across the erasure literature), **not** a specific
+   published system (in particular it does **not** implement Jaiswal et al.'s
+   "adversarial forgetting" — no forget-gate): deep 256-256 adversary, proper
+   alternating schedule (5 adversary steps per encoder step), λ ∈ {1…20}.
+   Strictly stronger than Exp-7's minimal GRL scrub. Provenance: generic
+   mechanism.
 4. **LEACE** (Belrose et al. 2023) — the closed-form eraser (`concept_erasure`),
    as published, on the clean trained P; utility + logits from a retrained LR head.
 
@@ -1213,7 +1237,7 @@ the utility that knob keeps):
 | LAFTR | 1.000 ✗ (66% @ γ=8) | 1.000 ✗ (86% @ γ=2) | 0.995 ✗ (76% @ γ=4) |
 | **VFAE (sampled z)** | **0.535 ✓ TIER 1 @ 72%** — T2 0.553 ✗ | 0.585 ✗ (79% @ β=1) | 0.587 ✗ (68% @ β=1000) |
 | VFAE (mean z) | 1.000 ✗ (every β) | 1.000 ✗ | 1.000 ✗ |
-| adv. forgetting (deep, 5:1) | 0.664 ✗ (42% @ λ=20) | 0.624 ✗ (69% @ λ=20) | 0.610 ✗ (43% @ λ=20) |
+| DANN-style adv. scrubbing (deep, 5:1) | 0.664 ✗ (42% @ λ=20) | 0.624 ✗ (69% @ λ=20) | 0.610 ✗ (43% @ λ=20) |
 | LEACE | 0.995 ✗ (101%) | 0.997 ✗ (97%) | 0.998 ✗ (82%) |
 | *ours: e2e blunt (Exp 14)* | *T1 ✓ 95% · T2 ✓ 55%* | *T1 ✓ 57% · T2 ✓ 22%* | *T1 ✓ −1% · T2 ✓ −7%* |
 | *ours: e2e surgical (Exp 15, Tier-1-only)* | *✓ 102%* | *✓ 100%* | *✓ 85% (σ=16, robust)* |
@@ -1229,7 +1253,7 @@ finding:
    converges) while XGBoost reads the attribute at the unprotected level. This is
    the Exp-7 gradient-reversal result on the published method at published
    strength, ×3 cells ×5 knobs.
-2. **Full-strength adversarial forgetting is better scrubbing and still nowhere
+2. **Full-strength DANN-style scrubbing is better scrubbing and still nowhere
    near the bar.** The deep 5:1-schedule adversary genuinely removes signal
    (1.00 → 0.61–0.66 at λ=20) — far more than the minimal GRL — but it plateaus
    3–4× the bar's distance above chance while utility falls to 42–69%. No λ
@@ -1274,6 +1298,174 @@ is not *reliably* below it; the failing methods' utility numbers are read at
 their most-protected knob, not at matched protection (matched protection does
 not exist for them — they never reach the bar).
 
+## Provenance repairs — official code, validation, and an honest rename
+
+Experiment 16 ran *our* faithful reimplementations. Three repairs pin down what
+that does and does not license, and give every gauntlet row an exact provenance
+tag (**official code / validated reimplementation / generic mechanism** — the
+column that appears in the paper appendix, `results/master_gauntlet_table.txt`).
+
+### Repair 1 — LAFTR re-run on the official code (`experiments/laftr_official.py`)
+
+The official release ([VectorInstitute/laftr](https://github.com/VectorInstitute/laftr),
+commit `a166ba3c`, TF-1.9/Python-3.6-era) **runs unmodified** under TF 2.21's
+`tf.compat.v1` via a 3-line environment shim (module alias; `collections.abc`
+alias; `tf.contrib.layers.xavier_initializer → glorot_uniform_initializer`, the
+identical initializer). Shim sanity anchor on THEIR `data/adult/adult.npz`, their
+full protocol: accuracy 0.844–0.848 vs the paper's ~0.84 Adult region (DP
+0.12–0.18 / DI 0.05–0.08 at the final epoch — their published points come from a
+checkpoint sweep; and their joint adversary reads A at exactly the majority rate,
+the same "adversary fools itself" behavior as our reimplementation).
+
+Their released protocol throughout: `WeightedDemParWassGan` (group-normalized L1
+adversary), hidden `[8]`, zdim 8, `use_attr=true` (their Adult config
+concatenates the protected attribute onto x), batch 64, 1000 epochs, final-epoch
+model. Our cells enter at the data boundary only (their npz schema; train = all
+rows as for every gauntlet baseline; x_test = all rows so the saved tensors align
+with the battery). **Scope fact:** the release is binary-A/binary-Y by
+construction (2×2 AY-weight grids, 0/1-array metrics). On the two 5-class-race
+HMDA cells it does not crash — `mean(A)+1−mean(A)=1` slips through its assert —
+it silently treats race ∈ {0..4} as a scalar two-group target (and trains its
+head on the "band==1" indicator for the 5-class task). We run it as released
+anyway and let the battery judge the representation; the Exp-16 multiclass
+reimplementation remains the charitable version, validated head-to-head on the
+adult cell where both are well-defined.
+
+**Result — the official code fails Tier 1 on every cell at every γ, and NO
+VERDICT CHANGES from the Exp-16 row** (`results/laftr_official.json`; battery
+T1 max on the released zdim-8 representation, seed-0 sweep, utility = % of
+clean e2e lift):
+
+| γ | easy hmda/loan_decision | middle hmda/loan_amount_band | hard adult/sex/income |
+|---|---|---|---|
+| 0.5 | 0.993 ✗ (104%) | 0.968 ✗ (79%) | 0.997 ✗ (82%) |
+| 1 | 0.967 ✗ (102%) | 0.949 ✗ (79%) | 0.992 ✗ (80%) |
+| 2 | 0.999 ✗ (3%) | 0.993 ✗ (69%) | 0.990 ✗ (82%) |
+| 4 | 1.000 ✗ (17%) | 0.998 ✗ (34%) | 0.999 ✗ (81%) |
+| 8 | 0.996 ✗ (13%) | 0.972 ✗ (77%) | 0.846 ✗ (80%) |
+
+Two details the official run adds beyond confirming the reimplementation: (a)
+on the easy cell, γ≥2 collapses the task head to zero lift *while the
+representation still leaks at 0.996–1.000* — the min-max degenerates by
+destroying utility, not by hiding the attribute (their output channel then
+reads 0.500 only because the output is uninformative); (b) the single lowest
+LAFTR reading anywhere in the project is the official code's adult γ=8 point,
+T1 = 0.846 — still 0.30 above the bar, at 80% utility. The official-vs-reimpl
+head-to-head on the adult cell (the one cell where the released binary code is
+fully well-defined) matches verdict-for-verdict: fails every tier at every
+knob, leaking at 0.85–1.00 (official) vs 0.995–1.000 (reimpl, which is
+project-capacity and multiclass-generalized) — validating the reimplementation
+rows the race cells rest on. Verdict changes from Exp 16: **none**.
+
+### Repair 2 — VFAE: no official code exists; calibration on the paper's own experiment (`experiments/vfae_calibration.py`)
+
+**Verified (2026-07-03): Louizos et al. never released VFAE code.** GitHub-wide
+repo search returns community reimplementations only; no author account ships
+one; rampasek/DrVAE credits "Christos Louizos's original theano implementation"
+but links only the arXiv page — that Theano code was never published. The
+gauntlet's VFAE row therefore rests on our reimplementation, and the repair
+demonstrates its fidelity on the paper's own Adult experiment (s = age, y =
+income>50K), evaluated with the **paper's own instruments** (LR + RF predicting
+s from z on held-out rows; discrimination |E[ŷ|s=0]−E[ŷ|s=1]|):
+
+| row (paper-matched config: h100 z50 α1 mb100) | s-acc LR | s-acc RF | y-acc | discrimination |
+|---|---|---|---|---|
+| paper reports (Fig 4a, read off the figure; their chance ≈ 0.5) | ~0.51 | ~0.50 | ~0.78 | ~0.02 |
+| **ours, VFAE sampled z, chosen β=1** (our s-majority = 0.703) | **0.703** | **0.704** | **0.802** | **0.042** |
+| ours, β=100 | 0.703 | 0.703 | 0.789 | **0.005** |
+| ours, original x (reference; paper: ~0.75/~0.70, y 0.82, disc 0.15) | 1.000 | 1.000 | 0.850 | 0.142 |
+
+Fidelity reproduced on every axis, adjusted for base rates: under the paper's LR/RF
+probes, s-recovery from sampled z collapses to exactly the majority rate (paper:
+exactly chance), y-accuracy costs ~5pp, discrimination collapses 0.142 → 0.005–0.042
+(paper 0.15 → 0.02). The same representations that pass the paper's own audit are
+the ones whose posterior mean our battery reads at 1.00 — the thesis in one table.
+Documented deviations (D1–D5, none touching the fairness mechanism): age binarized
+at our bucket boundary (theirs unstated), project-standard preprocessing/split
+(Zemel splits unrecoverable), single stochastic layer (no z2), exact median-heuristic
+MMD instead of their 500-random-feature approximation, β grid {1,10,100,1000} with a
+stated selection criterion (theirs unstated). Full details in
+`experiments/vfae_calibration.py` and `results/vfae_calibration.json`.
+
+**Re-confirmation of the certifying result:** the single certifying baseline
+combo (VFAE β=1 sampled-z, Tier 1, easy cell) was re-certified from scratch under
+the calibration-validated implementation: rep T1 = **0.535 ≤ 0.55** (per-seed
+0.534/0.534/0.536), Tier-2 LRT 0.551–0.556 (the graze stands), 72% utility — the
+fully-seeded pipeline reproduces Exp-16 exactly.
+
+### Repair 3 — renamed: "DANN-style adversarial scrubbing (full strength)"
+
+The Exp-16 scrubbing baseline is a **generic-mechanism** baseline — the
+gradient-reversal / alternating-adversary family (Ganin & Lempitsky 2015) at
+full strength — not Jaiswal et al.'s "adversarial forgetting" (it has no
+forget-gate), and the paper must not imply otherwise. Renamed everywhere (code
+key `DANN-scrub`, README, results JSON — numbers unchanged, see
+`provenance_note` in `results/baseline_gauntlet.json`).
+
+## Experiment 17 — Obliviator (NeurIPS 2025, official code) through the gauntlet
+
+Obliviator (Akbari et al., NeurIPS 2025) is the field's strongest HSIC-family
+post-hoc eraser — iterative RFF-kernelized HSIC minimization with an
+encoder that morphs the feature space, plus a kernel-PCA step in the null space
+of Cov(s,·) each iteration, repeated until **their own MLP probe** reads the
+attribute at ≤ 0.6 accuracy (or 15 iterations). It is exactly "the Exp-4 HSIC
+idea done seriously," which makes it the decisive test of whether the Exp-4/5
+finding — *probe-shaped erasure only fools its own probe* — was an artifact of
+our simple projections. **Provenance: official code**
+([ramin-akbari/Obliviator](https://github.com/ramin-akbari/Obliviator), pinned
+commit `0f2233f8`, imported in-place; their `Supervised` eraser — the strongest
+mode, task label available — their default configs and their `main.py` loop
+verbatim; our cells in at the data boundary, x = the clean trained P exactly as
+LEACE received; `experiments/obliviator_gauntlet.py`).
+
+**Result: fails Tier 1 on all three cells, at every iteration — and its own
+stopping criterion never fires** (`results/obliviator_gauntlet.{json,png}`):
+
+| cell | our battery T1, best over 16 iterations | their own MLP probe | utility kept | verdict |
+|---|---|---|---|---|
+| hmda/loan_decision (easy) | 0.983 ✗ (iter 15) | 0.965–0.990 (target 0.6: never) | 85–92% | fails T1+T2 |
+| hmda/loan_amount_band (middle) | 0.968 ✗ (iter 15) | 0.939–0.969 (never) | 98–99% | fails T1+T2 |
+| adult/sex/income (hard) | 0.997 ✗ (iter 15) | 0.977–0.988 (never) | 92–96% | fails T1+T2 |
+
+Characterization against the Exp-4 controlled finding: this is the same
+signature, produced by the authors' own code. The Exp-4 HSIC projections removed
+what their kernel statistic could see and left XGBoost at the unprotected level
+(0.68 on Adult, ~1.0 on HMDA); official Obliviator — iterative, supervised,
+kernelized — lands at 0.97–1.00 under the battery on the same cells at near-full
+utility. The interesting twist is that here even *its own* deep MLP probe stays
+at 0.94–0.99: on tabular trained representations (attribute robustly,
+redundantly, nonlinearly encoded — XGB reads clean P at 1.00), the null-space +
+HSIC moves have almost nothing kernel-visible to remove. The paper's reported
+successes are on foundation-model text embeddings; on representations where the
+attribute is load-bearing, the strongest published HSIC machinery does not move
+the needle. The Exp-4/5 lesson was not an implementation artifact.
+
+## The master gauntlet table with provenance (paper appendix)
+
+`experiments/master_gauntlet_table.py` merges Exp 16, Repair 1, and Exp 17 into
+the single appendix artifact, `results/master_gauntlet_table.txt` — every
+method × cell × tier with its operating point, utility, T1/T2/output readings,
+verdict, and an exact provenance tag. The tags (this is the appendix column):
+
+| gauntlet row | provenance |
+|---|---|
+| LAFTR [official TF code] | **official code** (VectorInstitute/laftr `a166ba3c`, TF1-compat shim, data boundary only) |
+| LAFTR [reimpl, 5-class adversary] | **validated reimplementation** (head-to-head vs official on the adult cell: same verdict at every knob) |
+| VFAE | **validated reimplementation** (no official release exists; calibrated on the paper's own Adult experiment) |
+| DANN-style adv. scrubbing (full) | **generic mechanism** (DANN family; not Jaiswal et al.'s adversarial forgetting) |
+| LEACE | **official code** (the authors' `concept-erasure` library, as published) |
+| Obliviator (NeurIPS'25) | **official code** (ramin-akbari/Obliviator `0f2233f8`, their loop verbatim, data boundary only) |
+
+**Scoreboard: 1 of 36 method×cell×tier combinations certifies** (VFAE sampled-z,
+Tier 1, easy cell, 72% — the accidental noise channel), and the two new
+official-code rows are the two heaviest hitters the field has: the released
+LAFTR at its own protocol (fails everywhere, best reading 0.846 at one point,
+elsewhere 0.95–1.00) and the NeurIPS-2025 state-of-the-art HSIC eraser (fails
+everywhere at 0.97–1.00 with its own stopping probe never satisfied). Our e2e
+noised channel certifies both tiers on both achievable cells. The provenance
+repair *strengthened* the gauntlet's conclusion: the failures are not artifacts
+of our reimplementations — the field's own code fails its own cells the same way.
+
 ### Layout
 
 ```
@@ -1300,7 +1492,11 @@ experiments/celeba_extract.py         # Experiment 13 (step 1): checkpointed Cel
 experiments/celeba_pipeline.py        # Experiment 13: the full CelebA pipeline on both cells (2x2 + tiers + footprint)
 experiments/two_tier_certification.py # Experiment 14: two-tier (black-box vs informed-LRT) re-certification of the key operating points
 experiments/hardening_seeds.py        # Experiment 15: every headline number at 5 training seeds (hard-cell edge case settled)
-experiments/baseline_gauntlet.py      # Experiment 16: LAFTR/VFAE/adv-forgetting/LEACE under the two-tier battery (1/24 certifies)
+experiments/baseline_gauntlet.py      # Experiment 16: LAFTR/VFAE/DANN-scrub/LEACE under the two-tier battery (1/24 certifies)
+experiments/laftr_official.py         # Repair 1: LAFTR re-run on the OFFICIAL TF code (VectorInstitute/laftr under a compat shim)
+experiments/vfae_calibration.py       # Repair 2: VFAE official-code search record + calibration on the paper's own Adult setup
+experiments/obliviator_gauntlet.py    # Experiment 17: Obliviator (NeurIPS 2025, official code) through the two-tier gauntlet
+experiments/master_gauntlet_table.py  # the master gauntlet table with the provenance column (paper appendix artifact)
 utils/battery.py                       # the standing battery: Tier 1 (XGB+MLP+LoRA32) and Tier 2 (+ channel-aware Gaussian-LRT)
 utils/pcrl_io.py                       # PCRL-specific glue (imports the read-only PCRL repo)
 results/                               # JSON curves + plots

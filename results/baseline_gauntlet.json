@@ -16,15 +16,15 @@
       100.0,
       1000.0
     ],
-    "AdvScrub": [
+    "LEACE": [
+      0.0
+    ],
+    "DANN-scrub": [
       1.0,
       2.0,
       5.0,
       10.0,
       20.0
-    ],
-    "LEACE": [
-      0.0
     ]
   },
   "vfae_alpha": 10.0,
@@ -476,7 +476,7 @@
           }
         },
         {
-          "baseline": "AdvScrub",
+          "baseline": "DANN-scrub",
           "rows": [
             {
               "label": "\u03bb=1",
@@ -953,7 +953,7 @@
           "certs": {}
         },
         {
-          "baseline": "AdvScrub",
+          "baseline": "DANN-scrub",
           "rows": [
             {
               "label": "\u03bb=1",
@@ -1430,7 +1430,7 @@
           "certs": {}
         },
         {
-          "baseline": "AdvScrub",
+          "baseline": "DANN-scrub",
           "rows": [
             {
               "label": "\u03bb=1",
@@ -1682,5 +1682,6 @@
         "clean_lift": 0.14757927686425182
       }
     }
-  }
+  },
+  "provenance_note": "'DANN-scrub' = DANN-style adversarial scrubbing (full strength): a GENERIC gradient-reversal/alternating-adversary mechanism baseline (Ganin & Lempitsky 2015 family), not Jaiswal et al.'s adversarial forgetting (no forget-gate). Renamed from 'AdvScrub'/'adversarial forgetting' in the provenance repair; numbers unchanged."
 }

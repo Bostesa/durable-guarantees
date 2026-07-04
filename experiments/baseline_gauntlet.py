@@ -25,11 +25,16 @@ certified over 3 training seeds — the baselines get their best shot):
      evaluated per beta — the SAMPLED z (the stochastic encoder is a
      heteroscedastic noise channel, VFAE's only attacker-agnostic component)
      and the posterior MEAN mu (the common deterministic deployment).
-  3. Adversarial forgetting / gradient-reversal scrubbing at full published
-     strength — deep 256-256 adversary, proper alternating schedule (5
-     adversary steps per encoder step), encoder trained task-CE − lambda *
-     adversary-CE. Knob: lambda in {1, 2, 5, 10, 20}. (Strictly stronger than
-     the minimal single-step GRL scrub of Exp 7, which XGB read at 1.00.)
+  3. DANN-style adversarial scrubbing (full strength) — the GENERIC
+     gradient-reversal / alternating-adversary mechanism (the DANN family,
+     Ganin & Lempitsky 2015, as used across the erasure literature), NOT a
+     specific published system: deep 256-256 adversary, proper alternating
+     schedule (5 adversary steps per encoder step), encoder trained task-CE −
+     lambda * adversary-CE. Knob: lambda in {1, 2, 5, 10, 20}. (Strictly
+     stronger than the minimal single-step GRL scrub of Exp 7, which XGB read
+     at 1.00.) Provenance: generic mechanism — this row does not implement
+     Jaiswal et al.'s "adversarial forgetting" (no forget-gate) and must not
+     be cited as it.
   4. LEACE (Belrose et al. 2023) — closed-form linear concept erasure
      (concept_erasure.LeaceEraser, as published) applied post-hoc to the clean
      trained representation P; utility and logits from a retrained LR head.
@@ -136,11 +141,12 @@ def _eval_chunks(fn, X_t, n, chunk=4096):
             for j in range(len(outs[0]))]
 
 
-def _batch_gen(n, seed):
+def _batch_gen(n, seed, bs=None):
     g = torch.Generator(device="cpu").manual_seed(seed)
+    bs = BS if bs is None else bs
 
     def nxt():
-        return torch.randint(0, n, (min(BS, n),), generator=g)
+        return torch.randint(0, n, (min(bs, n),), generator=g)
     return nxt
 
 
@@ -185,7 +191,7 @@ def train_laftr(X_t, attr_np, task_np, n_attr, n_task, gamma, device, seed):
 
 
 # --------------------------------------------------------------------------- #
-#  Baseline 3 — adversarial forgetting / full-strength GR scrubbing            #
+#  Baseline 3 — DANN-style adversarial scrubbing (full strength)               #
 # --------------------------------------------------------------------------- #
 def train_scrub(X_t, attr_np, task_np, n_attr, n_task, lam, device, seed):
     torch.manual_seed(seed)
@@ -229,16 +235,26 @@ def train_scrub(X_t, attr_np, task_np, n_attr, n_task, lam, device, seed):
 # --------------------------------------------------------------------------- #
 #  Baseline 2 — VFAE                                                           #
 # --------------------------------------------------------------------------- #
-def train_vfae(X_t, attr_np, task_np, n_attr, n_task, beta, device, seed):
-    """Returns (mu, sigma2, z_sampled, L_sampled, L_mean) over all rows."""
+def train_vfae(X_t, attr_np, task_np, n_attr, n_task, beta, device, seed,
+               hidden=128, zdim=None, alpha=None, steps=None, bs=None,
+               X_eval_t=None, attr_eval_np=None):
+    """Returns (mu, sigma2, z_sampled, L_sampled, L_mean) over all rows.
+
+    Defaults reproduce the gauntlet configuration exactly (hidden 128,
+    zdim=REP_DIM, alpha=VFAE_ALPHA, steps=STEPS, bs=BS); the kwargs exist so
+    experiments/vfae_calibration.py can run the paper-matched configuration
+    (hidden 100, zdim 50, alpha 1, minibatch 100) through the same code."""
+    zdim = REP_DIM if zdim is None else zdim
+    alpha = VFAE_ALPHA if alpha is None else alpha
+    steps = STEPS if steps is None else steps
     torch.manual_seed(seed)
     d_in = X_t.shape[1]
-    enc = nn.Sequential(nn.Linear(d_in + n_attr, 128), nn.ReLU()).to(device)
-    mu_h = nn.Linear(128, REP_DIM).to(device)
-    lv_h = nn.Linear(128, REP_DIM).to(device)
-    dec = nn.Sequential(nn.Linear(REP_DIM + n_attr, 128), nn.ReLU(),
-                        nn.Linear(128, d_in)).to(device)
-    clf = nn.Linear(REP_DIM, n_task).to(device)
+    enc = nn.Sequential(nn.Linear(d_in + n_attr, hidden), nn.ReLU()).to(device)
+    mu_h = nn.Linear(hidden, zdim).to(device)
+    lv_h = nn.Linear(hidden, zdim).to(device)
+    dec = nn.Sequential(nn.Linear(zdim + n_attr, hidden), nn.ReLU(),
+                        nn.Linear(hidden, d_in)).to(device)
+    clf = nn.Linear(zdim, n_task).to(device)
     params = (list(enc.parameters()) + list(mu_h.parameters()) + list(lv_h.parameters())
               + list(dec.parameters()) + list(clf.parameters()))
     opt = torch.optim.Adam(params, lr=1e-3)
@@ -247,10 +263,10 @@ def train_vfae(X_t, attr_np, task_np, n_attr, n_task, beta, device, seed):
     task_t = torch.from_numpy(task_np).long().to(device)
     classes = sorted(np.unique(attr_np).tolist())
     n = X_t.shape[0]
-    nxt = _batch_gen(n, seed)
+    nxt = _batch_gen(n, seed, bs)
     for m in (enc, mu_h, lv_h, dec, clf):
         m.train()
-    for _ in range(STEPS):
+    for _ in range(steps):
         idx = nxt().to(device)
         xb = X_t[idx]
         sb = attr_t[idx]
@@ -260,14 +276,18 @@ def train_vfae(X_t, attr_np, task_np, n_attr, n_task, beta, device, seed):
         z = mu + torch.exp(0.5 * lv) * torch.randn_like(mu)
         recon = F.mse_loss(dec(torch.cat([z, soh], 1)), xb, reduction="none").sum(1).mean()
         kl = (-0.5 * (1 + lv - mu ** 2 - lv.exp()).sum(1)).mean()
-        loss = (recon + kl + VFAE_ALPHA * ce(clf(z), task_t[idx])
+        loss = (recon + kl + alpha * ce(clf(z), task_t[idx])
                 + beta * mmd_class_loss(z, sb, classes))
         opt.zero_grad()
         loss.backward()
         opt.step()
     for m in (enc, mu_h, lv_h, clf):
         m.eval()
-    attr_oh = F.one_hot(torch.from_numpy(attr_np).long(), n_attr).float().to(device)
+    if X_eval_t is None:               # default: expose the training rows
+        X_eval_t, attr_eval_np = X_t, attr_np
+    n_eval = X_eval_t.shape[0]
+    attr_oh = F.one_hot(torch.from_numpy(attr_eval_np).long(),
+                        n_attr).float().to(device)
 
     def fwd(xb):
         i0 = fwd.pos
@@ -279,7 +299,7 @@ def train_vfae(X_t, attr_np, task_np, n_attr, n_task, beta, device, seed):
         return mu, lv.exp(), z, clf(z), clf(mu)
     fwd.pos = 0
     torch.manual_seed(seed + 10_000)   # deterministic exposure draw
-    mu, sig2, z, Lz, Lmu = _eval_chunks(fwd, X_t, n)
+    mu, sig2, z, Lz, Lmu = _eval_chunks(fwd, X_eval_t, n_eval)
     return mu, sig2, z, Lz, Lmu
 
 
@@ -319,7 +339,7 @@ def make_exposures(baseline, knob, ctx, device, seed):
     if baseline == "LAFTR":
         Z, L = train_laftr(X_t, attr, task, n_attr, n_task, knob, device, seed)
         return [_exposure(f"γ={knob:g}", knob, Z, L)]
-    if baseline == "AdvScrub":
+    if baseline == "DANN-scrub":
         Z, L = train_scrub(X_t, attr, task, n_attr, n_task, knob, device, seed)
         return [_exposure(f"λ={knob:g}", knob, Z, L)]
     if baseline == "VFAE":
@@ -404,7 +424,7 @@ def certify(baseline, label, knob, ctx, device):
 # --------------------------------------------------------------------------- #
 #  Per-baseline driver                                                         #
 # --------------------------------------------------------------------------- #
-KNOBS = {"LAFTR": LAFTR_GAMMAS, "VFAE": VFAE_BETAS, "AdvScrub": SCRUB_LAMBDAS,
+KNOBS = {"LAFTR": LAFTR_GAMMAS, "VFAE": VFAE_BETAS, "DANN-scrub": SCRUB_LAMBDAS,
          "LEACE": [0.0]}
 
 
@@ -539,7 +559,7 @@ def _plot(results, png_path):
     import matplotlib
     matplotlib.use("Agg")
     import matplotlib.pyplot as plt
-    markers = {"LAFTR": "o", "VFAE": "s", "AdvScrub": "^", "LEACE": "D"}
+    markers = {"LAFTR": "o", "VFAE": "s", "DANN-scrub": "^", "LEACE": "D"}
     fig, axes = plt.subplots(1, len(results), figsize=(5.8 * len(results), 5.0),
                              squeeze=False)
     for ax, cr in zip(axes[0], results):
@@ -597,7 +617,7 @@ def main():
               f"task={n_task}cls maj={task_maj:.3f} predictor={pred:.4f} "
               f"clean e2e lift={ours[cell['name']]['clean_lift']:+.4f}", flush=True)
         brs = []
-        for b in ("LAFTR", "VFAE", "AdvScrub", "LEACE"):
+        for b in ("LAFTR", "VFAE", "DANN-scrub", "LEACE"):
             key = f"{cell['name']}|{b}"
             if key in partial:
                 print(f"  [resume] {key} from checkpoint", flush=True)

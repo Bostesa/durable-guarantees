@@ -1,0 +1,162 @@
+{
+  "provenance": {
+    "LAFTR (official)": "official code",
+    "LAFTR": "validated reimplementation",
+    "VFAE": "validated reimplementation",
+    "DANN-scrub": "generic mechanism",
+    "LEACE": "official code (concept-erasure lib)",
+    "Obliviator": "official code"
+  },
+  "cells": {
+    "hmda/race/loan_decision": {
+      "LAFTR (official)": {
+        "tier1": {
+          "certified": false
+        },
+        "tier2": {
+          "certified": false
+        }
+      },
+      "LAFTR": {
+        "tier1": {
+          "certified": false
+        },
+        "tier2": {
+          "certified": false
+        }
+      },
+      "VFAE": {
+        "tier1": {
+          "certified": true
+        },
+        "tier2": {
+          "certified": false
+        }
+      },
+      "DANN-scrub": {
+        "tier1": {
+          "certified": false
+        },
+        "tier2": {
+          "certified": false
+        }
+      },
+      "LEACE": {
+        "tier1": {
+          "certified": false
+        },
+        "tier2": {
+          "certified": false
+        }
+      },
+      "Obliviator": {
+        "tier1": {
+          "certified": false
+        },
+        "tier2": {
+          "certified": false
+        }
+      }
+    },
+    "hmda/race/loan_amount_band": {
+      "LAFTR (official)": {
+        "tier1": {
+          "certified": false
+        },
+        "tier2": {
+          "certified": false
+        }
+      },
+      "LAFTR": {
+        "tier1": {
+          "certified": false
+        },
+        "tier2": {
+          "certified": false
+        }
+      },
+      "VFAE": {
+        "tier1": {
+          "certified": false
+        },
+        "tier2": {
+          "certified": false
+        }
+      },
+      "DANN-scrub": {
+        "tier1": {
+          "certified": false
+        },
+        "tier2": {
+          "certified": false
+        }
+      },
+      "LEACE": {
+        "tier1": {
+          "certified": false
+        },
+        "tier2": {
+          "certified": false
+        }
+      },
+      "Obliviator": {
+        "tier1": {
+          "certified": false
+        },
+        "tier2": {
+          "certified": false
+        }
+      }
+    },
+    "adult/sex/income": {
+      "LAFTR (official)": {
+        "tier1": {
+          "certified": false
+        },
+        "tier2": {
+          "certified": false
+        }
+      },
+      "LAFTR": {
+        "tier1": {
+          "certified": false
+        },
+        "tier2": {
+          "certified": false
+        }
+      },
+      "VFAE": {
+        "tier1": {
+          "certified": false
+        },
+        "tier2": {
+          "certified": false
+        }
+      },
+      "DANN-scrub": {
+        "tier1": {
+          "certified": false
+        },
+        "tier2": {
+          "certified": false
+        }
+      },
+      "LEACE": {
+        "tier1": {
+          "certified": false
+        },
+        "tier2": {
+          "certified": false
+        }
+      },
+      "Obliviator": {
+        "tier1": {
+          "certified": false
+        },
+        "tier2": {
+          "certified": false
+        }
+      }
+    }
+  }
+}
