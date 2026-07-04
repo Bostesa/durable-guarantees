@@ -105,7 +105,62 @@ Our contributions:
 % diffusion-model erasure \citep{lu2025erasure}; TAR/RMU durability failures as
 % motivation \citep{tamirisa2024tar,qi2024durability}.
 % Field-claim calibration sentence lives here too.
-[Related work stub: five risk papers thrown at ourselves first, at true size.]
+\textbf{Removing attributes from representations.}
+Fair representation learning trains encoders so that protected attributes cannot
+be recovered downstream, by adversarial games \citep{madras2018laftr,
+ganin2015dann}, variational objectives \citep{louizos2016vfae}, or closed-form
+projection \citep{belrose2023leace}. Each certifies compliance against a stated
+adversary class, the method's own adversary, a kernel statistic, or a linear
+probe. Linear certificates in particular are deliberately scoped: LEACE proves
+exact guardedness against linear adversaries and claims nothing beyond them
+\citep{belrose2023leace}. Practical evaluations, however, rarely check beyond
+the certified class. We quantify the gap that habit leaves open, and find it is
+large enough to invert verdicts: representations certified compliant yield the
+attribute to a gradient-boosted probe at up to 0.99 AUC.
+
+\textbf{Evaluation as the weak link.}
+That erasure does not transfer across adversary classes was established in
+kernel space by \citet{ravfogel2022kernelized}, and the privacy literature has
+long shown models leak attributes they were never trained to predict
+\citep{song2020overlearning}. Probing methodology work makes the complementary
+point that what a probe finds depends on the probe
+\citep{voita2020mdl,elazar2021amnesic}. We build the graded version of this
+argument: a two-tier battery ordered by attacker knowledge, a systematic
+re-audit in which 3 of 21 certified verdicts survive, and two propositions
+(Props.~\ref{prop:blind} and~\ref{prop:impossible}) showing the failure is not
+repairable within the certificate, since linear certificates are invariant to
+linear adaptation and second-moment certificates admit no non-vacuous bound.
+
+\textbf{Limits of removal.}
+Information-theoretic tradeoffs between fairness and utility are classical
+\citep{zhao2019inherent}. Most directly, \citet{stadler2024} formalize
+least-privilege learning and prove that representations cannot combine high
+task utility with the prevention of inference beyond the task label. Their
+theorem establishes that a leakage floor exists, at the level of
+representations and task-label leakage, which is slightly more general than
+our output-side phrasing. We contribute the empirical face of that limit: the
+floor tracks label--attribute coupling along the diagonal, a one-feature test
+predicts it before training, constructed cells confirm the relationship is
+causal, and our method approaches the floor rather than pretending to beat it.
+
+\textbf{Certified fairness.}
+FARE \citep{jovanovic2023fare} derives practical certificates that bound the
+unfairness of downstream classifiers drawn from restricted families. Our
+evaluation is the complement: empirical, adversarial, and graded by attacker
+knowledge, with Prop.~\ref{prop:impossible} explaining why certificates
+computed from second-moment statistics cannot close the gap the restriction
+leaves open.
+
+\textbf{Adjacent evidence.}
+The durability literature for language models reports the same pattern at
+larger scale: safeguards certified by their own evaluations fail under
+fine-tuning attacks \citep{tamirisa2024tar,qi2024durability}. Concurrent work
+on diffusion-model concept erasure likewise distinguishes guidance-based
+avoidance from destruction-based removal and finds that avoidance fools its
+own evaluation but not stronger probes \citep{lu2025erasure}. The mechanism
+our results isolate, that only information destruction survives, is the
+data-processing inequality read as an evaluation principle
+\citep{dwork2014dp,cover2006it}.
 
 \section{Setup: Cells, Battery, and Why Measurement Must Be Adversarial}
 
@@ -422,7 +477,37 @@ Gauntlet summary across the three headline cells and two threat tiers; 1 of 36 p
 % - Future work: 2-3 sentences on prevention vs removal for entangled capabilities
 %   in language models (Way 3, do not spend it); 1 sentence on output-level
 %   mechanisms such as differentially private responses (Way 4).
-[Discussion stub.]
+\textbf{The floor is label-relative.}
+The footprint law bounds leakage by what the task label couples to, and the
+label is a modeling choice. Our constructed cells show this operationally:
+tuning the label--attribute coupling down moves the floor down, with everything
+else fixed. A measured floor therefore mixes two things, genuine task
+necessity and bias inherited from the label itself. A lending label built from
+historical decisions may couple to race because the decisions did. When the
+diagnostic reads high, the first question is not how to remove harder but
+whether the label is the right one, since a cleaner label shrinks the wall
+that no removal method can.
+
+\textbf{Limitations.}
+Our evidence is tabular plus one vision check, and the vision cells used a
+frozen, pre-shaped encoder, which is exactly the regime where the end-to-end
+advantage disappears. The diagnostic is an upper bound whose tightness
+requires the task to be well learned. The 0.55 bar and the two tiers are
+choices, defensible but not canonical, and Tier-2 certification is expensive
+enough that for many deployments it amounts to a proof of infeasibility. We
+report certified operating points, not guarantees: by
+Prop.~\ref{prop:impossible}, no second-moment certificate can replace
+adversarial measurement, including ours.
+
+\textbf{Future work.}
+The pattern we characterize, removal succeeding exactly where the target is
+weakly coupled to what the system must retain, suggests that for capabilities
+deeply entangled with model utility, preventing acquisition during training
+may dominate post-hoc removal. Testing this in language models, where
+fine-tuning attacks routinely undo safeguards
+\citep{tamirisa2024tar,qi2024durability}, is the natural next step. When the
+output must carry the attribute, output-side mechanisms such as differentially
+private responses \citep{dwork2014dp} are the complementary direction.
 
 \bibliography{references}
 
