@@ -183,10 +183,10 @@ end-to-end experiments it breached configurations that XGBoost and the MLP
 both passed, so a battery without it would have certified operating points
 that do not hold. Certified operating points are the mean over three
 training seeds with the full battery on the representation and on the task
-outputs, and every headline point is re-run at five seeds. In plain terms,
-a method is only credited with hiding an attribute if the strongest probe
-we can build, at the stated knowledge tier, reads near chance on every
-exposed surface.
+outputs, and every headline point is re-run at five seeds. A method is
+only credited with hiding an attribute if the strongest probe we can
+build, at the stated knowledge tier, reads near chance on every exposed
+surface.
 
 \begin{proposition}[Linear certificates are blind to linear adaptation]
 \label{prop:blind}
@@ -212,12 +212,12 @@ For certificates computed from second-moment statistics of a noise-protected rep
 
 Fig.~\ref{fig:demolition} is the audit of certificate-based erasure on
 the Adult cell. Every targeted projection, whether it minimizes
-class-conditional MMD in the style of LEOPARD or an HSIC independence
-objective, drives the linear certificate to $R^2 \approx 0.036$, a clear
-pass at $\tau = 0.05$. The honest probe reads the same representations at
-$0.681$--$0.683$ AUC, and the unprotected representation reads $0.683$.
-In plain terms, the projections removed what the certificate can see and
-nothing that a gradient-boosted attacker uses. Only the noise channel
+class-conditional MMD in the style of LEOPARD \citep{saillenfest2025leopard}
+or an HSIC independence objective, drives the linear certificate to
+$R^2 \approx 0.036$, a clear pass at $\tau = 0.05$. The honest probe reads
+the same representations at $0.681$--$0.683$ AUC, and the unprotected
+representation reads $0.683$. The projections removed what the certificate
+can see and nothing that a gradient-boosted attacker uses. Only the noise channel
 moves the honest number, from $0.589$ at $\sigma{=}1$ down to $0.514$ at
 $\sigma{=}8$. On the HMDA cells the same projections never passed even the
 certificate (attacked $R^2$ plateaus at $0.166$ with rank 32, against
@@ -257,8 +257,8 @@ CelebA Attractive$\to$Young cell makes the bound's slack measurable: the
 label couples with Young at $0.734$, but the deployable model only
 reaches $0.565$ accuracy, its achieved predictions couple with Young at
 $0.536$--$0.540$, and the measured floor is $0.526$--$0.553$, matching
-the achieved coupling rather than the label coupling. In plain terms, a
-weak model cannot betray label structure it never captured. Where removal
+the achieved coupling rather than the label coupling. A weak model cannot
+betray label structure it never captured. Where removal
 is achievable the measured floors are small, $0.505$--$0.533$ on the
 below-band cells ($0.526$--$0.553$ on the loose-bound CelebA cell),
 empirically approaching the leakage floor established by
@@ -334,9 +334,9 @@ expensive because the informed attacker must also be defeated: the same
 cells certify at $\sigma{=}20$ and $\sigma{=}24$ for $55.5\% \pm 4.4$ and
 $21.7\% \pm 0.5$. On the hard cell the diagnostic already predicts that
 useful certification is out of reach, and the certified points confirm it
-at $-0.5\%$ and $-7.0\%$. In plain terms, protection against a stronger
-adversary is bought with more noise, and the price is read directly off
-the utility axis.
+at $-0.5\%$ and $-7.0\%$. Protection against a stronger adversary is
+bought with more noise, and the price is read directly off the utility
+axis.
 
 Surgical destruction, which confines the noise to the shaped
 attribute-carrying subspace, is a Tier-1 technology. It holds the
@@ -453,7 +453,7 @@ single certifying combination is an accident of a stochastic encoder.
 \toprule
 Method & Provenance & Utility & T1 & T2 \\
 \midrule
-LAFTR & official+calib. & -- & \texttt{0.995+} & fail \\
+LAFTR & official+calib. & -- & \texttt{0.846+}$^{3}$ & fail \\
 VFAE & valid.\ reimpl. & 72\% & \textbf{pass}$^{1}$ & at bar \\
 DANN-scrub & generic mech. & $\le$58\% lost & fail & fail \\
 LEACE & official pkg. & -- & \texttt{0.995+} & fail \\
@@ -464,7 +464,7 @@ Ours (e2e) & this work & 85--102\% & \textbf{pass} & pass$^{2}$ \\
 \bottomrule
 \end{tabular}
 \caption{% TODO(Nathan): finalize columns/footnotes.
-Gauntlet summary across the three headline cells and two threat tiers; 1 of 36 published-baseline combinations certifies. $^{1}$Easy cell only, via incidental sampling noise. $^{2}$Tier-2 certification via full-rank noise at the costs of Fig.~\ref{fig:twotier}.}
+Gauntlet summary across the three headline cells and two threat tiers; 1 of 36 published-baseline combinations certifies. $^{1}$Easy cell only, via incidental sampling noise. $^{2}$Tier-2 certification via full-rank noise at the costs of Fig.~\ref{fig:twotier}. $^{3}$Official-run range 0.846--1.000 (the 0.846 is one point, hard cell at $\gamma{=}8$); the validated multiclass reimplementation reads 0.995--1.000.}
 \label{tab:gauntlet}
 \end{table}
 

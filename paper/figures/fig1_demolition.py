@@ -86,7 +86,7 @@ axL.tick_params(axis="y", length=0, pad=2)
 axR.barh(y, [v - 0.5 for v in xgb], left=0.5, height=0.62, color=colors,
          edgecolor="none")
 axR.axvline(0.55, color=DARK, ls="--", lw=0.7)
-axR.text(0.555, -0.62, "bar", ha="left", va="bottom", fontsize=8)
+axR.text(0.555, -0.62, "0.55 bar", ha="left", va="bottom", fontsize=8)
 axR.set_xlim(0.5, 0.72)
 axR.set_xticks([0.5, 0.55, 0.6, 0.65, 0.7])
 axR.set_xticklabels([".50", ".55", ".60", ".65", ".70"])
