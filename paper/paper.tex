@@ -301,6 +301,7 @@ vision cell).
 
 \begin{figure}[t]
 \centering
+\resizebox{\columnwidth}{!}{%
 \begin{tikzpicture}[font=\footnotesize, node distance=4mm and 6mm,
   box/.style={draw, rounded corners=1pt, align=center, inner sep=3pt, minimum height=6mm}]
 \node[box] (x) {raw\\features $x$};
@@ -314,7 +315,7 @@ vision cell).
 \draw[-{Latex}] (noise) -- (head);
 \node[below=5mm of rep, align=center] (att) {attribute info\\concentrated in $S$};
 \draw[-{Latex}, dashed] (att) -- (rep);
-\end{tikzpicture}
+\end{tikzpicture}}
 \caption{% TODO(Nathan): refine schematic + caption.
 Shape-then-destroy. Training concentrates attribute information into subspace $S$; $S$ is destroyed with noise before the task head. Ablations show both halves are necessary.}
 \label{fig:schematic}
