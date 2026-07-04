@@ -61,7 +61,7 @@ diag_label = ax.text(0.735, 0.748, "$y=x$", ha="right", va="bottom",
                      rotation_mode="anchor")
 
 xs, ys = [p[0] for p in tab], [p[1] for p in tab]
-ax.scatter(xs, ys, s=26, color=DARK, zorder=3, label="tabular cells (Exp 8)")
+ax.scatter(xs, ys, s=26, color=DARK, zorder=3, label="tabular cells")
 
 for p in cel_pts:
     ax.errorbar(p["pred"], p["point"],
@@ -70,7 +70,7 @@ for p in cel_pts:
                 elinewidth=0.9, capsize=2, zorder=4,
                 markeredgecolor=DARK, markeredgewidth=0.4)
 ax.scatter([], [], marker="D", s=30, color=ORANGE, edgecolor=DARK,
-           linewidth=0.4, label="CelebA cells (Exp 13)")
+           linewidth=0.4, label="CelebA cells")
 
 # annotations: the two CelebA points, the high one as the loose-bound outlier
 low, high = sorted(cel_pts, key=lambda p: p["pred"])
