@@ -1,0 +1,234 @@
+% Experiments section. AAAI 2027 two-column, natbib.
+% Style contract: no em dashes, no semicolon sentence joins, "we propose",
+% every technical claim paired with a plain-English gloss.
+% All numbers verified against results/*.json (see
+% paper/figures/figure_data_provenance.md for the figure-side audit).
+
+\section{Experiments}
+\label{sec:experiments}
+
+\subsection{Setup}
+\label{sec:setup}
+
+We evaluate on three headline tabular cells, named by their label-coupling
+difficulty throughout: \textbf{easy} (HMDA, race $\to$ loan\_decision,
+predictor $0.514$), \textbf{middle} (HMDA, race $\to$ loan\_amount\_band,
+$0.584$), and \textbf{hard} (Adult, sex $\to$ income, $0.603$), plus two
+CelebA vision cells selected by the same statistic. Attribute recovery is
+measured as macro one-vs-rest AUC, where $0.5$ is chance and $0.55$ is the
+protection bar. The recovery battery has two tiers, priced by attacker
+knowledge. Tier~1 is black box: XGBoost \citep{chen2016xgboost}, a deep MLP
+(256--256), and a rank-32 ReLU LoRA probe \citep{hu2022lora}. Tier~2 adds a
+channel-aware Gaussian likelihood-ratio attacker that knows the clean
+representation and the noise law. The LoRA member is not redundant: in the
+end-to-end experiments it breached configurations that XGBoost and the MLP
+both passed, so a battery without it would have certified operating points
+that do not hold. Certified operating points are the mean over three
+training seeds with the full battery on the representation and on the task
+outputs, and every headline point is re-run at five seeds. In plain terms,
+a method is only credited with hiding an attribute if the strongest probe
+we can build, at the stated knowledge tier, reads near chance on every
+exposed surface.
+
+\subsection{Weak certificates leave a nonlinear gap}
+\label{sec:demolition}
+
+Figure~\ref{fig:demolition} is the audit of certificate-based erasure on
+the Adult cell. Every targeted projection, whether it minimizes
+class-conditional MMD in the style of LEOPARD or an HSIC independence
+objective, drives the linear certificate to $R^2 \approx 0.036$, a clear
+pass at $\tau = 0.05$. The honest probe reads the same representations at
+$0.681$--$0.683$ AUC, and the unprotected representation reads $0.683$.
+In plain terms, the projections removed what the certificate can see and
+nothing that a gradient-boosted attacker uses. Only the noise channel
+moves the honest number, from $0.589$ at $\sigma{=}1$ down to $0.514$ at
+$\sigma{=}8$. On the HMDA cells the same projections never passed even the
+certificate (attacked $R^2$ plateaus at $0.166$ with rank 32, against
+$\tau = 0.05$), so Adult is the cell where the certificate-pass contrast
+exists to be shown. Linear certificates, though deliberately scoped, leave
+a large nonlinear gap that practical evaluations rarely check. We quantify
+it: on this cell the gap is the full distance from a certified pass to
+unprotected-level recovery.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\columnwidth]{figures/fig1_demolition.pdf}
+\caption{Certificate-based erasure audited on Adult (sex). Left: the
+linear certificate $R^2$, where every projection passes at
+$\tau{=}0.05$. Right: honest recovery by XGBoost on the same
+representations, where every projection sits at the unprotected level
+($0.68$, top bar) and only the noise channel descends toward chance.
+The certificate and the honest probe disagree about every projection and
+agree only about noise. On HMDA the projections never passed even the
+certificate, so no analogous contrast exists there.}
+\label{fig:demolition}
+\end{figure}
+
+\subsection{Outputs leak what outputs actually use}
+\label{sec:footprint}
+
+Hiding the representation is not the whole problem, because the task
+output is also an exposed surface. Figure~\ref{fig:footprint} plots, for
+each cell, the best-attacker AUC on the task outputs once the
+representation is hidden (the output-leak floor) against the
+label-coupling predictor, a single XGBoost fit recovering the attribute
+from the task label alone, computed before any model is trained. The six
+tabular cells track the diagonal, from $(0.509, 0.509)$ to
+$(0.676, 0.629)$. The causal law is that outputs leak what outputs
+actually use. The predictor is therefore an upper bound on the output
+floor, tight when the task is well learned and loose otherwise. The
+CelebA Attractive$\to$Young cell makes the bound's slack measurable: the
+label couples with Young at $0.734$, but the deployable model only
+reaches $0.565$ accuracy, its achieved predictions couple with Young at
+$0.536$--$0.540$, and the measured floor is $0.526$--$0.553$, matching
+the achieved coupling rather than the label coupling. In plain terms, a
+weak model cannot betray label structure it never captured. Where removal
+is achievable the measured floors are small, $0.505$--$0.533$ on the
+below-band cells ($0.526$--$0.553$ on the loose-bound CelebA cell),
+empirically approaching the leakage floor established by
+\citet{stadler2022}.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\columnwidth]{figures/fig2_footprint.pdf}
+\caption{The output-leak floor against the label-coupling predictor, one
+point per cell, with $y{=}x$. Tabular cells (Exp.~8) track the diagonal:
+once the representation is hidden, the task output still betrays the
+attribute to the extent the label couples with it. The CelebA cells
+(Exp.~13) show the bound's character: the predictor is an upper bound on
+the floor, tight when the task is well learned (Smiling$\to$Young, on the
+diagonal) and loose when it is not (Attractive$\to$Young, far below, whisker
+spanning the floors of the four erasure arms). There the achieved
+predictions couple with the attribute at $0.536$--$0.540$ and the floor
+matches that value, not the label coupling of $0.734$.}
+\label{fig:footprint}
+\end{figure}
+
+\subsection{The cost of durable removal is a predictable ramp}
+\label{sec:ramp}
+
+Figure~\ref{fig:ramp} turns the predictor into a forecast of cost. For 20
+natural cells across three datasets, the durable-removal cost, the
+fraction of clean task lift lost at the noise level where the black-box
+battery first reads at or below $0.55$ on both the representation and the
+output, correlates with the predictor at $r = 0.795$ and
+$\rho = 0.848$. Nine constructed cells, in which only the
+label--attribute coupling is tuned, reproduce the same rise, which makes
+the relationship causal rather than a dataset accident. The landscape is
+a steep ramp, not a cliff: inside the band $0.52$--$0.60$ the cost climbs
+from near zero to near everything, and outside it the answer is
+essentially binary. In plain terms, one number computed from the labels
+alone, before training anything, tells a practitioner whether durable
+removal will be cheap, expensive, or hopeless.
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\columnwidth]{figures/fig3_cost_ramp.pdf}
+\caption{Durable-removal cost against the label-coupling predictor.
+Filled circles are 20 natural cells ($r{=}0.79$, $\rho{=}0.85$), open
+triangles are 9 constructed cells in which only the label--attribute
+coupling is tuned, so the rise is causal. The shaded band marks the
+usable middle ($0.52$--$0.60$), where the cost ramps from near zero to
+near total. Below the band removal is nearly free, above it removal
+costs essentially all task utility.}
+\label{fig:ramp}
+\end{figure}
+
+\subsection{Two tiers: protection is priced by attacker knowledge}
+\label{sec:twotier}
+
+Figure~\ref{fig:twotier} prices certified protection at both tiers for
+the end-to-end noised channel we propose. Tier~1 removes
+representation-side leakage at near-zero cost on the achievable cells,
+leaving only the output-level floor, which is fundamental: the easy cell
+keeps $94.6\% \pm 2.2$ of its clean lift at $\sigma{=}8$ and the middle
+cell keeps $56.6\% \pm 0.7$ at $\sigma{=}12$. Tier~2 is strictly more
+expensive because the informed attacker must also be defeated: the same
+cells certify at $\sigma{=}20$ and $\sigma{=}24$ for $55.5\% \pm 4.4$ and
+$21.7\% \pm 0.5$. On the hard cell the diagnostic already predicts that
+useful certification is out of reach, and the certified points confirm it
+at $-0.5\%$ and $-7.0\%$. In plain terms, protection against a stronger
+adversary is bought with more noise, and the price is read directly off
+the utility axis.
+
+Surgical destruction, which confines the noise to a learned
+attribute-carrying subspace, is a Tier-1 technology. It holds the
+black-box bar everywhere, but the informed likelihood-ratio attacker
+reads its untouched complement at $0.66$--$0.94$, and no in-family
+escalation fixes that. Only full-rank noise buys Tier~2. Within Tier~1
+the surgical channel is what makes the hard cell usable at all: it keeps
+$85\% \pm 2$ at the $0.55$ bar ($90\%$ at a relaxed $0.57$ bar), where
+the $90\%$ point is the three-seed winner whose worst seed reads $0.561$
+and breaches at five seeds. One scope note: the end-to-end advantage over
+post-hoc surgery ($104\%$, $100\%$, and $90\%$ kept versus $88\%$,
+$81\%$, and $53\%$ at matched Tier-1 protection, with the hard-cell
+$90\%$ subject to the five-seed revision above) appears when
+representation training is under our control. On the frozen, pre-shaped
+CelebA representation the two tie ($99.1\%$ versus $98.4\%$ on the easy
+vision cell).
+
+\begin{figure}[t]
+\centering
+\includegraphics[width=\columnwidth]{figures/fig4_two_tier.pdf}
+\caption{Utility kept at the certified operating point of the end-to-end
+noised channel, per cell and per tier (error bars: spread over three
+training seeds). Tier~1 (black box) is nearly free where the diagnostic
+predicts removal is achievable, and what remains exposed afterward is
+only the output-level floor, which is fundamental. Tier~2 (adding the
+informed likelihood-ratio attacker) is bought only by more full-rank
+noise, at $\sigma{=}20$/$24$/$64$, and its price is the visible drop. On
+the hard cell the diagnostic predicts no useful certified point exists,
+and none does.}
+\label{fig:twotier}
+\end{figure}
+
+\subsection{The baseline gauntlet}
+\label{sec:gauntlet}
+
+We ran the field's published fair-representation and erasure methods
+through the identical two-tier battery on the three headline cells, with
+knob sweeps, best honest operating point per tier, and three-seed
+certification. Each row carries a provenance tag (official code,
+validated reimplementation, or generic mechanism), reported in the
+appendix. One of 36 method--cell--tier combinations certifies.
+
+\textbf{VFAE} \citep{louizos2016vfae} is the one survivor, and it
+certifies through its accidental sampling noise rather than its fairness
+machinery. The sampled-$z$ exposure holds Tier~1 on the easy cell at
+$0.535$ with $72\%$ utility. The posterior-mean exposure of the same
+models reads $1.00$ at every $\beta$, and raising the fairness knob makes
+sampled-$z$ recovery strictly worse, $0.536$, $0.583$, $0.661$, $0.743$
+for $\beta = 1, 10, 10^2, 10^3$, because a larger MMD weight shrinks the
+posterior noise faster than it matches groups. Its Tier-2 reading of
+$0.551$--$0.556$ is at the bar, not under it, and with no noise knob it
+fails the middle and hard cells at $0.585$ and $0.587$. It is the
+exception that proves the mechanism: the only baseline that certifies
+anything does so exactly where the diagnostic says removal is cheap, via
+an unadjustable noise channel it does not control.
+
+\textbf{Obliviator} \citep{akbari2025obliviator}, run from the authors'
+pinned official code in its strongest supervised mode, fails Tier~1 on
+all three cells at every one of its 15 iterations, reading
+$0.968$--$0.999$ while keeping $85$--$99\%$ utility, and its own MLP
+stopping probe reads $0.94$--$0.99$ throughout, so its termination
+criterion never fires. This matches the prediction of our controlled
+HSIC experiment (Exp.~4): on representations where the attribute is
+robustly and nonlinearly encoded, HSIC-guided erasure has almost nothing
+kernel-visible left to remove, however seriously it is engineered.
+
+\textbf{LAFTR} \citep{madras2018laftr}, both as our validated multiclass
+reimplementation and re-run on the official Vector Institute release
+under a compatibility shim calibrated to the paper's own Adult numbers,
+fails Tier~1 everywhere, at $0.846$--$1.000$ across every adversary
+weight. The official run adds one diagnosis: at $\gamma \ge 2$ on the
+easy cell the min-max ``wins'' fairness by zeroing task utility, lift
+falls to $3$--$17\%$ of clean, while the representation still leaks at
+$0.996$--$1.000$. \textbf{DANN-style adversarial scrubbing}
+\citep{ganin2015dann}, our generic-mechanism baseline at full strength,
+genuinely removes signal but plateaus at $0.610$--$0.664$ for
+$42$--$69\%$ utility. \textbf{LEACE} \citep{belrose2023leace}, from the
+authors' library, reads $0.995$--$0.998$ at nearly full utility, the
+unprotected level, as its linear scope predicts on representations that
+encode the attribute nonlinearly. In plain terms, no published method
+reaches the purpose-built channel on any cell at either tier, and the
+single certifying combination is an accident of a stochastic encoder.
