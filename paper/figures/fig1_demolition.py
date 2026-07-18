@@ -90,7 +90,7 @@ axR.text(0.555, -0.62, "0.55 bar", ha="left", va="bottom", fontsize=8)
 axR.set_xlim(0.5, 0.72)
 axR.set_xticks([0.5, 0.55, 0.6, 0.65, 0.7])
 axR.set_xticklabels([".50", ".55", ".60", ".65", ".70"])
-axR.set_xlabel("honest recovery\n(XGBoost AUC; 0.5 = chance)")
+axR.set_xlabel("attacker recovery\n(XGBoost AUC; 0.5 = chance)")
 
 for ax in (axL, axR):
     ax.spines[["top", "right"]].set_visible(False)
