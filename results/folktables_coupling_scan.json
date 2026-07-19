@@ -1,0 +1,128 @@
+{
+  "experiment": "folktables_coupling_scan",
+  "phase": 0,
+  "predictor": "XGB AUC(attr | task label alone), 75/25 stratified, 3 seeds",
+  "band": [
+    0.52,
+    0.6
+  ],
+  "seeds": [
+    0,
+    1,
+    2
+  ],
+  "provenance": {
+    "source": "folktables ACS PUMS person survey",
+    "state": "CA",
+    "survey_year": "2018",
+    "horizon": "1-Year",
+    "tasks": {
+      "income": "ACSIncome (official filter; label = PINCP > 50000)",
+      "employment": "ACSEmployment (official filter; label = ESR == 1)",
+      "public_coverage": "ACSPublicCoverage (official filter; label = PUBCOV == 1)"
+    },
+    "attributes": {
+      "sex": "1 iff SEX == 1 (Male)",
+      "race": "1 iff RAC1P == 1 (White alone) \u2014 binarized White vs non-White"
+    },
+    "features": "standardized numerics (AGEP/WKHP/PINCP where present) + one-hot categoricals with NaN->-1 bucket; SCHL 4-level bucket, OCCP 2-digit bucket, POBP {state,territory,foreign} bucket (same bucketings as pcrl/data/folktables.py); binarized SEX/RAC1P kept as features; ST dropped",
+    "split": "stratified 80/19 train/holdout, seed 42, stratified on (task label, sex, race); experiments use the train partition; probes use 75/25 stratified held-out splits downstream"
+  },
+  "cells": [
+    {
+      "cell": "folktables/sex/income",
+      "task": "income",
+      "attr": "sex",
+      "n": 156533,
+      "x_dim": 141,
+      "n_attr": 2,
+      "n_task": 2,
+      "attr_majority": 0.5280036797352635,
+      "task_majority": 0.5894284272325964,
+      "predictor_auc": 0.5588913458957899,
+      "predictor_std": 0.00036272974815642646,
+      "band": "inside",
+      "seconds": 6.1
+    },
+    {
+      "cell": "folktables/race/income",
+      "task": "income",
+      "attr": "race",
+      "n": 156533,
+      "x_dim": 141,
+      "n_attr": 2,
+      "n_task": 2,
+      "attr_majority": 0.6184318961496936,
+      "task_majority": 0.5894284272325964,
+      "predictor_auc": 0.5435472290883516,
+      "predictor_std": 0.0013154048187575776,
+      "band": "inside",
+      "seconds": 0.4
+    },
+    {
+      "cell": "folktables/sex/employment",
+      "task": "employment",
+      "attr": "sex",
+      "n": 303055,
+      "x_dim": 68,
+      "n_attr": 2,
+      "n_task": 2,
+      "attr_majority": 0.507211562257676,
+      "task_majority": 0.543831977693818,
+      "predictor_auc": 0.5358194680952133,
+      "predictor_std": 0.0017322108244680432,
+      "band": "inside",
+      "seconds": 6.2
+    },
+    {
+      "cell": "folktables/race/employment",
+      "task": "employment",
+      "attr": "race",
+      "n": 303055,
+      "x_dim": 68,
+      "n_attr": 2,
+      "n_task": 2,
+      "attr_majority": 0.6140403557110096,
+      "task_majority": 0.543831977693818,
+      "predictor_auc": 0.5042132204899038,
+      "predictor_std": 0.00024617254579979486,
+      "band": "below",
+      "seconds": 0.7
+    },
+    {
+      "cell": "folktables/sex/public_coverage",
+      "task": "public_coverage",
+      "attr": "sex",
+      "n": 110844,
+      "x_dim": 59,
+      "n_attr": 2,
+      "n_task": 2,
+      "attr_majority": 0.5589567319836888,
+      "task_majority": 0.6310490418967197,
+      "predictor_auc": 0.5198606986452101,
+      "predictor_std": 0.0011486611204246295,
+      "band": "below",
+      "seconds": 5.4
+    },
+    {
+      "cell": "folktables/race/public_coverage",
+      "task": "public_coverage",
+      "attr": "race",
+      "n": 110844,
+      "x_dim": 59,
+      "n_attr": 2,
+      "n_task": 2,
+      "attr_majority": 0.5672837501353253,
+      "task_majority": 0.6310490418967197,
+      "predictor_auc": 0.5131198536731216,
+      "predictor_std": 0.002994138528515694,
+      "band": "below",
+      "seconds": 0.3
+    }
+  ],
+  "band_tally": {
+    "below": 3,
+    "inside": 3,
+    "above": 0
+  }
+}

@@ -20,3 +20,7 @@ torchvision>=0.15.0  # pcrl.data.__init__ imports celeba.py which needs torchvis
 # most Tier B experiments):
 #   tensorflow>=2.12  — ONLY experiments/laftr_official.py (runs the official
 #                       VectorInstitute/laftr TF1 code under utils/laftr_shim.py)
+
+# Folktables extension (optional): natural ACS PUMS cells for the diagnostic.
+# ONLY utils/folktables_io.py + the experiments/folktables_* scripts need it.
+folktables>=0.0.12
