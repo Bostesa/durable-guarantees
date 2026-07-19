@@ -57,14 +57,14 @@ ax.text(0.56, 1.045, "the usable middle band", ha="center", va="bottom",
         fontsize=8, color=DARK)
 
 ax.scatter(nx, ny, s=24, color=BLUE, zorder=3,
-           label=f"natural cells (n={len(nx)})")
+           label=f"original cells (n={len(nx)})")
 ax.scatter(ex, ey, s=26, facecolors="none", edgecolors=VERM,
            linewidths=0.9, zorder=3, label=f"external cells (n={len(ex)})")
 ax.scatter(cx, cy, s=30, facecolors="none", edgecolors=BLUE, marker="^",
            linewidths=0.9, zorder=3,
            label=f"constructed cells (n={len(cx)})")
 
-ax.text(0.688, 0.02, f"$r={r:.2f}$, $\\rho={rho:.2f}$ (natural, $n={n}$)",
+ax.text(0.688, 0.02, f"$r={r:.3f}$, $\\rho={rho:.3f}$ (natural, $n={n}$)",
         ha="right", va="bottom", fontsize=8, color=DARK)
 
 ax.set_xlim(0.495, 0.695)
