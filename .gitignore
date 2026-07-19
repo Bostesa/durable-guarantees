@@ -2,3 +2,10 @@
 __pycache__/
 *.pyc
 data_cache/
+
+# LaTeX build artifacts + macOS debris
+*.aux
+*.bbl
+*.blg
+*.log
+.DS_Store
