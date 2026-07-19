@@ -1,0 +1,700 @@
+{
+  "experiment": "expansion_analysis",
+  "correlation": {
+    "cost_durable": {
+      "old_20": {
+        "pearson_r": 0.7948746207852936,
+        "pearson_p": 2.8219032928795916e-05,
+        "spearman_r": 0.8482124269192884,
+        "spearman_p": 2.3096053062870013e-06,
+        "n": 20
+      },
+      "combined": {
+        "pearson_r": 0.7991437704746869,
+        "pearson_p": 5.776889672105281e-07,
+        "spearman_r": 0.8281658135319308,
+        "spearman_p": 9.715739849247052e-08,
+        "n": 27
+      },
+      "new_alone": {
+        "pearson_r": 0.8724922019365768,
+        "pearson_p": 0.010398392929590501,
+        "spearman_r": 0.9285714285714288,
+        "spearman_p": 0.002519472403794688,
+        "n": 7
+      }
+    },
+    "cost_rep": {
+      "old_20": {
+        "pearson_r": 0.754533354547569,
+        "pearson_p": 0.00012099426175838488,
+        "spearman_r": 0.7674945739269676,
+        "spearman_p": 7.82002606943508e-05,
+        "n": 20
+      },
+      "combined": {
+        "pearson_r": 0.7485752888007036,
+        "pearson_p": 7.098701955469634e-06,
+        "spearman_r": 0.6983206432408675,
+        "spearman_p": 5.11144420897069e-05,
+        "n": 27
+      },
+      "new_alone": {
+        "pearson_r": 0.7784251416902574,
+        "pearson_p": 0.039233436804988635,
+        "spearman_r": 0.6071428571428572,
+        "spearman_p": 0.14823116148116158,
+        "n": 7
+      }
+    }
+  },
+  "degenerate_new_cells": [
+    "diabetes_hospital/gender/readmit_30_days",
+    "diabetes_hospital/race/readmit_30_days"
+  ],
+  "new_cell_pairs": [
+    {
+      "cell": "folktables/race/employment",
+      "predictor": 0.5048688656469227,
+      "cost_rep": 0.029066742580429406,
+      "cost_durable": 0.0354355551814749,
+      "clean_lift": 0.28161197313378106,
+      "censored_durable": false,
+      "degenerate": false
+    },
+    {
+      "cell": "lawschool/sex/pass_bar",
+      "predictor": 0.5094341615089025,
+      "cost_rep": 0.17908763791015936,
+      "cost_durable": 0.17908763791015936,
+      "clean_lift": 0.01730977280923185,
+      "censored_durable": false,
+      "degenerate": false
+    },
+    {
+      "cell": "folktables/race/public_coverage",
+      "predictor": 0.5122371872201893,
+      "cost_rep": 0.04890694928958661,
+      "cost_durable": 0.10518463588347793,
+      "clean_lift": 0.10311666666666663,
+      "censored_durable": false,
+      "degenerate": false
+    },
+    {
+      "cell": "folktables/race/income",
+      "predictor": 0.5419807779986615,
+      "cost_rep": 0.023350775873074436,
+      "cost_durable": 0.21490056382318024,
+      "clean_lift": 0.25940432340539,
+      "censored_durable": false,
+      "degenerate": false
+    },
+    {
+      "cell": "folktables/sex/income",
+      "predictor": 0.556770030816641,
+      "cost_rep": 0.11948452040468238,
+      "cost_durable": 0.7133257158593547,
+      "clean_lift": 0.257837630627177,
+      "censored_durable": false,
+      "degenerate": false
+    },
+    {
+      "cell": "lawschool/race/pass_bar",
+      "predictor": 0.5911646537725569,
+      "cost_rep": 0.99245838731644,
+      "cost_durable": 0.9976193094470418,
+      "clean_lift": 0.01730977280923185,
+      "censored_durable": false,
+      "degenerate": false
+    },
+    {
+      "cell": "dutch/sex/occupation",
+      "predictor": 0.6499333972631062,
+      "cost_rep": 0.6957971927143762,
+      "cost_durable": 0.8762771626390836,
+      "clean_lift": 0.32650612380006616,
+      "censored_durable": false,
+      "degenerate": false
+    }
+  ],
+  "floor_points": [
+    {
+      "cell": "diabetes_hospital/gender/readmit_30_days",
+      "predictor": 0.4983686645532632,
+      "floor": 0.5223113885918668,
+      "delta": 0.02394272403860359,
+      "off_diagonal": false,
+      "task_well_learned": false,
+      "rep_hidden_within_grid": true,
+      "clean_out_leak": 0.5989684915124875
+    },
+    {
+      "cell": "diabetes_hospital/race/readmit_30_days",
+      "predictor": 0.5009712443706769,
+      "floor": 0.5065093719500853,
+      "delta": 0.005538127579408414,
+      "off_diagonal": false,
+      "task_well_learned": false,
+      "rep_hidden_within_grid": true,
+      "clean_out_leak": 0.5849529505601647
+    },
+    {
+      "cell": "folktables/race/employment",
+      "predictor": 0.5048688656469227,
+      "floor": 0.535770958442657,
+      "delta": 0.030902092795734304,
+      "off_diagonal": false,
+      "task_well_learned": true,
+      "rep_hidden_within_grid": true,
+      "clean_out_leak": 0.7673689570559893
+    },
+    {
+      "cell": "lawschool/sex/pass_bar",
+      "predictor": 0.5094341615089025,
+      "floor": 0.5033620212568323,
+      "delta": -0.006072140252070257,
+      "off_diagonal": false,
+      "task_well_learned": true,
+      "rep_hidden_within_grid": true,
+      "clean_out_leak": 0.5634169722214074
+    },
+    {
+      "cell": "folktables/race/public_coverage",
+      "predictor": 0.5122371872201893,
+      "floor": 0.5536037232383687,
+      "delta": 0.04136653601817941,
+      "off_diagonal": false,
+      "task_well_learned": true,
+      "rep_hidden_within_grid": true,
+      "clean_out_leak": 0.6600791926132423
+    },
+    {
+      "cell": "folktables/race/income",
+      "predictor": 0.5419807779986615,
+      "floor": 0.5569420613317285,
+      "delta": 0.01496128333306701,
+      "off_diagonal": false,
+      "task_well_learned": true,
+      "rep_hidden_within_grid": true,
+      "clean_out_leak": 0.5746022857340595
+    },
+    {
+      "cell": "folktables/sex/income",
+      "predictor": 0.556770030816641,
+      "floor": 0.5865377408738991,
+      "delta": 0.02976771005725809,
+      "off_diagonal": false,
+      "task_well_learned": true,
+      "rep_hidden_within_grid": true,
+      "clean_out_leak": 0.6138026391504499
+    },
+    {
+      "cell": "lawschool/race/pass_bar",
+      "predictor": 0.5911646537725569,
+      "floor": 0.5663841423174433,
+      "delta": -0.02478051145511362,
+      "off_diagonal": false,
+      "task_well_learned": true,
+      "rep_hidden_within_grid": true,
+      "clean_out_leak": 0.7782119723854536
+    },
+    {
+      "cell": "dutch/sex/occupation",
+      "predictor": 0.6499333972631062,
+      "floor": 0.5760629880542845,
+      "delta": -0.07387040920882171,
+      "off_diagonal": true,
+      "task_well_learned": true,
+      "rep_hidden_within_grid": true,
+      "clean_out_leak": 0.8951862960692442
+    }
+  ],
+  "reaudit_tally": {
+    "existing": {
+      "failed": 18,
+      "total": 21
+    },
+    "new": {
+      "failed": 76,
+      "total": 81
+    },
+    "combined": {
+      "failed": 94,
+      "total": 102
+    },
+    "cert_approved": {
+      "existing": {
+        "false_pass": 15,
+        "approved": 18
+      },
+      "new": {
+        "false_pass": 3,
+        "approved": 8
+      }
+    }
+  },
+  "pattern_deviations": [
+    {
+      "cell": "diabetes_hospital/gender/readmit_30_days",
+      "method": "noise \u03c3=8",
+      "note": "\u03c3=8 does NOT survive honest measurement (max XGB/MLP 0.550) \u2014 on adult it did"
+    },
+    {
+      "cell": "diabetes_hospital/gender/readmit_30_days",
+      "method": "LEOPARD-MMD proj r=1",
+      "note": "projection BREACHES the linear certificate (R\u00b2=0.419) \u2014 existing projections all passed it"
+    },
+    {
+      "cell": "diabetes_hospital/gender/readmit_30_days",
+      "method": "LEOPARD-MMD proj r=8",
+      "note": "projection BREACHES the linear certificate (R\u00b2=0.319) \u2014 existing projections all passed it"
+    },
+    {
+      "cell": "diabetes_hospital/gender/readmit_30_days",
+      "method": "LEOPARD-MMD proj r=16",
+      "note": "projection BREACHES the linear certificate (R\u00b2=0.183) \u2014 existing projections all passed it"
+    },
+    {
+      "cell": "diabetes_hospital/gender/readmit_30_days",
+      "method": "HSIC proj r=1",
+      "note": "projection BREACHES the linear certificate (R\u00b2=0.418) \u2014 existing projections all passed it"
+    },
+    {
+      "cell": "diabetes_hospital/gender/readmit_30_days",
+      "method": "HSIC proj r=8",
+      "note": "projection BREACHES the linear certificate (R\u00b2=0.319) \u2014 existing projections all passed it"
+    },
+    {
+      "cell": "diabetes_hospital/gender/readmit_30_days",
+      "method": "HSIC proj r=16",
+      "note": "projection BREACHES the linear certificate (R\u00b2=0.178) \u2014 existing projections all passed it"
+    },
+    {
+      "cell": "diabetes_hospital/race/readmit_30_days",
+      "method": "noise \u03c3=8",
+      "note": "passes XGB/MLP but Tier-2 reads above the bar (LoRA=0.528 LRT=0.565)"
+    },
+    {
+      "cell": "diabetes_hospital/race/readmit_30_days",
+      "method": "noise \u03c3=8",
+      "note": "GENUINE survivor (cert + suite agree stopped; utility lift +0.0000)"
+    },
+    {
+      "cell": "diabetes_hospital/race/readmit_30_days",
+      "method": "LEOPARD-MMD proj r=1",
+      "note": "projection BREACHES the linear certificate (R\u00b2=0.244) \u2014 existing projections all passed it"
+    },
+    {
+      "cell": "diabetes_hospital/race/readmit_30_days",
+      "method": "LEOPARD-MMD proj r=8",
+      "note": "projection BREACHES the linear certificate (R\u00b2=0.124) \u2014 existing projections all passed it"
+    },
+    {
+      "cell": "diabetes_hospital/race/readmit_30_days",
+      "method": "LEOPARD-MMD proj r=16",
+      "note": "projection BREACHES the linear certificate (R\u00b2=0.051) \u2014 existing projections all passed it"
+    },
+    {
+      "cell": "diabetes_hospital/race/readmit_30_days",
+      "method": "HSIC proj r=1",
+      "note": "projection BREACHES the linear certificate (R\u00b2=0.238) \u2014 existing projections all passed it"
+    },
+    {
+      "cell": "diabetes_hospital/race/readmit_30_days",
+      "method": "HSIC proj r=8",
+      "note": "projection BREACHES the linear certificate (R\u00b2=0.120) \u2014 existing projections all passed it"
+    },
+    {
+      "cell": "diabetes_hospital/race/readmit_30_days",
+      "method": "HSIC proj r=16",
+      "note": "projection BREACHES the linear certificate (R\u00b2=0.052) \u2014 existing projections all passed it"
+    },
+    {
+      "cell": "folktables/race/employment",
+      "method": "noise \u03c3=8",
+      "note": "GENUINE survivor (cert + suite agree stopped; utility lift +0.1119)"
+    },
+    {
+      "cell": "folktables/race/employment",
+      "method": "LEOPARD-MMD proj r=1",
+      "note": "projection BREACHES the linear certificate (R\u00b2=0.623) \u2014 existing projections all passed it"
+    },
+    {
+      "cell": "folktables/race/employment",
+      "method": "LEOPARD-MMD proj r=8",
+      "note": "projection BREACHES the linear certificate (R\u00b2=0.342) \u2014 existing projections all passed it"
+    },
+    {
+      "cell": "folktables/race/employment",
+      "method": "LEOPARD-MMD proj r=16",
+      "note": "projection BREACHES the linear certificate (R\u00b2=0.193) \u2014 existing projections all passed it"
+    },
+    {
+      "cell": "folktables/race/employment",
+      "method": "HSIC proj r=1",
+      "note": "projection BREACHES the linear certificate (R\u00b2=0.645) \u2014 existing projections all passed it"
+    },
+    {
+      "cell": "folktables/race/employment",
+      "method": "HSIC proj r=8",
+      "note": "projection BREACHES the linear certificate (R\u00b2=0.340) \u2014 existing projections all passed it"
+    },
+    {
+      "cell": "folktables/race/employment",
+      "method": "HSIC proj r=16",
+      "note": "projection BREACHES the linear certificate (R\u00b2=0.195) \u2014 existing projections all passed it"
+    },
+    {
+      "cell": "lawschool/sex/pass_bar",
+      "method": "noise \u03c3=8",
+      "note": "passes XGB/MLP but Tier-2 reads above the bar (LoRA=0.524 LRT=0.577)"
+    },
+    {
+      "cell": "lawschool/sex/pass_bar",
+      "method": "noise \u03c3=8",
+      "note": "GENUINE survivor (cert + suite agree stopped; utility lift -0.0001)"
+    },
+    {
+      "cell": "lawschool/sex/pass_bar",
+      "method": "LEOPARD-MMD proj r=1",
+      "note": "projection BREACHES the linear certificate (R\u00b2=0.841) \u2014 existing projections all passed it"
+    },
+    {
+      "cell": "lawschool/sex/pass_bar",
+      "method": "LEOPARD-MMD proj r=8",
+      "note": "projection BREACHES the linear certificate (R\u00b2=0.608) \u2014 existing projections all passed it"
+    },
+    {
+      "cell": "lawschool/sex/pass_bar",
+      "method": "LEOPARD-MMD proj r=16",
+      "note": "projection BREACHES the linear certificate (R\u00b2=0.421) \u2014 existing projections all passed it"
+    },
+    {
+      "cell": "lawschool/sex/pass_bar",
+      "method": "HSIC proj r=1",
+      "note": "projection BREACHES the linear certificate (R\u00b2=0.840) \u2014 existing projections all passed it"
+    },
+    {
+      "cell": "lawschool/sex/pass_bar",
+      "method": "HSIC proj r=8",
+      "note": "projection BREACHES the linear certificate (R\u00b2=0.615) \u2014 existing projections all passed it"
+    },
+    {
+      "cell": "lawschool/sex/pass_bar",
+      "method": "HSIC proj r=16",
+      "note": "projection BREACHES the linear certificate (R\u00b2=0.431) \u2014 existing projections all passed it"
+    },
+    {
+      "cell": "folktables/race/public_coverage",
+      "method": "noise \u03c3=8",
+      "note": "passes XGB/MLP but Tier-2 reads above the bar (LoRA=0.541 LRT=0.564)"
+    },
+    {
+      "cell": "folktables/race/public_coverage",
+      "method": "noise \u03c3=8",
+      "note": "GENUINE survivor (cert + suite agree stopped; utility lift +0.0401)"
+    },
+    {
+      "cell": "folktables/race/public_coverage",
+      "method": "LEOPARD-MMD proj r=1",
+      "note": "projection BREACHES the linear certificate (R\u00b2=0.712) \u2014 existing projections all passed it"
+    },
+    {
+      "cell": "folktables/race/public_coverage",
+      "method": "LEOPARD-MMD proj r=8",
+      "note": "projection BREACHES the linear certificate (R\u00b2=0.403) \u2014 existing projections all passed it"
+    },
+    {
+      "cell": "folktables/race/public_coverage",
+      "method": "LEOPARD-MMD proj r=16",
+      "note": "projection BREACHES the linear certificate (R\u00b2=0.243) \u2014 existing projections all passed it"
+    },
+    {
+      "cell": "folktables/race/public_coverage",
+      "method": "HSIC proj r=1",
+      "note": "projection BREACHES the linear certificate (R\u00b2=0.712) \u2014 existing projections all passed it"
+    },
+    {
+      "cell": "folktables/race/public_coverage",
+      "method": "HSIC proj r=8",
+      "note": "projection BREACHES the linear certificate (R\u00b2=0.408) \u2014 existing projections all passed it"
+    },
+    {
+      "cell": "folktables/race/public_coverage",
+      "method": "HSIC proj r=16",
+      "note": "projection BREACHES the linear certificate (R\u00b2=0.235) \u2014 existing projections all passed it"
+    },
+    {
+      "cell": "folktables/race/income",
+      "method": "noise \u03c3=8",
+      "note": "passes XGB/MLP but Tier-2 reads above the bar (LoRA=0.530 LRT=0.552)"
+    },
+    {
+      "cell": "folktables/race/income",
+      "method": "noise \u03c3=8",
+      "note": "GENUINE survivor (cert + suite agree stopped; utility lift +0.1177)"
+    },
+    {
+      "cell": "folktables/race/income",
+      "method": "LEOPARD-MMD proj r=1",
+      "note": "projection BREACHES the linear certificate (R\u00b2=0.458) \u2014 existing projections all passed it"
+    },
+    {
+      "cell": "folktables/race/income",
+      "method": "LEOPARD-MMD proj r=8",
+      "note": "projection BREACHES the linear certificate (R\u00b2=0.184) \u2014 existing projections all passed it"
+    },
+    {
+      "cell": "folktables/race/income",
+      "method": "LEOPARD-MMD proj r=16",
+      "note": "projection BREACHES the linear certificate (R\u00b2=0.146) \u2014 existing projections all passed it"
+    },
+    {
+      "cell": "folktables/race/income",
+      "method": "HSIC proj r=1",
+      "note": "projection BREACHES the linear certificate (R\u00b2=0.459) \u2014 existing projections all passed it"
+    },
+    {
+      "cell": "folktables/race/income",
+      "method": "HSIC proj r=8",
+      "note": "projection BREACHES the linear certificate (R\u00b2=0.183) \u2014 existing projections all passed it"
+    },
+    {
+      "cell": "folktables/race/income",
+      "method": "HSIC proj r=16",
+      "note": "projection BREACHES the linear certificate (R\u00b2=0.139) \u2014 existing projections all passed it"
+    },
+    {
+      "cell": "folktables/sex/income",
+      "method": "noise \u03c3=8",
+      "note": "\u03c3=8 does NOT survive honest measurement (max XGB/MLP 0.553) \u2014 on adult it did"
+    },
+    {
+      "cell": "folktables/sex/income",
+      "method": "LEOPARD-MMD proj r=1",
+      "note": "projection BREACHES the linear certificate (R\u00b2=0.551) \u2014 existing projections all passed it"
+    },
+    {
+      "cell": "folktables/sex/income",
+      "method": "LEOPARD-MMD proj r=8",
+      "note": "projection BREACHES the linear certificate (R\u00b2=0.331) \u2014 existing projections all passed it"
+    },
+    {
+      "cell": "folktables/sex/income",
+      "method": "LEOPARD-MMD proj r=16",
+      "note": "projection BREACHES the linear certificate (R\u00b2=0.159) \u2014 existing projections all passed it"
+    },
+    {
+      "cell": "folktables/sex/income",
+      "method": "HSIC proj r=1",
+      "note": "projection BREACHES the linear certificate (R\u00b2=0.551) \u2014 existing projections all passed it"
+    },
+    {
+      "cell": "folktables/sex/income",
+      "method": "HSIC proj r=8",
+      "note": "projection BREACHES the linear certificate (R\u00b2=0.333) \u2014 existing projections all passed it"
+    },
+    {
+      "cell": "folktables/sex/income",
+      "method": "HSIC proj r=16",
+      "note": "projection BREACHES the linear certificate (R\u00b2=0.162) \u2014 existing projections all passed it"
+    },
+    {
+      "cell": "lawschool/race/pass_bar",
+      "method": "noise \u03c3=8",
+      "note": "\u03c3=8 does NOT survive honest measurement (max XGB/MLP 0.649) \u2014 on adult it did"
+    },
+    {
+      "cell": "lawschool/race/pass_bar",
+      "method": "LEOPARD-MMD proj r=1",
+      "note": "projection BREACHES the linear certificate (R\u00b2=0.822) \u2014 existing projections all passed it"
+    },
+    {
+      "cell": "lawschool/race/pass_bar",
+      "method": "LEOPARD-MMD proj r=8",
+      "note": "projection BREACHES the linear certificate (R\u00b2=0.423) \u2014 existing projections all passed it"
+    },
+    {
+      "cell": "lawschool/race/pass_bar",
+      "method": "LEOPARD-MMD proj r=16",
+      "note": "projection BREACHES the linear certificate (R\u00b2=0.207) \u2014 existing projections all passed it"
+    },
+    {
+      "cell": "lawschool/race/pass_bar",
+      "method": "HSIC proj r=1",
+      "note": "projection BREACHES the linear certificate (R\u00b2=0.822) \u2014 existing projections all passed it"
+    },
+    {
+      "cell": "lawschool/race/pass_bar",
+      "method": "HSIC proj r=8",
+      "note": "projection BREACHES the linear certificate (R\u00b2=0.422) \u2014 existing projections all passed it"
+    },
+    {
+      "cell": "lawschool/race/pass_bar",
+      "method": "HSIC proj r=16",
+      "note": "projection BREACHES the linear certificate (R\u00b2=0.197) \u2014 existing projections all passed it"
+    },
+    {
+      "cell": "dutch/sex/occupation",
+      "method": "noise \u03c3=8",
+      "note": "\u03c3=8 does NOT survive honest measurement (max XGB/MLP 0.639) \u2014 on adult it did"
+    },
+    {
+      "cell": "dutch/sex/occupation",
+      "method": "LEOPARD-MMD proj r=1",
+      "note": "projection BREACHES the linear certificate (R\u00b2=0.764) \u2014 existing projections all passed it"
+    },
+    {
+      "cell": "dutch/sex/occupation",
+      "method": "LEOPARD-MMD proj r=8",
+      "note": "projection BREACHES the linear certificate (R\u00b2=0.614) \u2014 existing projections all passed it"
+    },
+    {
+      "cell": "dutch/sex/occupation",
+      "method": "LEOPARD-MMD proj r=16",
+      "note": "projection BREACHES the linear certificate (R\u00b2=0.476) \u2014 existing projections all passed it"
+    },
+    {
+      "cell": "dutch/sex/occupation",
+      "method": "HSIC proj r=1",
+      "note": "projection BREACHES the linear certificate (R\u00b2=0.763) \u2014 existing projections all passed it"
+    },
+    {
+      "cell": "dutch/sex/occupation",
+      "method": "HSIC proj r=8",
+      "note": "projection BREACHES the linear certificate (R\u00b2=0.612) \u2014 existing projections all passed it"
+    },
+    {
+      "cell": "dutch/sex/occupation",
+      "method": "HSIC proj r=16",
+      "note": "projection BREACHES the linear certificate (R\u00b2=0.477) \u2014 existing projections all passed it"
+    }
+  ],
+  "summary_table": [
+    {
+      "cell": "diabetes_hospital/gender/readmit_30_days",
+      "source": "diabetes_hospital",
+      "coupling": 0.4983686645532632,
+      "floor": 0.5223113885918668,
+      "cost_durable": null,
+      "degenerate": true,
+      "censored_durable": false,
+      "reaudit_false_pass": 1,
+      "reaudit_cert_approved": 1,
+      "reaudit_survivors": 0,
+      "reaudit_configs": 9
+    },
+    {
+      "cell": "diabetes_hospital/race/readmit_30_days",
+      "source": "diabetes_hospital",
+      "coupling": 0.5009712443706769,
+      "floor": 0.5065093719500853,
+      "cost_durable": null,
+      "degenerate": true,
+      "censored_durable": false,
+      "reaudit_false_pass": 0,
+      "reaudit_cert_approved": 1,
+      "reaudit_survivors": 1,
+      "reaudit_configs": 9
+    },
+    {
+      "cell": "folktables/race/employment",
+      "source": "folktables",
+      "coupling": 0.5048688656469227,
+      "floor": 0.535770958442657,
+      "cost_durable": 0.0354355551814749,
+      "degenerate": false,
+      "censored_durable": false,
+      "reaudit_false_pass": 1,
+      "reaudit_cert_approved": 2,
+      "reaudit_survivors": 1,
+      "reaudit_configs": 9
+    },
+    {
+      "cell": "lawschool/sex/pass_bar",
+      "source": "lawschool",
+      "coupling": 0.5094341615089025,
+      "floor": 0.5033620212568323,
+      "cost_durable": 0.17908763791015936,
+      "degenerate": false,
+      "censored_durable": false,
+      "reaudit_false_pass": 0,
+      "reaudit_cert_approved": 1,
+      "reaudit_survivors": 1,
+      "reaudit_configs": 9
+    },
+    {
+      "cell": "folktables/race/public_coverage",
+      "source": "folktables",
+      "coupling": 0.5122371872201893,
+      "floor": 0.5536037232383687,
+      "cost_durable": 0.10518463588347793,
+      "degenerate": false,
+      "censored_durable": false,
+      "reaudit_false_pass": 0,
+      "reaudit_cert_approved": 1,
+      "reaudit_survivors": 1,
+      "reaudit_configs": 9
+    },
+    {
+      "cell": "folktables/race/income",
+      "source": "folktables",
+      "coupling": 0.5419807779986615,
+      "floor": 0.5569420613317285,
+      "cost_durable": 0.21490056382318024,
+      "degenerate": false,
+      "censored_durable": false,
+      "reaudit_false_pass": 0,
+      "reaudit_cert_approved": 1,
+      "reaudit_survivors": 1,
+      "reaudit_configs": 9
+    },
+    {
+      "cell": "folktables/sex/income",
+      "source": "folktables",
+      "coupling": 0.556770030816641,
+      "floor": 0.5865377408738991,
+      "cost_durable": 0.7133257158593547,
+      "degenerate": false,
+      "censored_durable": false,
+      "reaudit_false_pass": 1,
+      "reaudit_cert_approved": 1,
+      "reaudit_survivors": 0,
+      "reaudit_configs": 9
+    },
+    {
+      "cell": "lawschool/race/pass_bar",
+      "source": "lawschool",
+      "coupling": 0.5911646537725569,
+      "floor": 0.5663841423174433,
+      "cost_durable": 0.9976193094470418,
+      "degenerate": false,
+      "censored_durable": false,
+      "reaudit_false_pass": 0,
+      "reaudit_cert_approved": 0,
+      "reaudit_survivors": 0,
+      "reaudit_configs": 9
+    },
+    {
+      "cell": "dutch/sex/occupation",
+      "source": "dutch",
+      "coupling": 0.6499333972631062,
+      "floor": 0.5760629880542845,
+      "cost_durable": 0.8762771626390836,
+      "degenerate": false,
+      "censored_durable": false,
+      "reaudit_false_pass": 0,
+      "reaudit_cert_approved": 0,
+      "reaudit_survivors": 0,
+      "reaudit_configs": 9
+    }
+  ],
+  "headline": {
+    "r_old": 0.7948746207852936,
+    "r_combined": 0.7991437704746869,
+    "rho_old": 0.8482124269192884,
+    "rho_combined": 0.8281658135319308,
+    "reaudit_old": "18/21",
+    "reaudit_combined": "94/102"
+  }
+}
