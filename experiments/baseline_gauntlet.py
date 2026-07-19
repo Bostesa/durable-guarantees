@@ -573,13 +573,13 @@ def _plot(results, png_path):
                        facecolors="none", edgecolors="gray",
                        label=f"{b['baseline']} (T2)", alpha=0.7)
         ax.axvline(BAR, color="green", ls="--", lw=1.2, label=f"bar {BAR}")
-        ax.set_xlabel("attribute recovery AUC (max over battery members)")
+        ax.set_xlabel("attribute recovery AUC (max over attacker suite)")
         ax.set_ylabel("task lift (best of own head / retrained LR)")
         ax.set_title(cr["cell"], fontsize=9)
         ax.grid(True, alpha=0.3)
         ax.legend(fontsize=6, ncol=2)
-    fig.suptitle("The baseline gauntlet — published methods under the two-tier "
-                 "battery (left of the bar = certifies)", fontsize=11)
+    fig.suptitle("Published methods under the two-tier "
+                 "attacker suite (left of the bar = certifies)", fontsize=11)
     fig.tight_layout()
     fig.savefig(png_path, dpi=130)
     plt.close(fig)

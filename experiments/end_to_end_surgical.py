@@ -583,10 +583,10 @@ def _plot(cells, png_path):
         ax.set_xticks(x)
         ax.set_xticklabels(short, fontsize=8)
         ax.set_ylim(0, 115)
-        ax.set_ylabel("utility kept at full-battery <=0.55 (%)")
+        ax.set_ylabel("utility kept at full attacker suite <=0.55 (%)")
         ax.set_title(f"{c['cell']}\npredictor={c['predictor']:.3f}", fontsize=9)
         ax.grid(True, axis="y", alpha=0.3)
-    fig.suptitle("Experiment 10 — can surgical destruction be trained end-to-end? "
+    fig.suptitle("Experiment 10 — can subspace-confined removal be trained end-to-end? "
                  "(e2e arms: mean±std over 3 training seeds)", fontsize=10)
     fig.tight_layout()
     fig.savefig(png_path, dpi=130)

@@ -319,15 +319,15 @@ def _plot(p1_rows, png_path):
     ax1.plot(sig, [r["old_r2"] for r in p1_rows], "^-", color="C0", lw=1.6,
              label="LoRA attacked R² (old certificate)")
     ax1.plot(sig, [r["xgb_auc"] for r in p1_rows], "s-", color="C3", lw=2,
-             label="XGBoost sex AUC (honest)")
+             label="XGBoost sex AUC (attacker)")
     ax1.plot(sig, [r["mlp_auc"] for r in p1_rows], "o-", color="C1", lw=2,
-             label="MLP sex AUC (honest)")
+             label="MLP sex AUC (attacker)")
     ax1.axhline(TAU, color="C0", ls="--", lw=1, label=f"τ={TAU} (R² bar)")
     ax1.axhline(0.5, color="gray", ls=":", lw=1, label="chance AUC=0.5")
-    ax1.axhline(HONEST_AUC_BAR, color="C3", ls="--", lw=0.9, label=f"honest bar AUC={HONEST_AUC_BAR}")
+    ax1.axhline(HONEST_AUC_BAR, color="C3", ls="--", lw=0.9, label=f"attacker bar AUC={HONEST_AUC_BAR}")
     ax1.set_xlabel("noise σ (relative to repr per-dim std)")
     ax1.set_ylabel("R²  /  AUC")
-    ax1.set_title("Honest re-audit of the Exp-2 noise channel (Adult/sex)\n"
+    ax1.set_title("Attacker-suite re-audit of the Exp-2 noise channel (Adult/sex)\n"
                   "R² says 'stopped' from σ=1; XGBoost keeps recovering sex well past it")
     ax2 = ax1.twinx()
     ax2.plot(sig, [r["income_acc"] for r in p1_rows], "D-", color="C2", lw=1.4,

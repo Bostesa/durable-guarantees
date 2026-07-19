@@ -455,8 +455,8 @@ def _plot(out, png_path):
                                            r.get("emp_lora32")) if v is not None))
               for r in rows if r.get("emp_xgb") is not None]
         if es:
-            ax.plot(*zip(*es), "D-", color="C0", label="empirical battery max AUC")
-        ax.axhline(0.55, color="green", ls=":", lw=1, label="honest bar 0.55")
+            ax.plot(*zip(*es), "D-", color="C0", label="empirical attacker-suite max AUC")
+        ax.axhline(0.55, color="green", ls=":", lw=1, label="attacker bar 0.55")
         ax.axhline(MEANINGFUL_AUC, color="gray", ls="--", lw=1,
                    label=f"'meaningful' ceiling {MEANINGFUL_AUC}")
         ax.set_xscale("log", base=2)

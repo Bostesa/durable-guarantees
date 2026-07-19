@@ -277,7 +277,7 @@ def _plot(rows, clean_lift, png_path):
         ax.scatter(xs, ys, marker=mk, color=c, s=70, label=method, zorder=4)
     # mark honest region and the best honest point per method
     ax.axvspan(0.45, HONEST_AUC_BAR, color="green", alpha=0.06)
-    ax.axvline(HONEST_AUC_BAR, color="green", ls="--", lw=1.2, label=f"honest bar XGB AUC={HONEST_AUC_BAR}")
+    ax.axvline(HONEST_AUC_BAR, color="green", ls="--", lw=1.2, label=f"attacker bar XGB AUC={HONEST_AUC_BAR}")
     ax.axvline(0.5, color="gray", ls=":", lw=1, label="chance AUC=0.5")
     ax.axhline(clean_lift, color="gray", ls=":", lw=1, label=f"clean income lift={clean_lift:+.3f}")
     for method, (mk, c) in style.items():
@@ -285,10 +285,10 @@ def _plot(rows, clean_lift, png_path):
         if b:
             ax.annotate(b["label"], (b["xgb_auc"], b["income_lift"]), fontsize=7,
                         color=c, xytext=(4, 4), textcoords="offset points")
-    ax.set_xlabel("XGBoost sex AUC (honest)  — left of green = attribute destroyed")
+    ax.set_xlabel("XGBoost sex AUC (attacker)  — left of green = attribute removed")
     ax.set_ylabel("income lift over majority  — higher = utility kept")
     ax.set_title("Targeted (anisotropic) vs isotropic noise on Adult/sex\n"
-                 "(want: inside green band AND high — cheaper honest durability)")
+                 "(want: inside green band AND high — cheaper durable removal)")
     ax.legend(fontsize=7.5, loc="best")
     ax.grid(True, alpha=0.3)
     fig.tight_layout()
