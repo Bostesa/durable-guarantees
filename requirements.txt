@@ -24,3 +24,7 @@ torchvision>=0.15.0  # pcrl.data.__init__ imports celeba.py which needs torchvis
 # Folktables extension (optional): natural ACS PUMS cells for the diagnostic.
 # ONLY utils/folktables_io.py + the experiments/folktables_* scripts need it.
 folktables>=0.0.12
+
+# Expansion extension (optional): Diabetes 130-US Hospitals natural cells.
+# ONLY utils/expansion_io.py + the experiments/expansion_* scripts need it.
+fairlearn>=0.10.0

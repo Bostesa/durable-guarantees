@@ -1,0 +1,362 @@
+{
+  "experiment": "expansion_coupling_scan",
+  "phase": 0,
+  "predictor": "XGB AUC(attr | task label alone), 75/25 stratified, 3 seeds",
+  "band": [
+    0.52,
+    0.6
+  ],
+  "rules": {
+    "R1": "folktables cap 4, band-coverage preference",
+    "R2": "non-folktables included iff n >= 10000",
+    "R3": "excluded iff coupling AUC > 0.9",
+    "R4": "target 6-10 cells"
+  },
+  "provenance": {
+    "folktables": {
+      "source": "folktables ACS PUMS person survey",
+      "state": "CA",
+      "survey_year": "2018",
+      "horizon": "1-Year",
+      "tasks": {
+        "income": "ACSIncome (official filter; label = PINCP > 50000)",
+        "employment": "ACSEmployment (official filter; label = ESR == 1)",
+        "public_coverage": "ACSPublicCoverage (official filter; label = PUBCOV == 1)"
+      },
+      "attributes": {
+        "sex": "1 iff SEX == 1 (Male)",
+        "race": "1 iff RAC1P == 1 (White alone) \u2014 binarized White vs non-White"
+      },
+      "features": "standardized numerics (AGEP/WKHP/PINCP where present) + one-hot categoricals with NaN->-1 bucket; SCHL 4-level bucket, OCCP 2-digit bucket, POBP {state,territory,foreign} bucket (same bucketings as pcrl/data/folktables.py); binarized SEX/RAC1P kept as features; ST dropped",
+      "split": "stratified 80/19 train/holdout, seed 42, stratified on (task label, sex, race); experiments use the train partition; probes use 75/25 stratified held-out splits downstream"
+    },
+    "diabetes_hospital": {
+      "source": "Diabetes 130-US Hospitals 1999-2008 (Strack et al. 2014) via fairlearn.datasets.fetch_diabetes_hospital (OpenML build)",
+      "url": "fairlearn.datasets.fetch_diabetes_hospital",
+      "label": "readmit_30_days \u2014 readmitted within 30 days (fairlearn target)",
+      "attributes": {
+        "gender": "1 iff Male (rows with Unknown/Invalid dropped)",
+        "race": "1 iff Caucasian, 0 non-Caucasian (rows with race Unknown dropped)"
+      },
+      "cleaning": "dropped medical_specialty (~49% Missing) and the readmitted/readmit_binary target-leakage columns; weight/payer_code already absent from the fairlearn build",
+      "split": "stratified 80/19 train/holdout, seed 42, stratified on (label x attributes); experiments use the train partition; probes use 75/25 stratified held-out splits downstream"
+    },
+    "dutch": {
+      "source": "Dutch Census 2001 (Dutch Central Bureau of Statistics)",
+      "url": "https://raw.githubusercontent.com/tailequy/fairness_dataset/main/experiments/data/dutch.csv",
+      "label": "occupation \u2014 1 = high-level (prestigious) occupation, 0 = low, as distributed in the cleaned survey CSV",
+      "attributes": {
+        "sex": "1 iff male (file column 'sex' in {male,female})"
+      },
+      "split": "stratified 80/19 train/holdout, seed 42, stratified on (label x attributes); experiments use the train partition; probes use 75/25 stratified held-out splits downstream"
+    },
+    "lawschool": {
+      "source": "LSAC National Longitudinal Bar Passage Study (Wightman 1998)",
+      "url": "https://raw.githubusercontent.com/tailequy/fairness_dataset/main/experiments/data/law_school_clean.csv",
+      "label": "pass_bar \u2014 the cleaned file's single bar-passage label; per the Le Quy et al. (2022) survey (arXiv:2110.00530) dataset table this is first-time bar passage (not eventual passage)",
+      "attributes": {
+        "sex": "1 iff male (file column 'male')",
+        "race": "1 iff White, 0 Non-White (file ships race already binarized to these two levels)"
+      },
+      "split": "stratified 80/19 train/holdout, seed 42, stratified on (label x attributes); experiments use the train partition; probes use 75/25 stratified held-out splits downstream"
+    }
+  },
+  "cells": [
+    {
+      "cell": "folktables/sex/income",
+      "source": "folktables",
+      "attr": "sex",
+      "task": "income",
+      "n": 156533,
+      "x_dim": 141,
+      "attr_majority": 0.5280036797352635,
+      "task_majority": 0.5894284272325964,
+      "groups": {
+        "0": {
+          "n": 73883,
+          "pos_rate": 0.34906541423602183
+        },
+        "1": {
+          "n": 82650,
+          "pos_rate": 0.4655535390199637
+        }
+      },
+      "predictor_auc": 0.5588913458957899,
+      "predictor_std": 0.00036272974815642646,
+      "band": "inside",
+      "seconds": 0.4
+    },
+    {
+      "cell": "folktables/race/income",
+      "source": "folktables",
+      "attr": "race",
+      "task": "income",
+      "n": 156533,
+      "x_dim": 141,
+      "attr_majority": 0.6184318961496936,
+      "task_majority": 0.5894284272325964,
+      "groups": {
+        "0": {
+          "n": 59728,
+          "pos_rate": 0.35742030538440933
+        },
+        "1": {
+          "n": 96805,
+          "pos_rate": 0.4433655286400496
+        }
+      },
+      "predictor_auc": 0.5435472290883516,
+      "predictor_std": 0.0013154048187575776,
+      "band": "inside",
+      "seconds": 0.4
+    },
+    {
+      "cell": "folktables/sex/employment",
+      "source": "folktables",
+      "attr": "sex",
+      "task": "employment",
+      "n": 303055,
+      "x_dim": 68,
+      "attr_majority": 0.507211562257676,
+      "task_majority": 0.543831977693818,
+      "groups": {
+        "0": {
+          "n": 153713,
+          "pos_rate": 0.4225276977223787
+        },
+        "1": {
+          "n": 149342,
+          "pos_rate": 0.4907929450522961
+        }
+      },
+      "predictor_auc": 0.5358194680952133,
+      "predictor_std": 0.0017322108244680432,
+      "band": "inside",
+      "seconds": 0.7
+    },
+    {
+      "cell": "folktables/race/employment",
+      "source": "folktables",
+      "attr": "race",
+      "task": "employment",
+      "n": 303055,
+      "x_dim": 68,
+      "attr_majority": 0.6140403557110096,
+      "task_majority": 0.543831977693818,
+      "groups": {
+        "0": {
+          "n": 116967,
+          "pos_rate": 0.4524011045850539
+        },
+        "1": {
+          "n": 186088,
+          "pos_rate": 0.45853574652852414
+        }
+      },
+      "predictor_auc": 0.5042132204899038,
+      "predictor_std": 0.00024617254579979486,
+      "band": "below",
+      "seconds": 0.7
+    },
+    {
+      "cell": "folktables/sex/public_coverage",
+      "source": "folktables",
+      "attr": "sex",
+      "task": "public_coverage",
+      "n": 110844,
+      "x_dim": 59,
+      "attr_majority": 0.5589567319836888,
+      "task_majority": 0.6310490418967197,
+      "groups": {
+        "0": {
+          "n": 61957,
+          "pos_rate": 0.3544070887873848
+        },
+        "1": {
+          "n": 48887,
+          "pos_rate": 0.38738314889438913
+        }
+      },
+      "predictor_auc": 0.5198606986452101,
+      "predictor_std": 0.0011486611204246295,
+      "band": "below",
+      "seconds": 0.3
+    },
+    {
+      "cell": "folktables/race/public_coverage",
+      "source": "folktables",
+      "attr": "race",
+      "task": "public_coverage",
+      "n": 110844,
+      "x_dim": 59,
+      "attr_majority": 0.5672837501353253,
+      "task_majority": 0.6310490418967197,
+      "groups": {
+        "0": {
+          "n": 47964,
+          "pos_rate": 0.38472604453340004
+        },
+        "1": {
+          "n": 62880,
+          "pos_rate": 0.3569179389312977
+        }
+      },
+      "predictor_auc": 0.5131198536731216,
+      "predictor_std": 0.002994138528515694,
+      "band": "below",
+      "seconds": 0.3
+    },
+    {
+      "cell": "lawschool/sex/pass_bar",
+      "source": "lawschool",
+      "attr": "sex",
+      "task": "pass_bar",
+      "n": 16638,
+      "x_dim": 11,
+      "attr_majority": 0.5613054453660296,
+      "task_majority": 0.8897103017189566,
+      "groups": {
+        "0": {
+          "n": 7299,
+          "pos_rate": 0.8777914782846965
+        },
+        "1": {
+          "n": 9339,
+          "pos_rate": 0.8990255916050969
+        }
+      },
+      "predictor_auc": 0.5094341615089025,
+      "predictor_std": 0.002565064245338485,
+      "band": "below",
+      "seconds": 0.1
+    },
+    {
+      "cell": "lawschool/race/pass_bar",
+      "source": "lawschool",
+      "attr": "race",
+      "task": "pass_bar",
+      "n": 16638,
+      "x_dim": 11,
+      "attr_majority": 0.841026565692992,
+      "task_majority": 0.8897103017189566,
+      "groups": {
+        "0": {
+          "n": 2645,
+          "pos_rate": 0.7228733459357278
+        },
+        "1": {
+          "n": 13993,
+          "pos_rate": 0.9212463374544415
+        }
+      },
+      "predictor_auc": 0.5911646537725569,
+      "predictor_std": 0.005692292390353444,
+      "band": "inside",
+      "seconds": 0.0
+    },
+    {
+      "cell": "dutch/sex/occupation",
+      "source": "dutch",
+      "attr": "sex",
+      "task": "occupation",
+      "n": 48336,
+      "x_dim": 60,
+      "attr_majority": 0.5010344256868586,
+      "task_majority": 0.5239572989076465,
+      "groups": {
+        "0": {
+          "n": 24218,
+          "pos_rate": 0.32711206540589643
+        },
+        "1": {
+          "n": 24118,
+          "pos_rate": 0.6255908450120242
+        }
+      },
+      "predictor_auc": 0.6499333972631062,
+      "predictor_std": 0.007159206055828526,
+      "band": "above",
+      "seconds": 0.4
+    },
+    {
+      "cell": "diabetes_hospital/gender/readmit_30_days",
+      "source": "diabetes_hospital",
+      "attr": "gender",
+      "task": "readmit_30_days",
+      "n": 79594,
+      "x_dim": 46,
+      "attr_majority": 0.5384828002110712,
+      "task_majority": 0.8877302309219288,
+      "groups": {
+        "0": {
+          "n": 42860,
+          "pos_rate": 0.11313579094727018
+        },
+        "1": {
+          "n": 36734,
+          "pos_rate": 0.1112593237872271
+        }
+      },
+      "predictor_auc": 0.5010378457831809,
+      "predictor_std": 0.0002606244129327257,
+      "band": "below",
+      "seconds": 0.7
+    },
+    {
+      "cell": "diabetes_hospital/race/readmit_30_days",
+      "source": "diabetes_hospital",
+      "attr": "race",
+      "task": "readmit_30_days",
+      "n": 79594,
+      "x_dim": 46,
+      "attr_majority": 0.764869211247079,
+      "task_majority": 0.8877302309219288,
+      "groups": {
+        "0": {
+          "n": 18715,
+          "pos_rate": 0.11017900080149613
+        },
+        "1": {
+          "n": 60879,
+          "pos_rate": 0.11291249856272277
+        }
+      },
+      "predictor_auc": 0.4981182616020341,
+      "predictor_std": 0.0033442660424474148,
+      "band": "below",
+      "seconds": 0.2
+    }
+  ],
+  "failed_sources": [],
+  "selected": [
+    "diabetes_hospital/race/readmit_30_days",
+    "diabetes_hospital/gender/readmit_30_days",
+    "folktables/race/employment",
+    "lawschool/sex/pass_bar",
+    "folktables/race/public_coverage",
+    "folktables/race/income",
+    "folktables/sex/income",
+    "lawschool/race/pass_bar",
+    "dutch/sex/occupation"
+  ],
+  "selection_rule": {
+    "folktables/race/employment": "R1 folktables (cap 4, band-coverage round-robin; band=below)",
+    "folktables/sex/income": "R1 folktables (cap 4, band-coverage round-robin; band=inside)",
+    "folktables/race/public_coverage": "R1 folktables (cap 4, band-coverage round-robin; band=below)",
+    "folktables/race/income": "R1 folktables (cap 4, band-coverage round-robin; band=inside)",
+    "lawschool/sex/pass_bar": "R2 non-folktables, n=16,638 >= 10,000",
+    "lawschool/race/pass_bar": "R2 non-folktables, n=16,638 >= 10,000",
+    "dutch/sex/occupation": "R2 non-folktables, n=48,336 >= 10,000",
+    "diabetes_hospital/gender/readmit_30_days": "R2 non-folktables, n=79,594 >= 10,000",
+    "diabetes_hospital/race/readmit_30_days": "R2 non-folktables, n=79,594 >= 10,000"
+  },
+  "selection_notes": [
+    "R1 dropped folktables/sex/employment (folktables cap; duplicate of band 'inside')",
+    "R1 dropped folktables/sex/public_coverage (folktables cap; duplicate of band 'below')"
+  ],
+  "spread": {
+    "below_052": 5,
+    "inside_band": 3,
+    "above_060": 1
+  }
+}
