@@ -355,5 +355,68 @@
       }
     }
   },
-  "verdict_meaningful_at_operating_sigma": false
+  "verdict_meaningful_at_operating_sigma": false,
+  "operating_point_extension": {
+    "note": "Extension of worst_case_auc / cert_auc_ceiling to the two operating sigmas absent from the per-channel grids (easy T2 sigma=20, hard T2 sigma=64). Same formulas as the main rows: worst_case_auc = Phi(sqrt(2*total_var)/sigma) (moment-matched two-point construction); cert_auc_ceiling = macro Pinsker chain on cert MI. total_var is per-retrained-channel in the main rows, so here: sigma=20 uses total_var linearly interpolated between the sigma=12 and sigma=24 hmda_e2e channels; sigma=64 uses the nearest retrained channel (adult_e2e sigma=48), with linear extrapolation reported as sensitivity. Cert MI at these large sigmas is spectrum-free (MI ~= total_var/(2 sigma^2)); isotropic form reproduces stored rows to <2e-4. Added 2026-07-18 for the appendix operating-point table; stored rows untouched.",
+    "points": [
+      {
+        "cell": "hmda/race/loan_decision (easy)",
+        "tier": "T1",
+        "sigma": 8.0,
+        "source": "stored row",
+        "worst_case_auc": 0.993192991411881,
+        "cert_auc_ceiling": 1.0
+      },
+      {
+        "cell": "hmda/race/loan_amount_band (middle)",
+        "tier": "T1",
+        "sigma": 12.0,
+        "source": "stored row",
+        "worst_case_auc": 0.9598947468180754,
+        "cert_auc_ceiling": 1.0
+      },
+      {
+        "cell": "hmda/race/loan_decision (easy)",
+        "tier": "T2",
+        "sigma": 20.0,
+        "source": "computed: total_var interpolated sigma 12-24",
+        "total_var_used": 213.62047425905862,
+        "worst_case_auc": 0.8493127655711068,
+        "worst_case_auc_sensitivity": [
+          0.8473891554540458,
+          0.85306727268583
+        ],
+        "cert_mi_nats": 0.2659176479157312,
+        "cert_auc_ceiling": 0.9954154194583988
+      },
+      {
+        "cell": "hmda/race/loan_amount_band (middle)",
+        "tier": "T2",
+        "sigma": 24.0,
+        "source": "stored row",
+        "worst_case_auc": 0.8035629014523376,
+        "cert_auc_ceiling": 0.9831596417077574
+      },
+      {
+        "cell": "adult/sex/income (hard)",
+        "tier": "T1",
+        "sigma": 32.0,
+        "source": "stored row",
+        "worst_case_auc": 0.7172147626471087,
+        "cert_auc_ceiling": 0.8564900717100424
+      },
+      {
+        "cell": "adult/sex/income (hard)",
+        "tier": "T2",
+        "sigma": 64.0,
+        "source": "computed: total_var from nearest retrained channel (sigma=48)",
+        "total_var_used": 112.16243696212769,
+        "worst_case_auc": 0.5925164803062863,
+        "worst_case_auc_extrapolated_total_var": 0.565254320056751,
+        "cert_mi_nats": 0.013688775460484559,
+        "cert_auc_ceiling": 0.6713146498480022,
+        "cert_auc_ceiling_extrapolated_total_var": 0.6240283097287412
+      }
+    ]
+  }
 }
