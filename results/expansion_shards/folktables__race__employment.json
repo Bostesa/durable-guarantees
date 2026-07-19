@@ -1,0 +1,319 @@
+{
+  "cell": "folktables/race/employment",
+  "source": "folktables",
+  "attr": "race",
+  "task": "employment",
+  "n_used": 60001,
+  "cost": {
+    "cell": "folktables/race/employment",
+    "dataset": "folktables",
+    "attr": "race",
+    "task": "employment",
+    "predictor": 0.5048688656469227,
+    "predictor_std": 0.0021560765226134983,
+    "attr_majority": 0.6140397660039,
+    "task_majority": 0.5438242695955068,
+    "clean_lift": 0.28161197313378106,
+    "degenerate": false,
+    "cost_rep": 0.029066742580429406,
+    "sigma_rep": 2.7312613614738352,
+    "lift_at_rep": 0.27342643040313463,
+    "censored_rep": false,
+    "cost_durable": 0.0354355551814749,
+    "sigma_durable": 3.1075334821726663,
+    "lift_at_durable": 0.2716328965200349,
+    "censored_durable": false,
+    "cost_rep_xgb_only": 0.020504394455185815,
+    "sweep": [
+      {
+        "sigma": 0.0,
+        "P_max": 0.9999781743274965,
+        "out_max": 0.768678322400809,
+        "both_max": 0.9999781743274965,
+        "P_xgb": 0.9992781636959189,
+        "out_xgb": 0.768678322400809,
+        "P_mlp": 0.9999781743274965,
+        "out_mlp": 0.7381718449199717,
+        "lift": 0.28161197313378106
+      },
+      {
+        "sigma": 2.0,
+        "P_max": 0.569435911369019,
+        "out_max": 0.547872025056772,
+        "both_max": 0.569435911369019,
+        "P_xgb": 0.5547597825983013,
+        "out_xgb": 0.5282426030377061,
+        "P_mlp": 0.569435911369019,
+        "out_mlp": 0.547872025056772,
+        "lift": 0.2769120514658089
+      },
+      {
+        "sigma": 4.0,
+        "P_max": 0.5162786890871074,
+        "out_max": 0.5343382611726724,
+        "both_max": 0.5343382611726724,
+        "P_xgb": 0.5125246077894775,
+        "out_xgb": 0.517170616569623,
+        "P_mlp": 0.5162786890871074,
+        "out_mlp": 0.5343382611726724,
+        "lift": 0.2673788770187163
+      }
+    ]
+  },
+  "floor": {
+    "sigma_rep_grid": 4.0,
+    "rep_hidden_within_grid": true,
+    "floor": 0.535770958442657,
+    "floor_seeds": [
+      0,
+      1,
+      2
+    ],
+    "clean": {
+      "sigma": 0.0,
+      "out_xgb": 0.7673689570559893,
+      "out_xgb_std": 0.0022722111862372623,
+      "out_mlp": 0.7360510920742745,
+      "out_mlp_std": 0.006159975790720018,
+      "out_max": 0.7673689570559893,
+      "P_max": 0.9999818056893878,
+      "task_acc": 0.8254362427292878,
+      "task_lift": 0.28161197313378106
+    },
+    "at_sigma_rep": {
+      "sigma": 4.0,
+      "out_xgb": 0.5173805730389067,
+      "out_xgb_std": 0.0020449356855338466,
+      "out_mlp": 0.535770958442657,
+      "out_mlp_std": 0.004376097761892369,
+      "out_max": 0.535770958442657,
+      "P_max": 0.5163123026228246,
+      "task_acc": 0.8112031466142231,
+      "task_lift": 0.2673788770187163
+    },
+    "task_well_learned": true
+  },
+  "reaudit": {
+    "sigma_h": 0.43159395456314087,
+    "noise_sigma_rels": [
+      1.0,
+      2.0,
+      8.0
+    ],
+    "proj_ranks": [
+      1,
+      8,
+      16
+    ],
+    "rows": [
+      {
+        "method": "noise \u03c3=1",
+        "linear_r2": 0.07278021982522997,
+        "linear_r2_std": 0.0005224840057552397,
+        "linear_stopped": false,
+        "xgb_auc": 0.623517365253817,
+        "mlp_auc": 0.6435428104128459,
+        "lora_auc": 0.64674324965138,
+        "lrt_auc": 0.6596912142355387,
+        "tier1_max": 0.64674324965138,
+        "tier2_max": 0.6596912142355387,
+        "honest_stopped": false,
+        "tier1_stopped": false,
+        "tier2_stopped": false,
+        "task_lift": 0.2674771991954627,
+        "seconds": 54.6,
+        "false_linear_pass": false
+      },
+      {
+        "method": "noise \u03c3=2",
+        "linear_r2": 0.021388152769043673,
+        "linear_r2_std": 0.0006274165822832343,
+        "linear_stopped": true,
+        "xgb_auc": 0.542654711173288,
+        "mlp_auc": 0.570050058417425,
+        "lora_auc": 0.5659831893570221,
+        "lrt_auc": 0.5903744596630385,
+        "tier1_max": 0.570050058417425,
+        "tier2_max": 0.5903744596630385,
+        "honest_stopped": false,
+        "tier1_stopped": false,
+        "tier2_stopped": false,
+        "task_lift": 0.23685701831863226,
+        "seconds": 48.9,
+        "false_linear_pass": true
+      },
+      {
+        "method": "noise \u03c3=8",
+        "linear_r2": 0.002705070038442238,
+        "linear_r2_std": 9.245797377523063e-05,
+        "linear_stopped": true,
+        "xgb_auc": 0.5101997986562962,
+        "mlp_auc": 0.507035529282246,
+        "lora_auc": 0.5083795238190777,
+        "lrt_auc": 0.5310271997755932,
+        "tier1_max": 0.5101997986562962,
+        "tier2_max": 0.5310271997755932,
+        "honest_stopped": true,
+        "tier1_stopped": true,
+        "tier2_stopped": true,
+        "task_lift": 0.11190979257812612,
+        "seconds": 47.0,
+        "false_linear_pass": false
+      },
+      {
+        "method": "LEOPARD-MMD proj r=1",
+        "linear_r2": 0.6233425895731385,
+        "linear_r2_std": 0.08869442216924622,
+        "linear_stopped": false,
+        "xgb_auc": 0.9831240675103302,
+        "mlp_auc": 0.9995943812518724,
+        "lora_auc": 0.9743431250725414,
+        "lrt_auc": 0.556695753187895,
+        "tier1_max": 0.9995943812518724,
+        "tier2_max": 0.9995943812518724,
+        "honest_stopped": false,
+        "tier1_stopped": false,
+        "tier2_stopped": false,
+        "task_lift": 0.28038744962321194,
+        "seconds": 42.6,
+        "false_linear_pass": false
+      },
+      {
+        "method": "LEOPARD-MMD proj r=8",
+        "linear_r2": 0.3418932941421257,
+        "linear_r2_std": 0.052019165951377275,
+        "linear_stopped": false,
+        "xgb_auc": 0.9846530083708204,
+        "mlp_auc": 0.9960952171838796,
+        "lora_auc": 0.8901808349469768,
+        "lrt_auc": 0.5670557411550243,
+        "tier1_max": 0.9960952171838796,
+        "tier2_max": 0.9960952171838796,
+        "honest_stopped": false,
+        "tier1_stopped": false,
+        "tier2_stopped": false,
+        "task_lift": 0.24812293392425855,
+        "seconds": 45.9,
+        "false_linear_pass": false
+      },
+      {
+        "method": "LEOPARD-MMD proj r=16",
+        "linear_r2": 0.1930699729433495,
+        "linear_r2_std": 0.0193493878007573,
+        "linear_stopped": false,
+        "xgb_auc": 0.9788239412626901,
+        "mlp_auc": 0.99241395375495,
+        "lora_auc": 0.7720693706374827,
+        "lrt_auc": 0.5638367607201897,
+        "tier1_max": 0.99241395375495,
+        "tier2_max": 0.99241395375495,
+        "honest_stopped": false,
+        "tier1_stopped": false,
+        "tier2_stopped": false,
+        "task_lift": 0.24892288059448053,
+        "seconds": 58.1,
+        "false_linear_pass": false
+      },
+      {
+        "method": "HSIC proj r=1",
+        "linear_r2": 0.6446777690881449,
+        "linear_r2_std": 0.05898249808839096,
+        "linear_stopped": false,
+        "xgb_auc": 0.9828630407174422,
+        "mlp_auc": 0.9995525237121369,
+        "lora_auc": 0.9739773544272333,
+        "lrt_auc": 0.5566960000705022,
+        "tier1_max": 0.9995525237121369,
+        "tier2_max": 0.9995525237121369,
+        "honest_stopped": false,
+        "tier1_stopped": false,
+        "tier2_stopped": false,
+        "task_lift": 0.28038744962321194,
+        "seconds": 45.1,
+        "false_linear_pass": false
+      },
+      {
+        "method": "HSIC proj r=8",
+        "linear_r2": 0.3397950742345843,
+        "linear_r2_std": 0.05333662576020222,
+        "linear_stopped": false,
+        "xgb_auc": 0.984924860497264,
+        "mlp_auc": 0.9957618256612532,
+        "lora_auc": 0.8938944399974323,
+        "lrt_auc": 0.5668624133231105,
+        "tier1_max": 0.9957618256612532,
+        "tier2_max": 0.9957618256612532,
+        "honest_stopped": false,
+        "tier1_stopped": false,
+        "tier2_stopped": false,
+        "task_lift": 0.24867845244524603,
+        "seconds": 47.8,
+        "false_linear_pass": false
+      },
+      {
+        "method": "HSIC proj r=16",
+        "linear_r2": 0.19542540448111145,
+        "linear_r2_std": 0.0218370422023627,
+        "linear_stopped": false,
+        "xgb_auc": 0.9800447757546529,
+        "mlp_auc": 0.9935621953851452,
+        "lora_auc": 0.7631219199441581,
+        "lrt_auc": 0.563895225021621,
+        "tier1_max": 0.9935621953851452,
+        "tier2_max": 0.9935621953851452,
+        "honest_stopped": false,
+        "tier1_stopped": false,
+        "tier2_stopped": false,
+        "task_lift": 0.24887843911280152,
+        "seconds": 67.8,
+        "false_linear_pass": false
+      }
+    ]
+  },
+  "runtimes_seconds": {
+    "load": 0.2,
+    "cost": 76.3,
+    "floor": 77.1,
+    "reaudit": 485.7,
+    "total": 639.8
+  },
+  "provenance": {
+    "source": "folktables ACS PUMS person survey",
+    "state": "CA",
+    "survey_year": "2018",
+    "horizon": "1-Year",
+    "tasks": {
+      "income": "ACSIncome (official filter; label = PINCP > 50000)",
+      "employment": "ACSEmployment (official filter; label = ESR == 1)",
+      "public_coverage": "ACSPublicCoverage (official filter; label = PUBCOV == 1)"
+    },
+    "attributes": {
+      "sex": "1 iff SEX == 1 (Male)",
+      "race": "1 iff RAC1P == 1 (White alone) \u2014 binarized White vs non-White"
+    },
+    "features": "standardized numerics (AGEP/WKHP/PINCP where present) + one-hot categoricals with NaN->-1 bucket; SCHL 4-level bucket, OCCP 2-digit bucket, POBP {state,territory,foreign} bucket (same bucketings as pcrl/data/folktables.py); binarized SEX/RAC1P kept as features; ST dropped",
+    "split": "stratified 80/19 train/holdout, seed 42, stratified on (task label, sex, race); experiments use the train partition; probes use 75/25 stratified held-out splits downstream",
+    "n_used": 60001,
+    "max_n_cap": 60000,
+    "subsample": "deterministic stratified on (label, attr), seed 42, applied only if train partition > max_n_cap",
+    "train_seed": 0,
+    "probe_seeds": {
+      "cost_sweep": [
+        0,
+        1
+      ],
+      "floor": [
+        0,
+        1,
+        2
+      ],
+      "reaudit": [
+        0,
+        1,
+        2
+      ]
+    },
+    "probe_split": "75/25 stratified held-out (diagnostic._split)",
+    "runtime_seconds": 639.8
+  }
+}

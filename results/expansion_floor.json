@@ -1,0 +1,666 @@
+{
+  "experiment": "expansion_floor",
+  "bar": 0.55,
+  "floor_definition": "best-attacker (XGB/MLP, 3 probe seeds, 75/25 stratified) AUC on the task outputs at the first swept sigma with P_max <= bar",
+  "rows": [
+    {
+      "cell": "diabetes_hospital/gender/readmit_30_days",
+      "predictor": 0.4983686645532632,
+      "predictor_std": 0.003063527384757136,
+      "sigma_rep_grid": 6.0,
+      "rep_hidden_within_grid": true,
+      "floor": 0.5223113885918668,
+      "floor_seeds": [
+        0,
+        1,
+        2
+      ],
+      "clean": {
+        "sigma": 0.0,
+        "out_xgb": 0.5749819764343522,
+        "out_xgb_std": 0.001960479283776969,
+        "out_mlp": 0.5989684915124875,
+        "out_mlp_std": 0.0018862420383024597,
+        "out_max": 0.5989684915124875,
+        "P_max": 0.9998999828394682,
+        "task_acc": 0.88825,
+        "task_lift": 0.0005166666666666098
+      },
+      "at_sigma_rep": {
+        "sigma": 6.0,
+        "out_xgb": 0.5059309049526813,
+        "out_xgb_std": 0.002194531275550717,
+        "out_mlp": 0.5223113885918668,
+        "out_mlp_std": 0.0006341303847631047,
+        "out_max": 0.5223113885918668,
+        "P_max": 0.5302477782977343,
+        "task_acc": 0.8875666666666666,
+        "task_lift": -0.00016666666666675933
+      },
+      "task_well_learned": false,
+      "clean_lift": 0.0005166666666666098,
+      "degenerate": true,
+      "provenance": {
+        "source": "Diabetes 130-US Hospitals 1999-2008 (Strack et al. 2014) via fairlearn.datasets.fetch_diabetes_hospital (OpenML build)",
+        "url": "fairlearn.datasets.fetch_diabetes_hospital",
+        "label": "readmit_30_days \u2014 readmitted within 30 days (fairlearn target)",
+        "attributes": {
+          "gender": "1 iff Male (rows with Unknown/Invalid dropped)",
+          "race": "1 iff Caucasian, 0 non-Caucasian (rows with race Unknown dropped)"
+        },
+        "cleaning": "dropped medical_specialty (~49% Missing) and the readmitted/readmit_binary target-leakage columns; weight/payer_code already absent from the fairlearn build",
+        "split": "stratified 80/19 train/holdout, seed 42, stratified on (label x attributes); experiments use the train partition; probes use 75/25 stratified held-out splits downstream",
+        "n_used": 60000,
+        "max_n_cap": 60000,
+        "subsample": "deterministic stratified on (label, attr), seed 42, applied only if train partition > max_n_cap",
+        "train_seed": 0,
+        "probe_seeds": {
+          "cost_sweep": [
+            0,
+            1
+          ],
+          "floor": [
+            0,
+            1,
+            2
+          ],
+          "reaudit": [
+            0,
+            1,
+            2
+          ]
+        },
+        "probe_split": "75/25 stratified held-out (diagnostic._split)",
+        "runtime_seconds": 717.3
+      }
+    },
+    {
+      "cell": "diabetes_hospital/race/readmit_30_days",
+      "predictor": 0.5009712443706769,
+      "predictor_std": 0.0009017303328841818,
+      "sigma_rep_grid": 6.0,
+      "rep_hidden_within_grid": true,
+      "floor": 0.5065093719500853,
+      "floor_seeds": [
+        0,
+        1,
+        2
+      ],
+      "clean": {
+        "sigma": 0.0,
+        "out_xgb": 0.5607972245303057,
+        "out_xgb_std": 0.0016953761684471076,
+        "out_mlp": 0.5849529505601647,
+        "out_mlp_std": 0.007166345377740835,
+        "out_max": 0.5849529505601647,
+        "P_max": 0.9997867636505718,
+        "task_acc": 0.8881981366356106,
+        "task_lift": 0.0004666744445741555
+      },
+      "at_sigma_rep": {
+        "sigma": 6.0,
+        "out_xgb": 0.49642017719342596,
+        "out_xgb_std": 0.003515491200160117,
+        "out_mlp": 0.5065093719500853,
+        "out_mlp_std": 0.003985988083530635,
+        "out_max": 0.5065093719500853,
+        "P_max": 0.5283773213825752,
+        "task_acc": 0.8878147969132819,
+        "task_lift": 8.33347222454206e-05
+      },
+      "task_well_learned": false,
+      "clean_lift": 0.0004666744445741555,
+      "degenerate": true,
+      "provenance": {
+        "source": "Diabetes 130-US Hospitals 1999-2008 (Strack et al. 2014) via fairlearn.datasets.fetch_diabetes_hospital (OpenML build)",
+        "url": "fairlearn.datasets.fetch_diabetes_hospital",
+        "label": "readmit_30_days \u2014 readmitted within 30 days (fairlearn target)",
+        "attributes": {
+          "gender": "1 iff Male (rows with Unknown/Invalid dropped)",
+          "race": "1 iff Caucasian, 0 non-Caucasian (rows with race Unknown dropped)"
+        },
+        "cleaning": "dropped medical_specialty (~49% Missing) and the readmitted/readmit_binary target-leakage columns; weight/payer_code already absent from the fairlearn build",
+        "split": "stratified 80/19 train/holdout, seed 42, stratified on (label x attributes); experiments use the train partition; probes use 75/25 stratified held-out splits downstream",
+        "n_used": 59999,
+        "max_n_cap": 60000,
+        "subsample": "deterministic stratified on (label, attr), seed 42, applied only if train partition > max_n_cap",
+        "train_seed": 0,
+        "probe_seeds": {
+          "cost_sweep": [
+            0,
+            1
+          ],
+          "floor": [
+            0,
+            1,
+            2
+          ],
+          "reaudit": [
+            0,
+            1,
+            2
+          ]
+        },
+        "probe_split": "75/25 stratified held-out (diagnostic._split)",
+        "runtime_seconds": 700.0
+      }
+    },
+    {
+      "cell": "folktables/race/employment",
+      "predictor": 0.5048688656469227,
+      "predictor_std": 0.0021560765226134983,
+      "sigma_rep_grid": 4.0,
+      "rep_hidden_within_grid": true,
+      "floor": 0.535770958442657,
+      "floor_seeds": [
+        0,
+        1,
+        2
+      ],
+      "clean": {
+        "sigma": 0.0,
+        "out_xgb": 0.7673689570559893,
+        "out_xgb_std": 0.0022722111862372623,
+        "out_mlp": 0.7360510920742745,
+        "out_mlp_std": 0.006159975790720018,
+        "out_max": 0.7673689570559893,
+        "P_max": 0.9999818056893878,
+        "task_acc": 0.8254362427292878,
+        "task_lift": 0.28161197313378106
+      },
+      "at_sigma_rep": {
+        "sigma": 4.0,
+        "out_xgb": 0.5173805730389067,
+        "out_xgb_std": 0.0020449356855338466,
+        "out_mlp": 0.535770958442657,
+        "out_mlp_std": 0.004376097761892369,
+        "out_max": 0.535770958442657,
+        "P_max": 0.5163123026228246,
+        "task_acc": 0.8112031466142231,
+        "task_lift": 0.2673788770187163
+      },
+      "task_well_learned": true,
+      "clean_lift": 0.28161197313378106,
+      "degenerate": false,
+      "provenance": {
+        "source": "folktables ACS PUMS person survey",
+        "state": "CA",
+        "survey_year": "2018",
+        "horizon": "1-Year",
+        "tasks": {
+          "income": "ACSIncome (official filter; label = PINCP > 50000)",
+          "employment": "ACSEmployment (official filter; label = ESR == 1)",
+          "public_coverage": "ACSPublicCoverage (official filter; label = PUBCOV == 1)"
+        },
+        "attributes": {
+          "sex": "1 iff SEX == 1 (Male)",
+          "race": "1 iff RAC1P == 1 (White alone) \u2014 binarized White vs non-White"
+        },
+        "features": "standardized numerics (AGEP/WKHP/PINCP where present) + one-hot categoricals with NaN->-1 bucket; SCHL 4-level bucket, OCCP 2-digit bucket, POBP {state,territory,foreign} bucket (same bucketings as pcrl/data/folktables.py); binarized SEX/RAC1P kept as features; ST dropped",
+        "split": "stratified 80/19 train/holdout, seed 42, stratified on (task label, sex, race); experiments use the train partition; probes use 75/25 stratified held-out splits downstream",
+        "n_used": 60001,
+        "max_n_cap": 60000,
+        "subsample": "deterministic stratified on (label, attr), seed 42, applied only if train partition > max_n_cap",
+        "train_seed": 0,
+        "probe_seeds": {
+          "cost_sweep": [
+            0,
+            1
+          ],
+          "floor": [
+            0,
+            1,
+            2
+          ],
+          "reaudit": [
+            0,
+            1,
+            2
+          ]
+        },
+        "probe_split": "75/25 stratified held-out (diagnostic._split)",
+        "runtime_seconds": 639.8
+      }
+    },
+    {
+      "cell": "lawschool/sex/pass_bar",
+      "predictor": 0.5094341615089025,
+      "predictor_std": 0.002565064245338485,
+      "sigma_rep_grid": 4.0,
+      "rep_hidden_within_grid": true,
+      "floor": 0.5033620212568323,
+      "floor_seeds": [
+        0,
+        1,
+        2
+      ],
+      "clean": {
+        "sigma": 0.0,
+        "out_xgb": 0.5476641928954856,
+        "out_xgb_std": 0.007449791168462511,
+        "out_mlp": 0.5634169722214074,
+        "out_mlp_std": 0.004132393640181139,
+        "out_max": 0.5634169722214074,
+        "P_max": 0.9999997653339591,
+        "task_acc": 0.9070200745281884,
+        "task_lift": 0.01730977280923185
+      },
+      "at_sigma_rep": {
+        "sigma": 4.0,
+        "out_xgb": 0.502610972592962,
+        "out_xgb_std": 0.007259826041892721,
+        "out_mlp": 0.5033620212568323,
+        "out_mlp_std": 0.003966396352367514,
+        "out_max": 0.5033620212568323,
+        "P_max": 0.5271926705973229,
+        "task_acc": 0.903954802259887,
+        "task_lift": 0.014244500540930405
+      },
+      "task_well_learned": true,
+      "clean_lift": 0.01730977280923185,
+      "degenerate": false,
+      "provenance": {
+        "source": "LSAC National Longitudinal Bar Passage Study (Wightman 1998)",
+        "url": "https://raw.githubusercontent.com/tailequy/fairness_dataset/main/experiments/data/law_school_clean.csv",
+        "label": "pass_bar \u2014 the cleaned file's single bar-passage label; per the Le Quy et al. (2022) survey (arXiv:2110.00530) dataset table this is first-time bar passage (not eventual passage)",
+        "attributes": {
+          "sex": "1 iff male (file column 'male')",
+          "race": "1 iff White, 0 Non-White (file ships race already binarized to these two levels)"
+        },
+        "split": "stratified 80/19 train/holdout, seed 42, stratified on (label x attributes); experiments use the train partition; probes use 75/25 stratified held-out splits downstream",
+        "n_used": 16638,
+        "max_n_cap": 60000,
+        "subsample": "deterministic stratified on (label, attr), seed 42, applied only if train partition > max_n_cap",
+        "train_seed": 0,
+        "probe_seeds": {
+          "cost_sweep": [
+            0,
+            1
+          ],
+          "floor": [
+            0,
+            1,
+            2
+          ],
+          "reaudit": [
+            0,
+            1,
+            2
+          ]
+        },
+        "probe_split": "75/25 stratified held-out (diagnostic._split)",
+        "runtime_seconds": 190.4
+      }
+    },
+    {
+      "cell": "folktables/race/public_coverage",
+      "predictor": 0.5122371872201893,
+      "predictor_std": 0.0006454364302809558,
+      "sigma_rep_grid": 4.0,
+      "rep_hidden_within_grid": true,
+      "floor": 0.5536037232383687,
+      "floor_seeds": [
+        0,
+        1,
+        2
+      ],
+      "clean": {
+        "sigma": 0.0,
+        "out_xgb": 0.6600791926132423,
+        "out_xgb_std": 0.0037125732642027216,
+        "out_mlp": 0.5808494661694928,
+        "out_mlp_std": 0.0012276290491194213,
+        "out_max": 0.6600791926132423,
+        "P_max": 0.9999590695614494,
+        "task_acc": 0.7341666666666666,
+        "task_lift": 0.10311666666666663
+      },
+      "at_sigma_rep": {
+        "sigma": 4.0,
+        "out_xgb": 0.5342790582139046,
+        "out_xgb_std": 0.0035342210650681606,
+        "out_mlp": 0.5536037232383687,
+        "out_mlp_std": 0.002944371549079725,
+        "out_max": 0.5536037232383687,
+        "P_max": 0.5369713601054974,
+        "task_acc": 0.7278166666666667,
+        "task_lift": 0.09676666666666667
+      },
+      "task_well_learned": true,
+      "clean_lift": 0.10311666666666663,
+      "degenerate": false,
+      "provenance": {
+        "source": "folktables ACS PUMS person survey",
+        "state": "CA",
+        "survey_year": "2018",
+        "horizon": "1-Year",
+        "tasks": {
+          "income": "ACSIncome (official filter; label = PINCP > 50000)",
+          "employment": "ACSEmployment (official filter; label = ESR == 1)",
+          "public_coverage": "ACSPublicCoverage (official filter; label = PUBCOV == 1)"
+        },
+        "attributes": {
+          "sex": "1 iff SEX == 1 (Male)",
+          "race": "1 iff RAC1P == 1 (White alone) \u2014 binarized White vs non-White"
+        },
+        "features": "standardized numerics (AGEP/WKHP/PINCP where present) + one-hot categoricals with NaN->-1 bucket; SCHL 4-level bucket, OCCP 2-digit bucket, POBP {state,territory,foreign} bucket (same bucketings as pcrl/data/folktables.py); binarized SEX/RAC1P kept as features; ST dropped",
+        "split": "stratified 80/19 train/holdout, seed 42, stratified on (task label, sex, race); experiments use the train partition; probes use 75/25 stratified held-out splits downstream",
+        "n_used": 60000,
+        "max_n_cap": 60000,
+        "subsample": "deterministic stratified on (label, attr), seed 42, applied only if train partition > max_n_cap",
+        "train_seed": 0,
+        "probe_seeds": {
+          "cost_sweep": [
+            0,
+            1
+          ],
+          "floor": [
+            0,
+            1,
+            2
+          ],
+          "reaudit": [
+            0,
+            1,
+            2
+          ]
+        },
+        "probe_split": "75/25 stratified held-out (diagnostic._split)",
+        "runtime_seconds": 626.4
+      }
+    },
+    {
+      "cell": "folktables/race/income",
+      "predictor": 0.5419807779986615,
+      "predictor_std": 0.003019060530530857,
+      "sigma_rep_grid": 4.0,
+      "rep_hidden_within_grid": true,
+      "floor": 0.5569420613317285,
+      "floor_seeds": [
+        0,
+        1,
+        2
+      ],
+      "clean": {
+        "sigma": 0.0,
+        "out_xgb": 0.5746022857340595,
+        "out_xgb_std": 0.006568112946183503,
+        "out_mlp": 0.5724575125405971,
+        "out_mlp_std": 0.003959668500800832,
+        "out_max": 0.5746022857340595,
+        "P_max": 0.9993918542445072,
+        "task_acc": 0.8488308138468974,
+        "task_lift": 0.25940432340539
+      },
+      "at_sigma_rep": {
+        "sigma": 4.0,
+        "out_xgb": 0.5349908528901758,
+        "out_xgb_std": 0.0029516074223527792,
+        "out_mlp": 0.5569420613317285,
+        "out_mlp_std": 0.0023099148858946456,
+        "out_max": 0.5569420613317285,
+        "P_max": 0.5304017820058065,
+        "task_acc": 0.8398806646777446,
+        "task_lift": 0.25045417423623717
+      },
+      "task_well_learned": true,
+      "clean_lift": 0.25940432340539,
+      "degenerate": false,
+      "provenance": {
+        "source": "folktables ACS PUMS person survey",
+        "state": "CA",
+        "survey_year": "2018",
+        "horizon": "1-Year",
+        "tasks": {
+          "income": "ACSIncome (official filter; label = PINCP > 50000)",
+          "employment": "ACSEmployment (official filter; label = ESR == 1)",
+          "public_coverage": "ACSPublicCoverage (official filter; label = PUBCOV == 1)"
+        },
+        "attributes": {
+          "sex": "1 iff SEX == 1 (Male)",
+          "race": "1 iff RAC1P == 1 (White alone) \u2014 binarized White vs non-White"
+        },
+        "features": "standardized numerics (AGEP/WKHP/PINCP where present) + one-hot categoricals with NaN->-1 bucket; SCHL 4-level bucket, OCCP 2-digit bucket, POBP {state,territory,foreign} bucket (same bucketings as pcrl/data/folktables.py); binarized SEX/RAC1P kept as features; ST dropped",
+        "split": "stratified 80/19 train/holdout, seed 42, stratified on (task label, sex, race); experiments use the train partition; probes use 75/25 stratified held-out splits downstream",
+        "n_used": 59999,
+        "max_n_cap": 60000,
+        "subsample": "deterministic stratified on (label, attr), seed 42, applied only if train partition > max_n_cap",
+        "train_seed": 0,
+        "probe_seeds": {
+          "cost_sweep": [
+            0,
+            1
+          ],
+          "floor": [
+            0,
+            1,
+            2
+          ],
+          "reaudit": [
+            0,
+            1,
+            2
+          ]
+        },
+        "probe_split": "75/25 stratified held-out (diagnostic._split)",
+        "runtime_seconds": 658.7
+      }
+    },
+    {
+      "cell": "folktables/sex/income",
+      "predictor": 0.556770030816641,
+      "predictor_std": 0.0017388549760527963,
+      "sigma_rep_grid": 8.0,
+      "rep_hidden_within_grid": true,
+      "floor": 0.5865377408738991,
+      "floor_seeds": [
+        0,
+        1,
+        2
+      ],
+      "clean": {
+        "sigma": 0.0,
+        "out_xgb": 0.6138026391504499,
+        "out_xgb_std": 0.0024718928796908053,
+        "out_mlp": 0.6128765764994578,
+        "out_mlp_std": 0.006893373822162693,
+        "out_max": 0.6138026391504499,
+        "P_max": 0.9997139771062793,
+        "task_acc": 0.8472641210686844,
+        "task_lift": 0.257837630627177
+      },
+      "at_sigma_rep": {
+        "sigma": 8.0,
+        "out_xgb": 0.5594300229222546,
+        "out_xgb_std": 0.0016906141509751003,
+        "out_mlp": 0.5865377408738991,
+        "out_mlp_std": 0.0033894429933795846,
+        "out_max": 0.5865377408738991,
+        "P_max": 0.545718787450779,
+        "task_acc": 0.8152135868931148,
+        "task_lift": 0.22578709645160744
+      },
+      "task_well_learned": true,
+      "clean_lift": 0.257837630627177,
+      "degenerate": false,
+      "provenance": {
+        "source": "folktables ACS PUMS person survey",
+        "state": "CA",
+        "survey_year": "2018",
+        "horizon": "1-Year",
+        "tasks": {
+          "income": "ACSIncome (official filter; label = PINCP > 50000)",
+          "employment": "ACSEmployment (official filter; label = ESR == 1)",
+          "public_coverage": "ACSPublicCoverage (official filter; label = PUBCOV == 1)"
+        },
+        "attributes": {
+          "sex": "1 iff SEX == 1 (Male)",
+          "race": "1 iff RAC1P == 1 (White alone) \u2014 binarized White vs non-White"
+        },
+        "features": "standardized numerics (AGEP/WKHP/PINCP where present) + one-hot categoricals with NaN->-1 bucket; SCHL 4-level bucket, OCCP 2-digit bucket, POBP {state,territory,foreign} bucket (same bucketings as pcrl/data/folktables.py); binarized SEX/RAC1P kept as features; ST dropped",
+        "split": "stratified 80/19 train/holdout, seed 42, stratified on (task label, sex, race); experiments use the train partition; probes use 75/25 stratified held-out splits downstream",
+        "n_used": 59999,
+        "max_n_cap": 60000,
+        "subsample": "deterministic stratified on (label, attr), seed 42, applied only if train partition > max_n_cap",
+        "train_seed": 0,
+        "probe_seeds": {
+          "cost_sweep": [
+            0,
+            1
+          ],
+          "floor": [
+            0,
+            1,
+            2
+          ],
+          "reaudit": [
+            0,
+            1,
+            2
+          ]
+        },
+        "probe_split": "75/25 stratified held-out (diagnostic._split)",
+        "runtime_seconds": 731.2
+      }
+    },
+    {
+      "cell": "lawschool/race/pass_bar",
+      "predictor": 0.5911646537725569,
+      "predictor_std": 0.005692292390353444,
+      "sigma_rep_grid": 32.0,
+      "rep_hidden_within_grid": true,
+      "floor": 0.5663841423174433,
+      "floor_seeds": [
+        0,
+        1,
+        2
+      ],
+      "clean": {
+        "sigma": 0.0,
+        "out_xgb": 0.7567578922124136,
+        "out_xgb_std": 0.005995948108144414,
+        "out_mlp": 0.7782119723854536,
+        "out_mlp_std": 0.006973511776726188,
+        "out_max": 0.7782119723854536,
+        "P_max": 0.9999788139165761,
+        "task_acc": 0.9070200745281884,
+        "task_lift": 0.01730977280923185
+      },
+      "at_sigma_rep": {
+        "sigma": 32.0,
+        "out_xgb": 0.5439970817971621,
+        "out_xgb_std": 0.01175275402982384,
+        "out_mlp": 0.5663841423174433,
+        "out_mlp_std": 0.012549251818729507,
+        "out_max": 0.5663841423174433,
+        "P_max": 0.5381935361691843,
+        "task_acc": 0.8897704050967664,
+        "task_lift": 6.0103377809817005e-05
+      },
+      "task_well_learned": true,
+      "clean_lift": 0.01730977280923185,
+      "degenerate": false,
+      "provenance": {
+        "source": "LSAC National Longitudinal Bar Passage Study (Wightman 1998)",
+        "url": "https://raw.githubusercontent.com/tailequy/fairness_dataset/main/experiments/data/law_school_clean.csv",
+        "label": "pass_bar \u2014 the cleaned file's single bar-passage label; per the Le Quy et al. (2022) survey (arXiv:2110.00530) dataset table this is first-time bar passage (not eventual passage)",
+        "attributes": {
+          "sex": "1 iff male (file column 'male')",
+          "race": "1 iff White, 0 Non-White (file ships race already binarized to these two levels)"
+        },
+        "split": "stratified 80/19 train/holdout, seed 42, stratified on (label x attributes); experiments use the train partition; probes use 75/25 stratified held-out splits downstream",
+        "n_used": 16638,
+        "max_n_cap": 60000,
+        "subsample": "deterministic stratified on (label, attr), seed 42, applied only if train partition > max_n_cap",
+        "train_seed": 0,
+        "probe_seeds": {
+          "cost_sweep": [
+            0,
+            1
+          ],
+          "floor": [
+            0,
+            1,
+            2
+          ],
+          "reaudit": [
+            0,
+            1,
+            2
+          ]
+        },
+        "probe_split": "75/25 stratified held-out (diagnostic._split)",
+        "runtime_seconds": 262.3
+      }
+    },
+    {
+      "cell": "dutch/sex/occupation",
+      "predictor": 0.6499333972631062,
+      "predictor_std": 0.007159206055828526,
+      "sigma_rep_grid": 32.0,
+      "rep_hidden_within_grid": true,
+      "floor": 0.5760629880542845,
+      "floor_seeds": [
+        0,
+        1,
+        2
+      ],
+      "clean": {
+        "sigma": 0.0,
+        "out_xgb": 0.8951862960692442,
+        "out_xgb_std": 0.0009891264298002047,
+        "out_mlp": 0.8004203359875016,
+        "out_mlp_std": 0.004077516833457324,
+        "out_max": 0.8951862960692442,
+        "P_max": 0.9999927682350428,
+        "task_acc": 0.8504634227077127,
+        "task_lift": 0.32650612380006616
+      },
+      "at_sigma_rep": {
+        "sigma": 32.0,
+        "out_xgb": 0.5549688443208529,
+        "out_xgb_std": 0.00136730559722353,
+        "out_mlp": 0.5760629880542845,
+        "out_mlp_std": 0.006566605666903278,
+        "out_max": 0.5760629880542845,
+        "P_max": 0.5413673398348374,
+        "task_acc": 0.6059045018205892,
+        "task_lift": 0.08194720291294266
+      },
+      "task_well_learned": true,
+      "clean_lift": 0.32650612380006616,
+      "degenerate": false,
+      "provenance": {
+        "source": "Dutch Census 2001 (Dutch Central Bureau of Statistics)",
+        "url": "https://raw.githubusercontent.com/tailequy/fairness_dataset/main/experiments/data/dutch.csv",
+        "label": "occupation \u2014 1 = high-level (prestigious) occupation, 0 = low, as distributed in the cleaned survey CSV",
+        "attributes": {
+          "sex": "1 iff male (file column 'sex' in {male,female})"
+        },
+        "split": "stratified 80/19 train/holdout, seed 42, stratified on (label x attributes); experiments use the train partition; probes use 75/25 stratified held-out splits downstream",
+        "n_used": 48336,
+        "max_n_cap": 60000,
+        "subsample": "deterministic stratified on (label, attr), seed 42, applied only if train partition > max_n_cap",
+        "train_seed": 0,
+        "probe_seeds": {
+          "cost_sweep": [
+            0,
+            1
+          ],
+          "floor": [
+            0,
+            1,
+            2
+          ],
+          "reaudit": [
+            0,
+            1,
+            2
+          ]
+        },
+        "probe_split": "75/25 stratified held-out (diagnostic._split)",
+        "runtime_seconds": 512.0
+      }
+    }
+  ]
+}

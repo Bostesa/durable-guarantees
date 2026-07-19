@@ -1,0 +1,330 @@
+{
+  "cell": "folktables/race/public_coverage",
+  "source": "folktables",
+  "attr": "race",
+  "task": "public_coverage",
+  "n_used": 60000,
+  "cost": {
+    "cell": "folktables/race/public_coverage",
+    "dataset": "folktables",
+    "attr": "race",
+    "task": "public_coverage",
+    "predictor": 0.5122371872201893,
+    "predictor_std": 0.0006454364302809558,
+    "attr_majority": 0.5672833333333334,
+    "task_majority": 0.63105,
+    "clean_lift": 0.10311666666666663,
+    "degenerate": false,
+    "cost_rep": 0.04890694928958661,
+    "sigma_rep": 3.447797853906163,
+    "lift_at_rep": 0.09807354507908876,
+    "censored_rep": false,
+    "cost_durable": 0.10518463588347793,
+    "sigma_durable": 5.319204607389139,
+    "lift_at_durable": 0.09227037762981534,
+    "censored_durable": false,
+    "cost_rep_xgb_only": 0.03980245414940242,
+    "sweep": [
+      {
+        "sigma": 0.0,
+        "P_max": 0.9999643231661026,
+        "out_max": 0.6577638964527015,
+        "both_max": 0.9999643231661026,
+        "P_xgb": 0.9994785669134545,
+        "out_xgb": 0.6577638964527015,
+        "P_mlp": 0.9999643231661026,
+        "out_mlp": 0.5799952107403692,
+        "lift": 0.10311666666666663
+      },
+      {
+        "sigma": 2.0,
+        "P_max": 0.5862490311082618,
+        "out_max": 0.561250406671548,
+        "both_max": 0.5862490311082618,
+        "P_xgb": 0.5716086471665053,
+        "out_xgb": 0.5416993387464955,
+        "P_mlp": 0.5862490311082618,
+        "out_mlp": 0.561250406671548,
+        "lift": 0.10150000000000003
+      },
+      {
+        "sigma": 4.0,
+        "P_max": 0.5361743179700129,
+        "out_max": 0.5527827848965379,
+        "both_max": 0.5527827848965379,
+        "P_xgb": 0.530492829698711,
+        "out_xgb": 0.5323086637637922,
+        "P_mlp": 0.5361743179700129,
+        "out_mlp": 0.5527827848965379,
+        "lift": 0.09676666666666667
+      },
+      {
+        "sigma": 6.0,
+        "P_max": 0.5313326520485373,
+        "out_max": 0.5485639019712496,
+        "both_max": 0.5485639019712496,
+        "P_xgb": 0.5313326520485373,
+        "out_xgb": 0.5345791534058413,
+        "P_mlp": 0.5216722417339872,
+        "out_mlp": 0.5485639019712496,
+        "lift": 0.08994999999999997
+      }
+    ]
+  },
+  "floor": {
+    "sigma_rep_grid": 4.0,
+    "rep_hidden_within_grid": true,
+    "floor": 0.5536037232383687,
+    "floor_seeds": [
+      0,
+      1,
+      2
+    ],
+    "clean": {
+      "sigma": 0.0,
+      "out_xgb": 0.6600791926132423,
+      "out_xgb_std": 0.0037125732642027216,
+      "out_mlp": 0.5808494661694928,
+      "out_mlp_std": 0.0012276290491194213,
+      "out_max": 0.6600791926132423,
+      "P_max": 0.9999590695614494,
+      "task_acc": 0.7341666666666666,
+      "task_lift": 0.10311666666666663
+    },
+    "at_sigma_rep": {
+      "sigma": 4.0,
+      "out_xgb": 0.5342790582139046,
+      "out_xgb_std": 0.0035342210650681606,
+      "out_mlp": 0.5536037232383687,
+      "out_mlp_std": 0.002944371549079725,
+      "out_max": 0.5536037232383687,
+      "P_max": 0.5369713601054974,
+      "task_acc": 0.7278166666666667,
+      "task_lift": 0.09676666666666667
+    },
+    "task_well_learned": true
+  },
+  "reaudit": {
+    "sigma_h": 0.12207423150539398,
+    "noise_sigma_rels": [
+      1.0,
+      2.0,
+      8.0
+    ],
+    "proj_ranks": [
+      1,
+      8,
+      16
+    ],
+    "rows": [
+      {
+        "method": "noise \u03c3=1",
+        "linear_r2": 0.32750503459867325,
+        "linear_r2_std": 0.002459099295090249,
+        "linear_stopped": false,
+        "xgb_auc": 0.8129935155792793,
+        "mlp_auc": 0.8443841081579415,
+        "lora_auc": 0.8354347299309541,
+        "lrt_auc": 0.8397149421273352,
+        "tier1_max": 0.8443841081579415,
+        "tier2_max": 0.8443841081579415,
+        "honest_stopped": false,
+        "tier1_stopped": false,
+        "tier2_stopped": false,
+        "task_lift": 0.10097222222222224,
+        "seconds": 48.3,
+        "false_linear_pass": false
+      },
+      {
+        "method": "noise \u03c3=2",
+        "linear_r2": 0.12814308221224666,
+        "linear_r2_std": 0.00039587247283550677,
+        "linear_stopped": false,
+        "xgb_auc": 0.6716167753167029,
+        "mlp_auc": 0.7032172706751929,
+        "lora_auc": 0.7013335712633849,
+        "lrt_auc": 0.7125415287489831,
+        "tier1_max": 0.7032172706751929,
+        "tier2_max": 0.7125415287489831,
+        "honest_stopped": false,
+        "tier1_stopped": false,
+        "tier2_stopped": false,
+        "task_lift": 0.09468333333333334,
+        "seconds": 44.7,
+        "false_linear_pass": false
+      },
+      {
+        "method": "noise \u03c3=8",
+        "linear_r2": 0.011737827201969643,
+        "linear_r2_std": 0.00031594999256874697,
+        "linear_stopped": true,
+        "xgb_auc": 0.5209530289903561,
+        "mlp_auc": 0.5445893222238636,
+        "lora_auc": 0.5405641437155208,
+        "lrt_auc": 0.5638523984654599,
+        "tier1_max": 0.5445893222238636,
+        "tier2_max": 0.5638523984654599,
+        "honest_stopped": true,
+        "tier1_stopped": true,
+        "tier2_stopped": false,
+        "task_lift": 0.04010555555555558,
+        "seconds": 43.5,
+        "false_linear_pass": false
+      },
+      {
+        "method": "LEOPARD-MMD proj r=1",
+        "linear_r2": 0.7122081030951944,
+        "linear_r2_std": 0.0022006630656778415,
+        "linear_stopped": false,
+        "xgb_auc": 0.9865082362972034,
+        "mlp_auc": 0.9994231898165021,
+        "lora_auc": 0.9843765220855957,
+        "lrt_auc": 0.6110078395067171,
+        "tier1_max": 0.9994231898165021,
+        "tier2_max": 0.9994231898165021,
+        "honest_stopped": false,
+        "tier1_stopped": false,
+        "tier2_stopped": false,
+        "task_lift": 0.10499444444444446,
+        "seconds": 46.4,
+        "false_linear_pass": false
+      },
+      {
+        "method": "LEOPARD-MMD proj r=8",
+        "linear_r2": 0.40346345330306593,
+        "linear_r2_std": 0.015351719275394374,
+        "linear_stopped": false,
+        "xgb_auc": 0.9805414993215549,
+        "mlp_auc": 0.9952533666869936,
+        "lora_auc": 0.9073923932765521,
+        "lrt_auc": 0.6525625034562593,
+        "tier1_max": 0.9952533666869936,
+        "tier2_max": 0.9952533666869936,
+        "honest_stopped": false,
+        "tier1_stopped": false,
+        "tier2_stopped": false,
+        "task_lift": 0.06499444444444447,
+        "seconds": 43.3,
+        "false_linear_pass": false
+      },
+      {
+        "method": "LEOPARD-MMD proj r=16",
+        "linear_r2": 0.2428322251414671,
+        "linear_r2_std": 0.01608255960653649,
+        "linear_stopped": false,
+        "xgb_auc": 0.9768032261683081,
+        "mlp_auc": 0.9899721391175996,
+        "lora_auc": 0.7873644676369111,
+        "lrt_auc": 0.6016358282487584,
+        "tier1_max": 0.9899721391175996,
+        "tier2_max": 0.9899721391175996,
+        "honest_stopped": false,
+        "tier1_stopped": false,
+        "tier2_stopped": false,
+        "task_lift": 0.07426111111111111,
+        "seconds": 58.1,
+        "false_linear_pass": false
+      },
+      {
+        "method": "HSIC proj r=1",
+        "linear_r2": 0.712144475007945,
+        "linear_r2_std": 0.001373047433582444,
+        "linear_stopped": false,
+        "xgb_auc": 0.9871095824137489,
+        "mlp_auc": 0.9994246684301035,
+        "lora_auc": 0.9842270433032271,
+        "lrt_auc": 0.6110075105906302,
+        "tier1_max": 0.9994246684301035,
+        "tier2_max": 0.9994246684301035,
+        "honest_stopped": false,
+        "tier1_stopped": false,
+        "tier2_stopped": false,
+        "task_lift": 0.10499444444444446,
+        "seconds": 37.9,
+        "false_linear_pass": false
+      },
+      {
+        "method": "HSIC proj r=8",
+        "linear_r2": 0.40845760429018707,
+        "linear_r2_std": 0.020069633062286818,
+        "linear_stopped": false,
+        "xgb_auc": 0.9799473440952383,
+        "mlp_auc": 0.996190391284431,
+        "lora_auc": 0.9178524529146513,
+        "lrt_auc": 0.6525855426702326,
+        "tier1_max": 0.996190391284431,
+        "tier2_max": 0.996190391284431,
+        "honest_stopped": false,
+        "tier1_stopped": false,
+        "tier2_stopped": false,
+        "task_lift": 0.06497222222222225,
+        "seconds": 62.7,
+        "false_linear_pass": false
+      },
+      {
+        "method": "HSIC proj r=16",
+        "linear_r2": 0.2348983000600742,
+        "linear_r2_std": 0.022615483860362048,
+        "linear_stopped": false,
+        "xgb_auc": 0.97602000152605,
+        "mlp_auc": 0.9910084843029505,
+        "lora_auc": 0.7792868136025958,
+        "lrt_auc": 0.6016497030759816,
+        "tier1_max": 0.9910084843029505,
+        "tier2_max": 0.9910084843029505,
+        "honest_stopped": false,
+        "tier1_stopped": false,
+        "tier2_stopped": false,
+        "task_lift": 0.07408333333333332,
+        "seconds": 60.4,
+        "false_linear_pass": false
+      }
+    ]
+  },
+  "runtimes_seconds": {
+    "load": 0.0,
+    "cost": 86.8,
+    "floor": 71.2,
+    "reaudit": 468.2,
+    "total": 626.4
+  },
+  "provenance": {
+    "source": "folktables ACS PUMS person survey",
+    "state": "CA",
+    "survey_year": "2018",
+    "horizon": "1-Year",
+    "tasks": {
+      "income": "ACSIncome (official filter; label = PINCP > 50000)",
+      "employment": "ACSEmployment (official filter; label = ESR == 1)",
+      "public_coverage": "ACSPublicCoverage (official filter; label = PUBCOV == 1)"
+    },
+    "attributes": {
+      "sex": "1 iff SEX == 1 (Male)",
+      "race": "1 iff RAC1P == 1 (White alone) \u2014 binarized White vs non-White"
+    },
+    "features": "standardized numerics (AGEP/WKHP/PINCP where present) + one-hot categoricals with NaN->-1 bucket; SCHL 4-level bucket, OCCP 2-digit bucket, POBP {state,territory,foreign} bucket (same bucketings as pcrl/data/folktables.py); binarized SEX/RAC1P kept as features; ST dropped",
+    "split": "stratified 80/19 train/holdout, seed 42, stratified on (task label, sex, race); experiments use the train partition; probes use 75/25 stratified held-out splits downstream",
+    "n_used": 60000,
+    "max_n_cap": 60000,
+    "subsample": "deterministic stratified on (label, attr), seed 42, applied only if train partition > max_n_cap",
+    "train_seed": 0,
+    "probe_seeds": {
+      "cost_sweep": [
+        0,
+        1
+      ],
+      "floor": [
+        0,
+        1,
+        2
+      ],
+      "reaudit": [
+        0,
+        1,
+        2
+      ]
+    },
+    "probe_split": "75/25 stratified held-out (diagnostic._split)",
+    "runtime_seconds": 626.4
+  }
+}

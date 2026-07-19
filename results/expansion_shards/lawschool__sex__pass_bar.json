@@ -1,0 +1,312 @@
+{
+  "cell": "lawschool/sex/pass_bar",
+  "source": "lawschool",
+  "attr": "sex",
+  "task": "pass_bar",
+  "n_used": 16638,
+  "cost": {
+    "cell": "lawschool/sex/pass_bar",
+    "dataset": "lawschool",
+    "attr": "sex",
+    "task": "pass_bar",
+    "predictor": 0.5094341615089025,
+    "predictor_std": 0.002565064245338485,
+    "attr_majority": 0.5613054453660296,
+    "task_majority": 0.8897103017189566,
+    "clean_lift": 0.01730977280923185,
+    "degenerate": false,
+    "cost_rep": 0.17908763791015936,
+    "sigma_rep": 3.8075867606245533,
+    "lift_at_rep": 0.014209806484065014,
+    "censored_rep": false,
+    "cost_durable": 0.17908763791015936,
+    "sigma_durable": 3.8075867606245533,
+    "lift_at_durable": 0.014209806484065014,
+    "censored_durable": false,
+    "cost_rep_xgb_only": 0.1793600829047689,
+    "sweep": [
+      {
+        "sigma": 0.0,
+        "P_max": 0.9999996480009387,
+        "out_max": 0.5616884221642076,
+        "both_max": 0.9999996480009387,
+        "P_xgb": 0.9999957760112639,
+        "out_xgb": 0.5427603179724854,
+        "P_mlp": 0.9999996480009387,
+        "out_mlp": 0.5616884221642076,
+        "lift": 0.01730977280923185
+      },
+      {
+        "sigma": 2.0,
+        "P_max": 0.8161337596433076,
+        "out_max": 0.5297740752691327,
+        "both_max": 0.8161337596433076,
+        "P_xgb": 0.7808971282743246,
+        "out_xgb": 0.5119652107594379,
+        "P_mlp": 0.8161337596433076,
+        "out_mlp": 0.5297740752691327,
+        "lift": 0.013883880274071392
+      },
+      {
+        "sigma": 4.0,
+        "P_max": 0.5216707048781204,
+        "out_max": 0.5057098941069491,
+        "both_max": 0.5216707048781204,
+        "P_xgb": 0.5216707048781204,
+        "out_xgb": 0.5030703118125018,
+        "P_mlp": 0.5196441289489895,
+        "out_mlp": 0.5057098941069491,
+        "lift": 0.014244500540930405
+      }
+    ]
+  },
+  "floor": {
+    "sigma_rep_grid": 4.0,
+    "rep_hidden_within_grid": true,
+    "floor": 0.5033620212568323,
+    "floor_seeds": [
+      0,
+      1,
+      2
+    ],
+    "clean": {
+      "sigma": 0.0,
+      "out_xgb": 0.5476641928954856,
+      "out_xgb_std": 0.007449791168462511,
+      "out_mlp": 0.5634169722214074,
+      "out_mlp_std": 0.004132393640181139,
+      "out_max": 0.5634169722214074,
+      "P_max": 0.9999997653339591,
+      "task_acc": 0.9070200745281884,
+      "task_lift": 0.01730977280923185
+    },
+    "at_sigma_rep": {
+      "sigma": 4.0,
+      "out_xgb": 0.502610972592962,
+      "out_xgb_std": 0.007259826041892721,
+      "out_mlp": 0.5033620212568323,
+      "out_mlp_std": 0.003966396352367514,
+      "out_max": 0.5033620212568323,
+      "P_max": 0.5271926705973229,
+      "task_acc": 0.903954802259887,
+      "task_lift": 0.014244500540930405
+    },
+    "task_well_learned": true
+  },
+  "reaudit": {
+    "sigma_h": 0.25138768553733826,
+    "noise_sigma_rels": [
+      1.0,
+      2.0,
+      8.0
+    ],
+    "proj_ranks": [
+      1,
+      8,
+      16
+    ],
+    "rows": [
+      {
+        "method": "noise \u03c3=1",
+        "linear_r2": 0.49245698995490805,
+        "linear_r2_std": 0.0024795431074725763,
+        "linear_stopped": false,
+        "xgb_auc": 0.894732607824157,
+        "mlp_auc": 0.9145218777194372,
+        "lora_auc": 0.915143977393838,
+        "lrt_auc": 0.9252014510183528,
+        "tier1_max": 0.915143977393838,
+        "tier2_max": 0.9252014510183528,
+        "honest_stopped": false,
+        "tier1_stopped": false,
+        "tier2_stopped": false,
+        "task_lift": 0.013815339306684438,
+        "seconds": 13.6,
+        "false_linear_pass": false
+      },
+      {
+        "method": "noise \u03c3=2",
+        "linear_r2": 0.20793509885779513,
+        "linear_r2_std": 0.0019526619233045778,
+        "linear_stopped": false,
+        "xgb_auc": 0.706889521183499,
+        "mlp_auc": 0.7508474768511729,
+        "lora_auc": 0.735012642632953,
+        "lrt_auc": 0.7757808219178082,
+        "tier1_max": 0.7508474768511729,
+        "tier2_max": 0.7757808219178082,
+        "honest_stopped": false,
+        "tier1_stopped": false,
+        "tier2_stopped": false,
+        "task_lift": 0.010930723922069027,
+        "seconds": 13.0,
+        "false_linear_pass": false
+      },
+      {
+        "method": "noise \u03c3=8",
+        "linear_r2": 0.016959538226472167,
+        "linear_r2_std": 0.0006187463494503712,
+        "linear_stopped": true,
+        "xgb_auc": 0.5245935486394259,
+        "mlp_auc": 0.539204051900306,
+        "lora_auc": 0.5244003793767661,
+        "lrt_auc": 0.5774957613446364,
+        "tier1_max": 0.539204051900306,
+        "tier2_max": 0.5774957613446364,
+        "honest_stopped": true,
+        "tier1_stopped": true,
+        "tier2_stopped": false,
+        "task_lift": -0.00012696838562327914,
+        "seconds": 12.1,
+        "false_linear_pass": false
+      },
+      {
+        "method": "LEOPARD-MMD proj r=1",
+        "linear_r2": 0.8407885066301118,
+        "linear_r2_std": 0.007437092055207644,
+        "linear_stopped": false,
+        "xgb_auc": 0.9985519540836779,
+        "mlp_auc": 0.9998890029626587,
+        "lora_auc": 0.9991719417637109,
+        "lrt_auc": 0.601086347325296,
+        "tier1_max": 0.9998890029626587,
+        "tier2_max": 0.9998890029626587,
+        "honest_stopped": false,
+        "tier1_stopped": false,
+        "tier2_stopped": false,
+        "task_lift": 0.020626236742581867,
+        "seconds": 8.7,
+        "false_linear_pass": false
+      },
+      {
+        "method": "LEOPARD-MMD proj r=8",
+        "linear_r2": 0.6084634488991646,
+        "linear_r2_std": 0.010386781705816433,
+        "linear_stopped": false,
+        "xgb_auc": 0.9867754734876262,
+        "mlp_auc": 0.9993277600148622,
+        "lora_auc": 0.9838823932025069,
+        "lrt_auc": 0.5731463436097503,
+        "tier1_max": 0.9993277600148622,
+        "tier2_max": 0.9993277600148622,
+        "honest_stopped": false,
+        "tier1_stopped": false,
+        "tier2_stopped": false,
+        "task_lift": 0.009889057255402381,
+        "seconds": 13.0,
+        "false_linear_pass": false
+      },
+      {
+        "method": "LEOPARD-MMD proj r=16",
+        "linear_r2": 0.4212700257640336,
+        "linear_r2_std": 0.020272899323553455,
+        "linear_stopped": false,
+        "xgb_auc": 0.9717239154028922,
+        "mlp_auc": 0.9945632571646476,
+        "lora_auc": 0.9257433731287827,
+        "lrt_auc": 0.5826740586469547,
+        "tier1_max": 0.9945632571646476,
+        "tier2_max": 0.9945632571646476,
+        "honest_stopped": false,
+        "tier1_stopped": false,
+        "tier2_stopped": false,
+        "task_lift": 0.010049313665658791,
+        "seconds": 15.5,
+        "false_linear_pass": false
+      },
+      {
+        "method": "HSIC proj r=1",
+        "linear_r2": 0.8403190769938286,
+        "linear_r2_std": 0.008014215625158968,
+        "linear_stopped": false,
+        "xgb_auc": 0.9986103077058462,
+        "mlp_auc": 0.9998956518338172,
+        "lora_auc": 0.9988599141513402,
+        "lrt_auc": 0.6010882246536232,
+        "tier1_max": 0.9998956518338172,
+        "tier2_max": 0.9998956518338172,
+        "honest_stopped": false,
+        "tier1_stopped": false,
+        "tier2_stopped": false,
+        "task_lift": 0.020626236742581867,
+        "seconds": 10.6,
+        "false_linear_pass": false
+      },
+      {
+        "method": "HSIC proj r=8",
+        "linear_r2": 0.6154878240849583,
+        "linear_r2_std": 0.0189867405886803,
+        "linear_stopped": false,
+        "xgb_auc": 0.9878099596178855,
+        "mlp_auc": 0.9991851612840144,
+        "lora_auc": 0.9804477428060192,
+        "lrt_auc": 0.5730183332844446,
+        "tier1_max": 0.9991851612840144,
+        "tier2_max": 0.9991851612840144,
+        "honest_stopped": false,
+        "tier1_stopped": false,
+        "tier2_stopped": false,
+        "task_lift": 0.009808929050274159,
+        "seconds": 14.4,
+        "false_linear_pass": false
+      },
+      {
+        "method": "HSIC proj r=16",
+        "linear_r2": 0.43137708363154587,
+        "linear_r2_std": 0.014223642927472838,
+        "linear_stopped": false,
+        "xgb_auc": 0.9707936209947885,
+        "mlp_auc": 0.9943245235790483,
+        "lora_auc": 0.9229936346836408,
+        "lrt_auc": 0.5826625600109511,
+        "tier1_max": 0.9943245235790483,
+        "tier2_max": 0.9943245235790483,
+        "honest_stopped": false,
+        "tier1_stopped": false,
+        "tier2_stopped": false,
+        "task_lift": 0.0102095700759152,
+        "seconds": 21.8,
+        "false_linear_pass": false
+      }
+    ]
+  },
+  "runtimes_seconds": {
+    "load": 0.0,
+    "cost": 24.8,
+    "floor": 19.6,
+    "reaudit": 145.9,
+    "total": 190.4
+  },
+  "provenance": {
+    "source": "LSAC National Longitudinal Bar Passage Study (Wightman 1998)",
+    "url": "https://raw.githubusercontent.com/tailequy/fairness_dataset/main/experiments/data/law_school_clean.csv",
+    "label": "pass_bar \u2014 the cleaned file's single bar-passage label; per the Le Quy et al. (2022) survey (arXiv:2110.00530) dataset table this is first-time bar passage (not eventual passage)",
+    "attributes": {
+      "sex": "1 iff male (file column 'male')",
+      "race": "1 iff White, 0 Non-White (file ships race already binarized to these two levels)"
+    },
+    "split": "stratified 80/19 train/holdout, seed 42, stratified on (label x attributes); experiments use the train partition; probes use 75/25 stratified held-out splits downstream",
+    "n_used": 16638,
+    "max_n_cap": 60000,
+    "subsample": "deterministic stratified on (label, attr), seed 42, applied only if train partition > max_n_cap",
+    "train_seed": 0,
+    "probe_seeds": {
+      "cost_sweep": [
+        0,
+        1
+      ],
+      "floor": [
+        0,
+        1,
+        2
+      ],
+      "reaudit": [
+        0,
+        1,
+        2
+      ]
+    },
+    "probe_split": "75/25 stratified held-out (diagnostic._split)",
+    "runtime_seconds": 190.4
+  }
+}

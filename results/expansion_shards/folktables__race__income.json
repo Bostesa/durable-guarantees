@@ -1,0 +1,352 @@
+{
+  "cell": "folktables/race/income",
+  "source": "folktables",
+  "attr": "race",
+  "task": "income",
+  "n_used": 59999,
+  "cost": {
+    "cell": "folktables/race/income",
+    "dataset": "folktables",
+    "attr": "race",
+    "task": "income",
+    "predictor": 0.5419807779986615,
+    "predictor_std": 0.003019060530530857,
+    "attr_majority": 0.6184269737828963,
+    "task_majority": 0.5894264904415074,
+    "clean_lift": 0.25940432340539,
+    "degenerate": false,
+    "cost_rep": 0.023350775873074436,
+    "sigma_rep": 3.4740347748137266,
+    "lift_at_rep": 0.2533470311890442,
+    "censored_rep": false,
+    "cost_durable": 0.21490056382318024,
+    "sigma_durable": 10.177963158524443,
+    "lift_at_durable": 0.2036581880474011,
+    "censored_durable": false,
+    "cost_rep_xgb_only": 0.018468294585944678,
+    "sweep": [
+      {
+        "sigma": 0.0,
+        "P_max": 0.9994002541518143,
+        "out_max": 0.5720000173648307,
+        "both_max": 0.9994002541518143,
+        "P_xgb": 0.9916807440449555,
+        "out_xgb": 0.5720000173648307,
+        "P_mlp": 0.9994002541518143,
+        "out_mlp": 0.5716266593772046,
+        "lift": 0.25940432340539
+      },
+      {
+        "sigma": 2.0,
+        "P_max": 0.5933728799462648,
+        "out_max": 0.5587104646873924,
+        "both_max": 0.5933728799462648,
+        "P_xgb": 0.5808350106780525,
+        "out_xgb": 0.5429586891805277,
+        "P_mlp": 0.5933728799462648,
+        "out_mlp": 0.5587104646873924,
+        "lift": 0.26145435757262614
+      },
+      {
+        "sigma": 4.0,
+        "P_max": 0.5345236849511932,
+        "out_max": 0.5554565741366025,
+        "both_max": 0.5554565741366025,
+        "P_xgb": 0.5312514407912758,
+        "out_xgb": 0.5329048052818617,
+        "P_mlp": 0.5345236849511932,
+        "out_mlp": 0.5554565741366025,
+        "lift": 0.25045417423623717
+      },
+      {
+        "sigma": 6.0,
+        "P_max": 0.526895731008902,
+        "out_max": 0.554291086997727,
+        "both_max": 0.554291086997727,
+        "P_xgb": 0.5225998328983463,
+        "out_xgb": 0.5370922014507205,
+        "P_mlp": 0.526895731008902,
+        "out_mlp": 0.554291086997727,
+        "lift": 0.23675394589909826
+      },
+      {
+        "sigma": 8.0,
+        "P_max": 0.5234999413513199,
+        "out_max": 0.5549282086666552,
+        "both_max": 0.5549282086666552,
+        "P_xgb": 0.5234999413513199,
+        "out_xgb": 0.5346732588611864,
+        "P_mlp": 0.5184264302970418,
+        "out_mlp": 0.5549282086666552,
+        "lift": 0.22348705811763525
+      },
+      {
+        "sigma": 12.0,
+        "P_max": 0.5251045072772578,
+        "out_max": 0.5458771672890885,
+        "both_max": 0.5458771672890885,
+        "P_xgb": 0.5251045072772578,
+        "out_xgb": 0.5297614836903182,
+        "P_mlp": 0.5112144883559957,
+        "out_mlp": 0.5458771672890885,
+        "lift": 0.1870697844964082
+      }
+    ]
+  },
+  "floor": {
+    "sigma_rep_grid": 4.0,
+    "rep_hidden_within_grid": true,
+    "floor": 0.5569420613317285,
+    "floor_seeds": [
+      0,
+      1,
+      2
+    ],
+    "clean": {
+      "sigma": 0.0,
+      "out_xgb": 0.5746022857340595,
+      "out_xgb_std": 0.006568112946183503,
+      "out_mlp": 0.5724575125405971,
+      "out_mlp_std": 0.003959668500800832,
+      "out_max": 0.5746022857340595,
+      "P_max": 0.9993918542445072,
+      "task_acc": 0.8488308138468974,
+      "task_lift": 0.25940432340539
+    },
+    "at_sigma_rep": {
+      "sigma": 4.0,
+      "out_xgb": 0.5349908528901758,
+      "out_xgb_std": 0.0029516074223527792,
+      "out_mlp": 0.5569420613317285,
+      "out_mlp_std": 0.0023099148858946456,
+      "out_max": 0.5569420613317285,
+      "P_max": 0.5304017820058065,
+      "task_acc": 0.8398806646777446,
+      "task_lift": 0.25045417423623717
+    },
+    "task_well_learned": true
+  },
+  "reaudit": {
+    "sigma_h": 0.1681230217218399,
+    "noise_sigma_rels": [
+      1.0,
+      2.0,
+      8.0
+    ],
+    "proj_ranks": [
+      1,
+      8,
+      16
+    ],
+    "rows": [
+      {
+        "method": "noise \u03c3=1",
+        "linear_r2": 0.16741924316483084,
+        "linear_r2_std": 0.0006938757389590898,
+        "linear_stopped": false,
+        "xgb_auc": 0.7024230254592778,
+        "mlp_auc": 0.7360723886684571,
+        "lora_auc": 0.7343833073074322,
+        "lrt_auc": 0.7421614676639479,
+        "tier1_max": 0.7360723886684571,
+        "tier2_max": 0.7421614676639479,
+        "honest_stopped": false,
+        "tier1_stopped": false,
+        "tier2_stopped": false,
+        "task_lift": 0.25075128733627033,
+        "seconds": 44.2,
+        "false_linear_pass": false
+      },
+      {
+        "method": "noise \u03c3=2",
+        "linear_r2": 0.056498693839124446,
+        "linear_r2_std": 0.00018294688384461516,
+        "linear_stopped": false,
+        "xgb_auc": 0.5994256817635978,
+        "mlp_auc": 0.6341284642900228,
+        "lora_auc": 0.6268080831868561,
+        "lrt_auc": 0.6402113469413337,
+        "tier1_max": 0.6341284642900228,
+        "tier2_max": 0.6402113469413337,
+        "honest_stopped": false,
+        "tier1_stopped": false,
+        "tier2_stopped": false,
+        "task_lift": 0.2355068428918259,
+        "seconds": 41.2,
+        "false_linear_pass": false
+      },
+      {
+        "method": "noise \u03c3=8",
+        "linear_r2": 0.0076930384796386544,
+        "linear_r2_std": 0.0001665190799653474,
+        "linear_stopped": true,
+        "xgb_auc": 0.522242602983868,
+        "mlp_auc": 0.5314903170790481,
+        "lora_auc": 0.5301599331050969,
+        "lrt_auc": 0.5518900821026276,
+        "tier1_max": 0.5314903170790481,
+        "tier2_max": 0.5518900821026276,
+        "honest_stopped": true,
+        "tier1_stopped": true,
+        "tier2_stopped": false,
+        "task_lift": 0.11770684289182594,
+        "seconds": 40.5,
+        "false_linear_pass": false
+      },
+      {
+        "method": "LEOPARD-MMD proj r=1",
+        "linear_r2": 0.4576150721491743,
+        "linear_r2_std": 0.033011540961513486,
+        "linear_stopped": false,
+        "xgb_auc": 0.9368180411576875,
+        "mlp_auc": 0.9959718049891583,
+        "lora_auc": 0.9526855916201621,
+        "lrt_auc": 0.5963607765713049,
+        "tier1_max": 0.9959718049891583,
+        "tier2_max": 0.9959718049891583,
+        "honest_stopped": false,
+        "tier1_stopped": false,
+        "tier2_stopped": false,
+        "task_lift": 0.24872906511404816,
+        "seconds": 44.5,
+        "false_linear_pass": false
+      },
+      {
+        "method": "LEOPARD-MMD proj r=8",
+        "linear_r2": 0.18434621349058078,
+        "linear_r2_std": 0.01606085400172772,
+        "linear_stopped": false,
+        "xgb_auc": 0.8876024882860843,
+        "mlp_auc": 0.9702106013710857,
+        "lora_auc": 0.7829972591943704,
+        "lrt_auc": 0.6646597919514976,
+        "tier1_max": 0.9702106013710857,
+        "tier2_max": 0.9702106013710857,
+        "honest_stopped": false,
+        "tier1_stopped": false,
+        "tier2_stopped": false,
+        "task_lift": 0.20475128733627035,
+        "seconds": 49.5,
+        "false_linear_pass": false
+      },
+      {
+        "method": "LEOPARD-MMD proj r=16",
+        "linear_r2": 0.1460236144781829,
+        "linear_r2_std": 0.01160351654764018,
+        "linear_stopped": false,
+        "xgb_auc": 0.8679734147579415,
+        "mlp_auc": 0.9514925065795508,
+        "lora_auc": 0.7334979708887589,
+        "lrt_auc": 0.6142132320362269,
+        "tier1_max": 0.9514925065795508,
+        "tier2_max": 0.9514925065795508,
+        "honest_stopped": false,
+        "tier1_stopped": false,
+        "tier2_stopped": false,
+        "task_lift": 0.21406239844738148,
+        "seconds": 58.6,
+        "false_linear_pass": false
+      },
+      {
+        "method": "HSIC proj r=1",
+        "linear_r2": 0.4590017451946213,
+        "linear_r2_std": 0.03248430558057147,
+        "linear_stopped": false,
+        "xgb_auc": 0.9369808411549153,
+        "mlp_auc": 0.9965187657696019,
+        "lora_auc": 0.9525502859383694,
+        "lrt_auc": 0.596361300780767,
+        "tier1_max": 0.9965187657696019,
+        "tier2_max": 0.9965187657696019,
+        "honest_stopped": false,
+        "tier1_stopped": false,
+        "tier2_stopped": false,
+        "task_lift": 0.24872906511404816,
+        "seconds": 52.4,
+        "false_linear_pass": false
+      },
+      {
+        "method": "HSIC proj r=8",
+        "linear_r2": 0.18298317130725839,
+        "linear_r2_std": 0.01761940528543366,
+        "linear_stopped": false,
+        "xgb_auc": 0.8849216497076431,
+        "mlp_auc": 0.9708470544375268,
+        "lora_auc": 0.7782575801064882,
+        "lrt_auc": 0.6648149516742912,
+        "tier1_max": 0.9708470544375268,
+        "tier2_max": 0.9708470544375268,
+        "honest_stopped": false,
+        "tier1_stopped": false,
+        "tier2_stopped": false,
+        "task_lift": 0.2051512873362704,
+        "seconds": 45.1,
+        "false_linear_pass": false
+      },
+      {
+        "method": "HSIC proj r=16",
+        "linear_r2": 0.13857634309636205,
+        "linear_r2_std": 0.004863251205848842,
+        "linear_stopped": false,
+        "xgb_auc": 0.8688127557200481,
+        "mlp_auc": 0.9522756629598591,
+        "lora_auc": 0.7310544077188945,
+        "lrt_auc": 0.6140792101967693,
+        "tier1_max": 0.9522756629598591,
+        "tier2_max": 0.9522756629598591,
+        "honest_stopped": false,
+        "tier1_stopped": false,
+        "tier2_stopped": false,
+        "task_lift": 0.21417350955849257,
+        "seconds": 59.5,
+        "false_linear_pass": false
+      }
+    ]
+  },
+  "runtimes_seconds": {
+    "load": 0.0,
+    "cost": 126.5,
+    "floor": 74.3,
+    "reaudit": 457.7,
+    "total": 658.7
+  },
+  "provenance": {
+    "source": "folktables ACS PUMS person survey",
+    "state": "CA",
+    "survey_year": "2018",
+    "horizon": "1-Year",
+    "tasks": {
+      "income": "ACSIncome (official filter; label = PINCP > 50000)",
+      "employment": "ACSEmployment (official filter; label = ESR == 1)",
+      "public_coverage": "ACSPublicCoverage (official filter; label = PUBCOV == 1)"
+    },
+    "attributes": {
+      "sex": "1 iff SEX == 1 (Male)",
+      "race": "1 iff RAC1P == 1 (White alone) \u2014 binarized White vs non-White"
+    },
+    "features": "standardized numerics (AGEP/WKHP/PINCP where present) + one-hot categoricals with NaN->-1 bucket; SCHL 4-level bucket, OCCP 2-digit bucket, POBP {state,territory,foreign} bucket (same bucketings as pcrl/data/folktables.py); binarized SEX/RAC1P kept as features; ST dropped",
+    "split": "stratified 80/19 train/holdout, seed 42, stratified on (task label, sex, race); experiments use the train partition; probes use 75/25 stratified held-out splits downstream",
+    "n_used": 59999,
+    "max_n_cap": 60000,
+    "subsample": "deterministic stratified on (label, attr), seed 42, applied only if train partition > max_n_cap",
+    "train_seed": 0,
+    "probe_seeds": {
+      "cost_sweep": [
+        0,
+        1
+      ],
+      "floor": [
+        0,
+        1,
+        2
+      ],
+      "reaudit": [
+        0,
+        1,
+        2
+      ]
+    },
+    "probe_split": "75/25 stratified held-out (diagnostic._split)",
+    "runtime_seconds": 658.7
+  }
+}

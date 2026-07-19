@@ -1,0 +1,1146 @@
+{
+  "experiment": "expansion_cost",
+  "bar": 0.55,
+  "sigma_grid": [
+    0.0,
+    2.0,
+    4.0,
+    6.0,
+    8.0,
+    12.0,
+    16.0,
+    24.0,
+    32.0,
+    48.0,
+    64.0,
+    96.0,
+    128.0,
+    192.0
+  ],
+  "max_n_cap": 60000,
+  "stats_new_cells_only": {
+    "cost_rep": {
+      "pearson_r": 0.7784251416902574,
+      "pearson_p": 0.039233436804988635,
+      "spearman_r": 0.6071428571428572,
+      "spearman_p": 0.14823116148116158,
+      "n": 7
+    },
+    "cost_durable": {
+      "pearson_r": 0.8724922019365768,
+      "pearson_p": 0.010398392929590501,
+      "spearman_r": 0.9285714285714288,
+      "spearman_p": 0.002519472403794688,
+      "n": 7
+    }
+  },
+  "rows": [
+    {
+      "cell": "diabetes_hospital/gender/readmit_30_days",
+      "dataset": "diabetes_hospital",
+      "attr": "gender",
+      "task": "readmit_30_days",
+      "predictor": 0.4983686645532632,
+      "predictor_std": 0.003063527384757136,
+      "attr_majority": 0.5384833333333333,
+      "task_majority": 0.8877333333333334,
+      "clean_lift": 0.0005166666666666098,
+      "degenerate": true,
+      "cost_rep": null,
+      "sigma_rep": null,
+      "lift_at_rep": null,
+      "censored_rep": false,
+      "cost_durable": null,
+      "sigma_durable": null,
+      "lift_at_durable": null,
+      "censored_durable": false,
+      "cost_rep_xgb_only": null,
+      "sweep": [
+        {
+          "sigma": 0.0,
+          "P_max": 0.9998880306159097,
+          "out_max": 0.6001986227068294,
+          "both_max": 0.9998880306159097,
+          "P_xgb": 0.9983179197637158,
+          "out_xgb": 0.5763653106937594,
+          "P_mlp": 0.9998880306159097,
+          "out_mlp": 0.6001986227068294,
+          "lift": 0.0005166666666666098
+        },
+        {
+          "sigma": 2.0,
+          "P_max": 0.7558781557066893,
+          "out_max": 0.5457611683559033,
+          "both_max": 0.7558781557066893,
+          "P_xgb": 0.7350419203824177,
+          "out_xgb": 0.5218971233310843,
+          "P_mlp": 0.7558781557066893,
+          "out_mlp": 0.5457611683559033,
+          "lift": -0.00021666666666675383
+        },
+        {
+          "sigma": 4.0,
+          "P_max": 0.5774012197455765,
+          "out_max": 0.5135335146578046,
+          "both_max": 0.5774012197455765,
+          "P_xgb": 0.5627107954205971,
+          "out_xgb": 0.502876666233108,
+          "P_mlp": 0.5774012197455765,
+          "out_mlp": 0.5135335146578046,
+          "lift": -0.00013333333333342967
+        },
+        {
+          "sigma": 6.0,
+          "P_max": 0.5321341938672002,
+          "out_max": 0.521884417014618,
+          "both_max": 0.5321341938672002,
+          "P_xgb": 0.5258133737012083,
+          "out_xgb": 0.5045686852946929,
+          "P_mlp": 0.5321341938672002,
+          "out_mlp": 0.521884417014618,
+          "lift": -0.00016666666666675933
+        }
+      ],
+      "provenance": {
+        "source": "Diabetes 130-US Hospitals 1999-2008 (Strack et al. 2014) via fairlearn.datasets.fetch_diabetes_hospital (OpenML build)",
+        "url": "fairlearn.datasets.fetch_diabetes_hospital",
+        "label": "readmit_30_days \u2014 readmitted within 30 days (fairlearn target)",
+        "attributes": {
+          "gender": "1 iff Male (rows with Unknown/Invalid dropped)",
+          "race": "1 iff Caucasian, 0 non-Caucasian (rows with race Unknown dropped)"
+        },
+        "cleaning": "dropped medical_specialty (~49% Missing) and the readmitted/readmit_binary target-leakage columns; weight/payer_code already absent from the fairlearn build",
+        "split": "stratified 80/19 train/holdout, seed 42, stratified on (label x attributes); experiments use the train partition; probes use 75/25 stratified held-out splits downstream",
+        "n_used": 60000,
+        "max_n_cap": 60000,
+        "subsample": "deterministic stratified on (label, attr), seed 42, applied only if train partition > max_n_cap",
+        "train_seed": 0,
+        "probe_seeds": {
+          "cost_sweep": [
+            0,
+            1
+          ],
+          "floor": [
+            0,
+            1,
+            2
+          ],
+          "reaudit": [
+            0,
+            1,
+            2
+          ]
+        },
+        "probe_split": "75/25 stratified held-out (diagnostic._split)",
+        "runtime_seconds": 717.3
+      }
+    },
+    {
+      "cell": "diabetes_hospital/race/readmit_30_days",
+      "dataset": "diabetes_hospital",
+      "attr": "race",
+      "task": "readmit_30_days",
+      "predictor": 0.5009712443706769,
+      "predictor_std": 0.0009017303328841818,
+      "attr_majority": 0.7648794146569109,
+      "task_majority": 0.8877314621910365,
+      "clean_lift": 0.0004666744445741555,
+      "degenerate": true,
+      "cost_rep": null,
+      "sigma_rep": null,
+      "lift_at_rep": null,
+      "censored_rep": false,
+      "cost_durable": null,
+      "sigma_durable": null,
+      "lift_at_durable": null,
+      "censored_durable": false,
+      "cost_rep_xgb_only": null,
+      "sweep": [
+        {
+          "sigma": 0.0,
+          "P_max": 0.9997878180526705,
+          "out_max": 0.5894627766115789,
+          "both_max": 0.9997878180526705,
+          "P_xgb": 0.9975771075399446,
+          "out_xgb": 0.5596258085112046,
+          "P_mlp": 0.9997878180526705,
+          "out_mlp": 0.5894627766115789,
+          "lift": 0.0004666744445741555
+        },
+        {
+          "sigma": 2.0,
+          "P_max": 0.7416090825142378,
+          "out_max": 0.5232639242673056,
+          "both_max": 0.7416090825142378,
+          "P_xgb": 0.7122920046674097,
+          "out_xgb": 0.4974702504772549,
+          "P_mlp": 0.7416090825142378,
+          "out_mlp": 0.5232639242673056,
+          "lift": 0.00016666944449073018
+        },
+        {
+          "sigma": 4.0,
+          "P_max": 0.5849622630724505,
+          "out_max": 0.5090900911055309,
+          "both_max": 0.5849622630724505,
+          "P_xgb": 0.5742208917864408,
+          "out_xgb": 0.5014898145622205,
+          "P_mlp": 0.5849622630724505,
+          "out_mlp": 0.5090900911055309,
+          "lift": 0.0003833397223287349
+        },
+        {
+          "sigma": 6.0,
+          "P_max": 0.5292332899488057,
+          "out_max": 0.5070657502825077,
+          "both_max": 0.5292332899488057,
+          "P_xgb": 0.5257859881872532,
+          "out_xgb": 0.49760469910111316,
+          "P_mlp": 0.5292332899488057,
+          "out_mlp": 0.5070657502825077,
+          "lift": 8.33347222454206e-05
+        }
+      ],
+      "provenance": {
+        "source": "Diabetes 130-US Hospitals 1999-2008 (Strack et al. 2014) via fairlearn.datasets.fetch_diabetes_hospital (OpenML build)",
+        "url": "fairlearn.datasets.fetch_diabetes_hospital",
+        "label": "readmit_30_days \u2014 readmitted within 30 days (fairlearn target)",
+        "attributes": {
+          "gender": "1 iff Male (rows with Unknown/Invalid dropped)",
+          "race": "1 iff Caucasian, 0 non-Caucasian (rows with race Unknown dropped)"
+        },
+        "cleaning": "dropped medical_specialty (~49% Missing) and the readmitted/readmit_binary target-leakage columns; weight/payer_code already absent from the fairlearn build",
+        "split": "stratified 80/19 train/holdout, seed 42, stratified on (label x attributes); experiments use the train partition; probes use 75/25 stratified held-out splits downstream",
+        "n_used": 59999,
+        "max_n_cap": 60000,
+        "subsample": "deterministic stratified on (label, attr), seed 42, applied only if train partition > max_n_cap",
+        "train_seed": 0,
+        "probe_seeds": {
+          "cost_sweep": [
+            0,
+            1
+          ],
+          "floor": [
+            0,
+            1,
+            2
+          ],
+          "reaudit": [
+            0,
+            1,
+            2
+          ]
+        },
+        "probe_split": "75/25 stratified held-out (diagnostic._split)",
+        "runtime_seconds": 700.0
+      }
+    },
+    {
+      "cell": "folktables/race/employment",
+      "dataset": "folktables",
+      "attr": "race",
+      "task": "employment",
+      "predictor": 0.5048688656469227,
+      "predictor_std": 0.0021560765226134983,
+      "attr_majority": 0.6140397660039,
+      "task_majority": 0.5438242695955068,
+      "clean_lift": 0.28161197313378106,
+      "degenerate": false,
+      "cost_rep": 0.029066742580429406,
+      "sigma_rep": 2.7312613614738352,
+      "lift_at_rep": 0.27342643040313463,
+      "censored_rep": false,
+      "cost_durable": 0.0354355551814749,
+      "sigma_durable": 3.1075334821726663,
+      "lift_at_durable": 0.2716328965200349,
+      "censored_durable": false,
+      "cost_rep_xgb_only": 0.020504394455185815,
+      "sweep": [
+        {
+          "sigma": 0.0,
+          "P_max": 0.9999781743274965,
+          "out_max": 0.768678322400809,
+          "both_max": 0.9999781743274965,
+          "P_xgb": 0.9992781636959189,
+          "out_xgb": 0.768678322400809,
+          "P_mlp": 0.9999781743274965,
+          "out_mlp": 0.7381718449199717,
+          "lift": 0.28161197313378106
+        },
+        {
+          "sigma": 2.0,
+          "P_max": 0.569435911369019,
+          "out_max": 0.547872025056772,
+          "both_max": 0.569435911369019,
+          "P_xgb": 0.5547597825983013,
+          "out_xgb": 0.5282426030377061,
+          "P_mlp": 0.569435911369019,
+          "out_mlp": 0.547872025056772,
+          "lift": 0.2769120514658089
+        },
+        {
+          "sigma": 4.0,
+          "P_max": 0.5162786890871074,
+          "out_max": 0.5343382611726724,
+          "both_max": 0.5343382611726724,
+          "P_xgb": 0.5125246077894775,
+          "out_xgb": 0.517170616569623,
+          "P_mlp": 0.5162786890871074,
+          "out_mlp": 0.5343382611726724,
+          "lift": 0.2673788770187163
+        }
+      ],
+      "provenance": {
+        "source": "folktables ACS PUMS person survey",
+        "state": "CA",
+        "survey_year": "2018",
+        "horizon": "1-Year",
+        "tasks": {
+          "income": "ACSIncome (official filter; label = PINCP > 50000)",
+          "employment": "ACSEmployment (official filter; label = ESR == 1)",
+          "public_coverage": "ACSPublicCoverage (official filter; label = PUBCOV == 1)"
+        },
+        "attributes": {
+          "sex": "1 iff SEX == 1 (Male)",
+          "race": "1 iff RAC1P == 1 (White alone) \u2014 binarized White vs non-White"
+        },
+        "features": "standardized numerics (AGEP/WKHP/PINCP where present) + one-hot categoricals with NaN->-1 bucket; SCHL 4-level bucket, OCCP 2-digit bucket, POBP {state,territory,foreign} bucket (same bucketings as pcrl/data/folktables.py); binarized SEX/RAC1P kept as features; ST dropped",
+        "split": "stratified 80/19 train/holdout, seed 42, stratified on (task label, sex, race); experiments use the train partition; probes use 75/25 stratified held-out splits downstream",
+        "n_used": 60001,
+        "max_n_cap": 60000,
+        "subsample": "deterministic stratified on (label, attr), seed 42, applied only if train partition > max_n_cap",
+        "train_seed": 0,
+        "probe_seeds": {
+          "cost_sweep": [
+            0,
+            1
+          ],
+          "floor": [
+            0,
+            1,
+            2
+          ],
+          "reaudit": [
+            0,
+            1,
+            2
+          ]
+        },
+        "probe_split": "75/25 stratified held-out (diagnostic._split)",
+        "runtime_seconds": 639.8
+      }
+    },
+    {
+      "cell": "lawschool/sex/pass_bar",
+      "dataset": "lawschool",
+      "attr": "sex",
+      "task": "pass_bar",
+      "predictor": 0.5094341615089025,
+      "predictor_std": 0.002565064245338485,
+      "attr_majority": 0.5613054453660296,
+      "task_majority": 0.8897103017189566,
+      "clean_lift": 0.01730977280923185,
+      "degenerate": false,
+      "cost_rep": 0.17908763791015936,
+      "sigma_rep": 3.8075867606245533,
+      "lift_at_rep": 0.014209806484065014,
+      "censored_rep": false,
+      "cost_durable": 0.17908763791015936,
+      "sigma_durable": 3.8075867606245533,
+      "lift_at_durable": 0.014209806484065014,
+      "censored_durable": false,
+      "cost_rep_xgb_only": 0.1793600829047689,
+      "sweep": [
+        {
+          "sigma": 0.0,
+          "P_max": 0.9999996480009387,
+          "out_max": 0.5616884221642076,
+          "both_max": 0.9999996480009387,
+          "P_xgb": 0.9999957760112639,
+          "out_xgb": 0.5427603179724854,
+          "P_mlp": 0.9999996480009387,
+          "out_mlp": 0.5616884221642076,
+          "lift": 0.01730977280923185
+        },
+        {
+          "sigma": 2.0,
+          "P_max": 0.8161337596433076,
+          "out_max": 0.5297740752691327,
+          "both_max": 0.8161337596433076,
+          "P_xgb": 0.7808971282743246,
+          "out_xgb": 0.5119652107594379,
+          "P_mlp": 0.8161337596433076,
+          "out_mlp": 0.5297740752691327,
+          "lift": 0.013883880274071392
+        },
+        {
+          "sigma": 4.0,
+          "P_max": 0.5216707048781204,
+          "out_max": 0.5057098941069491,
+          "both_max": 0.5216707048781204,
+          "P_xgb": 0.5216707048781204,
+          "out_xgb": 0.5030703118125018,
+          "P_mlp": 0.5196441289489895,
+          "out_mlp": 0.5057098941069491,
+          "lift": 0.014244500540930405
+        }
+      ],
+      "provenance": {
+        "source": "LSAC National Longitudinal Bar Passage Study (Wightman 1998)",
+        "url": "https://raw.githubusercontent.com/tailequy/fairness_dataset/main/experiments/data/law_school_clean.csv",
+        "label": "pass_bar \u2014 the cleaned file's single bar-passage label; per the Le Quy et al. (2022) survey (arXiv:2110.00530) dataset table this is first-time bar passage (not eventual passage)",
+        "attributes": {
+          "sex": "1 iff male (file column 'male')",
+          "race": "1 iff White, 0 Non-White (file ships race already binarized to these two levels)"
+        },
+        "split": "stratified 80/19 train/holdout, seed 42, stratified on (label x attributes); experiments use the train partition; probes use 75/25 stratified held-out splits downstream",
+        "n_used": 16638,
+        "max_n_cap": 60000,
+        "subsample": "deterministic stratified on (label, attr), seed 42, applied only if train partition > max_n_cap",
+        "train_seed": 0,
+        "probe_seeds": {
+          "cost_sweep": [
+            0,
+            1
+          ],
+          "floor": [
+            0,
+            1,
+            2
+          ],
+          "reaudit": [
+            0,
+            1,
+            2
+          ]
+        },
+        "probe_split": "75/25 stratified held-out (diagnostic._split)",
+        "runtime_seconds": 190.4
+      }
+    },
+    {
+      "cell": "folktables/race/public_coverage",
+      "dataset": "folktables",
+      "attr": "race",
+      "task": "public_coverage",
+      "predictor": 0.5122371872201893,
+      "predictor_std": 0.0006454364302809558,
+      "attr_majority": 0.5672833333333334,
+      "task_majority": 0.63105,
+      "clean_lift": 0.10311666666666663,
+      "degenerate": false,
+      "cost_rep": 0.04890694928958661,
+      "sigma_rep": 3.447797853906163,
+      "lift_at_rep": 0.09807354507908876,
+      "censored_rep": false,
+      "cost_durable": 0.10518463588347793,
+      "sigma_durable": 5.319204607389139,
+      "lift_at_durable": 0.09227037762981534,
+      "censored_durable": false,
+      "cost_rep_xgb_only": 0.03980245414940242,
+      "sweep": [
+        {
+          "sigma": 0.0,
+          "P_max": 0.9999643231661026,
+          "out_max": 0.6577638964527015,
+          "both_max": 0.9999643231661026,
+          "P_xgb": 0.9994785669134545,
+          "out_xgb": 0.6577638964527015,
+          "P_mlp": 0.9999643231661026,
+          "out_mlp": 0.5799952107403692,
+          "lift": 0.10311666666666663
+        },
+        {
+          "sigma": 2.0,
+          "P_max": 0.5862490311082618,
+          "out_max": 0.561250406671548,
+          "both_max": 0.5862490311082618,
+          "P_xgb": 0.5716086471665053,
+          "out_xgb": 0.5416993387464955,
+          "P_mlp": 0.5862490311082618,
+          "out_mlp": 0.561250406671548,
+          "lift": 0.10150000000000003
+        },
+        {
+          "sigma": 4.0,
+          "P_max": 0.5361743179700129,
+          "out_max": 0.5527827848965379,
+          "both_max": 0.5527827848965379,
+          "P_xgb": 0.530492829698711,
+          "out_xgb": 0.5323086637637922,
+          "P_mlp": 0.5361743179700129,
+          "out_mlp": 0.5527827848965379,
+          "lift": 0.09676666666666667
+        },
+        {
+          "sigma": 6.0,
+          "P_max": 0.5313326520485373,
+          "out_max": 0.5485639019712496,
+          "both_max": 0.5485639019712496,
+          "P_xgb": 0.5313326520485373,
+          "out_xgb": 0.5345791534058413,
+          "P_mlp": 0.5216722417339872,
+          "out_mlp": 0.5485639019712496,
+          "lift": 0.08994999999999997
+        }
+      ],
+      "provenance": {
+        "source": "folktables ACS PUMS person survey",
+        "state": "CA",
+        "survey_year": "2018",
+        "horizon": "1-Year",
+        "tasks": {
+          "income": "ACSIncome (official filter; label = PINCP > 50000)",
+          "employment": "ACSEmployment (official filter; label = ESR == 1)",
+          "public_coverage": "ACSPublicCoverage (official filter; label = PUBCOV == 1)"
+        },
+        "attributes": {
+          "sex": "1 iff SEX == 1 (Male)",
+          "race": "1 iff RAC1P == 1 (White alone) \u2014 binarized White vs non-White"
+        },
+        "features": "standardized numerics (AGEP/WKHP/PINCP where present) + one-hot categoricals with NaN->-1 bucket; SCHL 4-level bucket, OCCP 2-digit bucket, POBP {state,territory,foreign} bucket (same bucketings as pcrl/data/folktables.py); binarized SEX/RAC1P kept as features; ST dropped",
+        "split": "stratified 80/19 train/holdout, seed 42, stratified on (task label, sex, race); experiments use the train partition; probes use 75/25 stratified held-out splits downstream",
+        "n_used": 60000,
+        "max_n_cap": 60000,
+        "subsample": "deterministic stratified on (label, attr), seed 42, applied only if train partition > max_n_cap",
+        "train_seed": 0,
+        "probe_seeds": {
+          "cost_sweep": [
+            0,
+            1
+          ],
+          "floor": [
+            0,
+            1,
+            2
+          ],
+          "reaudit": [
+            0,
+            1,
+            2
+          ]
+        },
+        "probe_split": "75/25 stratified held-out (diagnostic._split)",
+        "runtime_seconds": 626.4
+      }
+    },
+    {
+      "cell": "folktables/race/income",
+      "dataset": "folktables",
+      "attr": "race",
+      "task": "income",
+      "predictor": 0.5419807779986615,
+      "predictor_std": 0.003019060530530857,
+      "attr_majority": 0.6184269737828963,
+      "task_majority": 0.5894264904415074,
+      "clean_lift": 0.25940432340539,
+      "degenerate": false,
+      "cost_rep": 0.023350775873074436,
+      "sigma_rep": 3.4740347748137266,
+      "lift_at_rep": 0.2533470311890442,
+      "censored_rep": false,
+      "cost_durable": 0.21490056382318024,
+      "sigma_durable": 10.177963158524443,
+      "lift_at_durable": 0.2036581880474011,
+      "censored_durable": false,
+      "cost_rep_xgb_only": 0.018468294585944678,
+      "sweep": [
+        {
+          "sigma": 0.0,
+          "P_max": 0.9994002541518143,
+          "out_max": 0.5720000173648307,
+          "both_max": 0.9994002541518143,
+          "P_xgb": 0.9916807440449555,
+          "out_xgb": 0.5720000173648307,
+          "P_mlp": 0.9994002541518143,
+          "out_mlp": 0.5716266593772046,
+          "lift": 0.25940432340539
+        },
+        {
+          "sigma": 2.0,
+          "P_max": 0.5933728799462648,
+          "out_max": 0.5587104646873924,
+          "both_max": 0.5933728799462648,
+          "P_xgb": 0.5808350106780525,
+          "out_xgb": 0.5429586891805277,
+          "P_mlp": 0.5933728799462648,
+          "out_mlp": 0.5587104646873924,
+          "lift": 0.26145435757262614
+        },
+        {
+          "sigma": 4.0,
+          "P_max": 0.5345236849511932,
+          "out_max": 0.5554565741366025,
+          "both_max": 0.5554565741366025,
+          "P_xgb": 0.5312514407912758,
+          "out_xgb": 0.5329048052818617,
+          "P_mlp": 0.5345236849511932,
+          "out_mlp": 0.5554565741366025,
+          "lift": 0.25045417423623717
+        },
+        {
+          "sigma": 6.0,
+          "P_max": 0.526895731008902,
+          "out_max": 0.554291086997727,
+          "both_max": 0.554291086997727,
+          "P_xgb": 0.5225998328983463,
+          "out_xgb": 0.5370922014507205,
+          "P_mlp": 0.526895731008902,
+          "out_mlp": 0.554291086997727,
+          "lift": 0.23675394589909826
+        },
+        {
+          "sigma": 8.0,
+          "P_max": 0.5234999413513199,
+          "out_max": 0.5549282086666552,
+          "both_max": 0.5549282086666552,
+          "P_xgb": 0.5234999413513199,
+          "out_xgb": 0.5346732588611864,
+          "P_mlp": 0.5184264302970418,
+          "out_mlp": 0.5549282086666552,
+          "lift": 0.22348705811763525
+        },
+        {
+          "sigma": 12.0,
+          "P_max": 0.5251045072772578,
+          "out_max": 0.5458771672890885,
+          "both_max": 0.5458771672890885,
+          "P_xgb": 0.5251045072772578,
+          "out_xgb": 0.5297614836903182,
+          "P_mlp": 0.5112144883559957,
+          "out_mlp": 0.5458771672890885,
+          "lift": 0.1870697844964082
+        }
+      ],
+      "provenance": {
+        "source": "folktables ACS PUMS person survey",
+        "state": "CA",
+        "survey_year": "2018",
+        "horizon": "1-Year",
+        "tasks": {
+          "income": "ACSIncome (official filter; label = PINCP > 50000)",
+          "employment": "ACSEmployment (official filter; label = ESR == 1)",
+          "public_coverage": "ACSPublicCoverage (official filter; label = PUBCOV == 1)"
+        },
+        "attributes": {
+          "sex": "1 iff SEX == 1 (Male)",
+          "race": "1 iff RAC1P == 1 (White alone) \u2014 binarized White vs non-White"
+        },
+        "features": "standardized numerics (AGEP/WKHP/PINCP where present) + one-hot categoricals with NaN->-1 bucket; SCHL 4-level bucket, OCCP 2-digit bucket, POBP {state,territory,foreign} bucket (same bucketings as pcrl/data/folktables.py); binarized SEX/RAC1P kept as features; ST dropped",
+        "split": "stratified 80/19 train/holdout, seed 42, stratified on (task label, sex, race); experiments use the train partition; probes use 75/25 stratified held-out splits downstream",
+        "n_used": 59999,
+        "max_n_cap": 60000,
+        "subsample": "deterministic stratified on (label, attr), seed 42, applied only if train partition > max_n_cap",
+        "train_seed": 0,
+        "probe_seeds": {
+          "cost_sweep": [
+            0,
+            1
+          ],
+          "floor": [
+            0,
+            1,
+            2
+          ],
+          "reaudit": [
+            0,
+            1,
+            2
+          ]
+        },
+        "probe_split": "75/25 stratified held-out (diagnostic._split)",
+        "runtime_seconds": 658.7
+      }
+    },
+    {
+      "cell": "folktables/sex/income",
+      "dataset": "folktables",
+      "attr": "sex",
+      "task": "income",
+      "predictor": 0.556770030816641,
+      "predictor_std": 0.0017388549760527963,
+      "attr_majority": 0.5280088001466691,
+      "task_majority": 0.5894264904415074,
+      "clean_lift": 0.257837630627177,
+      "degenerate": false,
+      "cost_rep": 0.11948452040468238,
+      "sigma_rep": 7.822017972936603,
+      "lift_at_rep": 0.22703002498940913,
+      "censored_rep": false,
+      "cost_durable": 0.7133257158593547,
+      "sigma_durable": 24.67105948605883,
+      "lift_at_durable": 0.07391541818456608,
+      "censored_durable": false,
+      "cost_rep_xgb_only": 0.020975537791211973,
+      "sweep": [
+        {
+          "sigma": 0.0,
+          "P_max": 0.999708365434001,
+          "out_max": 0.6122094131641271,
+          "both_max": 0.999708365434001,
+          "P_xgb": 0.9963046157193403,
+          "out_xgb": 0.6122094131641271,
+          "P_mlp": 0.999708365434001,
+          "out_mlp": 0.6086377814158535,
+          "lift": 0.257837630627177
+        },
+        {
+          "sigma": 2.0,
+          "P_max": 0.6100684011727444,
+          "out_max": 0.586326961350796,
+          "both_max": 0.6100684011727444,
+          "P_xgb": 0.5851263651700622,
+          "out_xgb": 0.5657237987216801,
+          "P_mlp": 0.6100684011727444,
+          "out_mlp": 0.586326961350796,
+          "lift": 0.26102101701695024
+        },
+        {
+          "sigma": 4.0,
+          "P_max": 0.5679059218598413,
+          "out_max": 0.5836972389859043,
+          "both_max": 0.5836972389859043,
+          "P_xgb": 0.5464219971608744,
+          "out_xgb": 0.5610897730839468,
+          "P_mlp": 0.5679059218598413,
+          "out_mlp": 0.5836972389859043,
+          "lift": 0.2515541925698761
+        },
+        {
+          "sigma": 6.0,
+          "P_max": 0.5575778262854535,
+          "out_max": 0.585859308123609,
+          "both_max": 0.585859308123609,
+          "P_xgb": 0.5509838631726873,
+          "out_xgb": 0.5609637957969525,
+          "P_mlp": 0.5575778262854535,
+          "out_mlp": 0.585859308123609,
+          "lift": 0.23975399589993163
+        },
+        {
+          "sigma": 8.0,
+          "P_max": 0.5492597675198311,
+          "out_max": 0.5846374853763625,
+          "both_max": 0.5846374853763625,
+          "P_xgb": 0.542904410453404,
+          "out_xgb": 0.5596198656765394,
+          "P_mlp": 0.5492597675198311,
+          "out_mlp": 0.5846374853763625,
+          "lift": 0.22578709645160744
+        },
+        {
+          "sigma": 12.0,
+          "P_max": 0.5410057986289447,
+          "out_max": 0.5824933123608971,
+          "both_max": 0.5824933123608971,
+          "P_xgb": 0.5410057986289447,
+          "out_xgb": 0.555730811825886,
+          "P_mlp": 0.5346640932631399,
+          "out_mlp": 0.5824933123608971,
+          "lift": 0.1892198203303388
+        },
+        {
+          "sigma": 16.0,
+          "P_max": 0.5363168630157507,
+          "out_max": 0.5742556301004393,
+          "both_max": 0.5742556301004393,
+          "P_xgb": 0.5363168630157507,
+          "out_xgb": 0.5521336645052217,
+          "P_mlp": 0.524299474262398,
+          "out_mlp": 0.5742556301004393,
+          "lift": 0.14826913781896356
+        },
+        {
+          "sigma": 24.0,
+          "P_max": 0.5196547305683958,
+          "out_max": 0.5522398508388975,
+          "both_max": 0.5522398508388975,
+          "P_xgb": 0.5196547305683958,
+          "out_xgb": 0.5334160326784797,
+          "P_mlp": 0.51531483621526,
+          "out_mlp": 0.5522398508388975,
+          "lift": 0.0779012983549725
+        },
+        {
+          "sigma": 32.0,
+          "P_max": 0.5094813512954403,
+          "out_max": 0.5255375880984992,
+          "both_max": 0.5255375880984992,
+          "P_xgb": 0.5067069351709182,
+          "out_xgb": 0.5141991463005764,
+          "P_mlp": 0.5094813512954403,
+          "out_mlp": 0.5255375880984992,
+          "lift": 0.030383839730662165
+        }
+      ],
+      "provenance": {
+        "source": "folktables ACS PUMS person survey",
+        "state": "CA",
+        "survey_year": "2018",
+        "horizon": "1-Year",
+        "tasks": {
+          "income": "ACSIncome (official filter; label = PINCP > 50000)",
+          "employment": "ACSEmployment (official filter; label = ESR == 1)",
+          "public_coverage": "ACSPublicCoverage (official filter; label = PUBCOV == 1)"
+        },
+        "attributes": {
+          "sex": "1 iff SEX == 1 (Male)",
+          "race": "1 iff RAC1P == 1 (White alone) \u2014 binarized White vs non-White"
+        },
+        "features": "standardized numerics (AGEP/WKHP/PINCP where present) + one-hot categoricals with NaN->-1 bucket; SCHL 4-level bucket, OCCP 2-digit bucket, POBP {state,territory,foreign} bucket (same bucketings as pcrl/data/folktables.py); binarized SEX/RAC1P kept as features; ST dropped",
+        "split": "stratified 80/19 train/holdout, seed 42, stratified on (task label, sex, race); experiments use the train partition; probes use 75/25 stratified held-out splits downstream",
+        "n_used": 59999,
+        "max_n_cap": 60000,
+        "subsample": "deterministic stratified on (label, attr), seed 42, applied only if train partition > max_n_cap",
+        "train_seed": 0,
+        "probe_seeds": {
+          "cost_sweep": [
+            0,
+            1
+          ],
+          "floor": [
+            0,
+            1,
+            2
+          ],
+          "reaudit": [
+            0,
+            1,
+            2
+          ]
+        },
+        "probe_split": "75/25 stratified held-out (diagnostic._split)",
+        "runtime_seconds": 731.2
+      }
+    },
+    {
+      "cell": "lawschool/race/pass_bar",
+      "dataset": "lawschool",
+      "attr": "race",
+      "task": "pass_bar",
+      "predictor": 0.5911646537725569,
+      "predictor_std": 0.005692292390353444,
+      "attr_majority": 0.841026565692992,
+      "task_majority": 0.8897103017189566,
+      "clean_lift": 0.01730977280923185,
+      "degenerate": false,
+      "cost_rep": 0.99245838731644,
+      "sigma_rep": 28.874708125692976,
+      "lift_at_rep": 0.00013054360216764523,
+      "censored_rep": false,
+      "cost_durable": 0.9976193094470418,
+      "sigma_durable": 37.02977793196576,
+      "lift_at_durable": 4.120921260079087e-05,
+      "censored_durable": false,
+      "cost_rep_xgb_only": 0.99245838731644,
+      "sweep": [
+        {
+          "sigma": 0.0,
+          "P_max": 0.9999682208748641,
+          "out_max": 0.7799081561665122,
+          "both_max": 0.9999682208748641,
+          "P_xgb": 0.9998795852197235,
+          "out_xgb": 0.7564517028638829,
+          "P_mlp": 0.9999682208748641,
+          "out_mlp": 0.7799081561665122,
+          "lift": 0.01730977280923185
+        },
+        {
+          "sigma": 2.0,
+          "P_max": 0.8663728863098554,
+          "out_max": 0.7299349414291267,
+          "both_max": 0.8663728863098554,
+          "P_xgb": 0.8479441284066898,
+          "out_xgb": 0.701151377160278,
+          "P_mlp": 0.8663728863098554,
+          "out_mlp": 0.7299349414291267,
+          "lift": 0.013883880274071392
+        },
+        {
+          "sigma": 4.0,
+          "P_max": 0.7362756335395589,
+          "out_max": 0.7135911751747527,
+          "both_max": 0.7362756335395589,
+          "P_xgb": 0.7142222178024498,
+          "out_xgb": 0.6813053135129596,
+          "P_mlp": 0.7362756335395589,
+          "out_mlp": 0.7135911751747527,
+          "lift": 0.014244500540930405
+        },
+        {
+          "sigma": 6.0,
+          "P_max": 0.7060530369818219,
+          "out_max": 0.7186073047021431,
+          "both_max": 0.7186073047021431,
+          "P_xgb": 0.6953373105520964,
+          "out_xgb": 0.686332036082062,
+          "P_mlp": 0.7060530369818219,
+          "out_mlp": 0.7186073047021431,
+          "lift": 0.01117922827262896
+        },
+        {
+          "sigma": 8.0,
+          "P_max": 0.6910726384326795,
+          "out_max": 0.7209747414324992,
+          "both_max": 0.7209747414324992,
+          "P_xgb": 0.6910726384326795,
+          "out_xgb": 0.6889165220752504,
+          "P_mlp": 0.6725928609816767,
+          "out_mlp": 0.7209747414324992,
+          "lift": 0.009796850583002725
+        },
+        {
+          "sigma": 12.0,
+          "P_max": 0.6549377194002695,
+          "out_max": 0.7083201640927017,
+          "both_max": 0.7083201640927017,
+          "P_xgb": 0.6549377194002695,
+          "out_xgb": 0.6795812419282103,
+          "P_mlp": 0.6337624452026276,
+          "out_mlp": 0.7083201640927017,
+          "lift": 0.006491164803462013
+        },
+        {
+          "sigma": 16.0,
+          "P_max": 0.6303481349112499,
+          "out_max": 0.6907834916308484,
+          "both_max": 0.6907834916308484,
+          "P_xgb": 0.6303481349112499,
+          "out_xgb": 0.6639797452395086,
+          "P_mlp": 0.6080531329677509,
+          "out_mlp": 0.6907834916308484,
+          "lift": 0.004627960091357131
+        },
+        {
+          "sigma": 24.0,
+          "P_max": 0.5770285999155151,
+          "out_max": 0.6391683554281123,
+          "both_max": 0.6391683554281123,
+          "P_xgb": 0.5770285999155151,
+          "out_xgb": 0.5931988780887905,
+          "P_mlp": 0.5546354501977873,
+          "out_mlp": 0.6391683554281123,
+          "lift": 0.00024041351123937904
+        },
+        {
+          "sigma": 32.0,
+          "P_max": 0.5326713186693929,
+          "out_max": 0.5682181077022654,
+          "both_max": 0.5682181077022654,
+          "P_xgb": 0.5326713186693929,
+          "out_xgb": 0.5521258721424189,
+          "P_mlp": 0.5246543317541774,
+          "out_mlp": 0.5682181077022654,
+          "lift": 6.0103377809817005e-05
+        },
+        {
+          "sigma": 48.0,
+          "P_max": 0.5102653059724434,
+          "out_max": 0.5088957770082569,
+          "both_max": 0.5102653059724434,
+          "P_xgb": 0.49110476345305487,
+          "out_xgb": 0.5041972225477,
+          "P_mlp": 0.5102653059724434,
+          "out_mlp": 0.5088957770082569,
+          "lift": 0.0
+        }
+      ],
+      "provenance": {
+        "source": "LSAC National Longitudinal Bar Passage Study (Wightman 1998)",
+        "url": "https://raw.githubusercontent.com/tailequy/fairness_dataset/main/experiments/data/law_school_clean.csv",
+        "label": "pass_bar \u2014 the cleaned file's single bar-passage label; per the Le Quy et al. (2022) survey (arXiv:2110.00530) dataset table this is first-time bar passage (not eventual passage)",
+        "attributes": {
+          "sex": "1 iff male (file column 'male')",
+          "race": "1 iff White, 0 Non-White (file ships race already binarized to these two levels)"
+        },
+        "split": "stratified 80/19 train/holdout, seed 42, stratified on (label x attributes); experiments use the train partition; probes use 75/25 stratified held-out splits downstream",
+        "n_used": 16638,
+        "max_n_cap": 60000,
+        "subsample": "deterministic stratified on (label, attr), seed 42, applied only if train partition > max_n_cap",
+        "train_seed": 0,
+        "probe_seeds": {
+          "cost_sweep": [
+            0,
+            1
+          ],
+          "floor": [
+            0,
+            1,
+            2
+          ],
+          "reaudit": [
+            0,
+            1,
+            2
+          ]
+        },
+        "probe_split": "75/25 stratified held-out (diagnostic._split)",
+        "runtime_seconds": 262.3
+      }
+    },
+    {
+      "cell": "dutch/sex/occupation",
+      "dataset": "dutch",
+      "attr": "sex",
+      "task": "occupation",
+      "predictor": 0.6499333972631062,
+      "predictor_std": 0.007159206055828526,
+      "attr_majority": 0.5010344256868586,
+      "task_majority": 0.5239572989076465,
+      "clean_lift": 0.32650612380006616,
+      "degenerate": false,
+      "cost_rep": 0.6957971927143762,
+      "sigma_rep": 29.5296214571126,
+      "lift_at_rep": 0.09932407945592753,
+      "censored_rep": false,
+      "cost_durable": 0.8762771626390836,
+      "sigma_durable": 43.53427813794697,
+      "lift_at_durable": 0.04039626405225882,
+      "censored_durable": false,
+      "cost_rep_xgb_only": 0.6957971927143762,
+      "sweep": [
+        {
+          "sigma": 0.0,
+          "P_max": 0.9999924943060372,
+          "out_max": 0.8957794499933744,
+          "both_max": 0.9999924943060372,
+          "P_xgb": 0.9998467769399415,
+          "out_xgb": 0.8957794499933744,
+          "P_mlp": 0.9999924943060372,
+          "out_mlp": 0.8020908143802474,
+          "lift": 0.32650612380006616
+        },
+        {
+          "sigma": 2.0,
+          "P_max": 0.7638065326126497,
+          "out_max": 0.7392864505522636,
+          "both_max": 0.7638065326126497,
+          "P_xgb": 0.7386780369555659,
+          "out_xgb": 0.729510816184672,
+          "P_mlp": 0.7638065326126497,
+          "out_mlp": 0.7392864505522636,
+          "lift": 0.3234856007944389
+        },
+        {
+          "sigma": 4.0,
+          "P_max": 0.707078042205074,
+          "out_max": 0.725942734563541,
+          "both_max": 0.725942734563541,
+          "P_xgb": 0.691948279167957,
+          "out_xgb": 0.7110252108086521,
+          "P_mlp": 0.707078042205074,
+          "out_mlp": 0.725942734563541,
+          "lift": 0.3172169811320754
+        },
+        {
+          "sigma": 6.0,
+          "P_max": 0.676169921610007,
+          "out_max": 0.7138948585761309,
+          "both_max": 0.7138948585761309,
+          "P_xgb": 0.676169921610007,
+          "out_xgb": 0.7052374360638032,
+          "P_mlp": 0.6712010054605179,
+          "out_mlp": 0.7138948585761309,
+          "lift": 0.30850711684872556
+        },
+        {
+          "sigma": 8.0,
+          "P_max": 0.6658967879381816,
+          "out_max": 0.7034564620457482,
+          "both_max": 0.7034564620457482,
+          "P_xgb": 0.6658967879381816,
+          "out_xgb": 0.6928266777119141,
+          "P_mlp": 0.661714683330441,
+          "out_mlp": 0.7034564620457482,
+          "lift": 0.2965905329361138
+        },
+        {
+          "sigma": 12.0,
+          "P_max": 0.6455132481742007,
+          "out_max": 0.6895619805158325,
+          "both_max": 0.6895619805158325,
+          "P_xgb": 0.6455132481742007,
+          "out_xgb": 0.6779704875738208,
+          "P_mlp": 0.6409389835642758,
+          "out_mlp": 0.6895619805158325,
+          "lift": 0.26290963257199595
+        },
+        {
+          "sigma": 16.0,
+          "P_max": 0.6216538248162069,
+          "out_max": 0.6693468942880567,
+          "both_max": 0.6693468942880567,
+          "P_xgb": 0.6216538248162069,
+          "out_xgb": 0.651543163514033,
+          "P_mlp": 0.596867194149278,
+          "out_mlp": 0.6693468942880567,
+          "lift": 0.21793280370738166
+        },
+        {
+          "sigma": 24.0,
+          "P_max": 0.5750256317051339,
+          "out_max": 0.6159589307693082,
+          "both_max": 0.6159589307693082,
+          "P_xgb": 0.5750256317051339,
+          "out_xgb": 0.5968067025939798,
+          "P_mlp": 0.5466691538599138,
+          "out_mlp": 0.6159589307693082,
+          "lift": 0.1382199602780536
+        },
+        {
+          "sigma": 32.0,
+          "P_max": 0.538819707810732,
+          "out_max": 0.5802850824537806,
+          "both_max": 0.5802850824537806,
+          "P_xgb": 0.538819707810732,
+          "out_xgb": 0.5559323044205322,
+          "P_mlp": 0.5246615336826486,
+          "out_mlp": 0.5802850824537806,
+          "lift": 0.08194720291294266
+        },
+        {
+          "sigma": 48.0,
+          "P_max": 0.5132235424073567,
+          "out_max": 0.5382745367165215,
+          "both_max": 0.5382745367165215,
+          "P_xgb": 0.5132235424073567,
+          "out_xgb": 0.5169998135978009,
+          "P_mlp": 0.5055252812355531,
+          "out_mlp": 0.5382745367165215,
+          "lift": 0.024309003641178384
+        }
+      ],
+      "provenance": {
+        "source": "Dutch Census 2001 (Dutch Central Bureau of Statistics)",
+        "url": "https://raw.githubusercontent.com/tailequy/fairness_dataset/main/experiments/data/dutch.csv",
+        "label": "occupation \u2014 1 = high-level (prestigious) occupation, 0 = low, as distributed in the cleaned survey CSV",
+        "attributes": {
+          "sex": "1 iff male (file column 'sex' in {male,female})"
+        },
+        "split": "stratified 80/19 train/holdout, seed 42, stratified on (label x attributes); experiments use the train partition; probes use 75/25 stratified held-out splits downstream",
+        "n_used": 48336,
+        "max_n_cap": 60000,
+        "subsample": "deterministic stratified on (label, attr), seed 42, applied only if train partition > max_n_cap",
+        "train_seed": 0,
+        "probe_seeds": {
+          "cost_sweep": [
+            0,
+            1
+          ],
+          "floor": [
+            0,
+            1,
+            2
+          ],
+          "reaudit": [
+            0,
+            1,
+            2
+          ]
+        },
+        "probe_split": "75/25 stratified held-out (diagnostic._split)",
+        "runtime_seconds": 512.0
+      }
+    }
+  ]
+}
