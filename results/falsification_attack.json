@@ -1,6 +1,6 @@
 {
   "experiment": "falsification_attack",
-  "checkpoint": "/Users/nathansamson/PCRL/checkpoints/v2_adult_s0/final.pt",
+  "checkpoint": "<PCRL_ROOT>/checkpoints/v2_adult_s0/final.pt",
   "purpose": "income_prediction",
   "purpose_idx": 0,
   "sensitive_attr": "sex",

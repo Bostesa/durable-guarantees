@@ -44,7 +44,7 @@ REPO_ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(REPO_ROOT))
 
 RESULTS_DIR = REPO_ROOT / "results"
-PCRL_ROOT = Path(os.environ.get("PCRL_ROOT", "/Users/nathansamson/PCRL"))
+from utils.pcrl_io import PCRL_ROOT  # noqa: E402  (single source of the path logic)
 CELEBA_ROOT = PCRL_ROOT / "data" / "celeba"
 
 PROTECTED = ["Male", "Young", "Pale_Skin"]

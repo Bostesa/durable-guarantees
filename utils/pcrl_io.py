@@ -27,7 +27,14 @@ import torch
 from torch.utils.data import DataLoader
 
 # --- Locate the (read-only) PCRL repo -------------------------------------
-PCRL_ROOT = Path(os.environ.get("PCRL_ROOT", "/Users/nathansamson/PCRL")).resolve()
+_pcrl_env = os.environ.get("PCRL_ROOT")
+if not _pcrl_env:
+    raise RuntimeError(
+        "PCRL_ROOT is not set. Point it at a checkout of the PCRL repo "
+        "(code + checkpoints/v2_adult_s0/ + data/), e.g. "
+        "`export PCRL_ROOT=/path/to/PCRL`. See README.md (Tier B)."
+    )
+PCRL_ROOT = Path(_pcrl_env).resolve()
 if not PCRL_ROOT.exists():
     raise FileNotFoundError(
         f"PCRL repo not found at {PCRL_ROOT}. Set PCRL_ROOT env var to the repo root."
