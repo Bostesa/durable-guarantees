@@ -53,8 +53,8 @@ ax.plot(lims, lims, ls="--", lw=0.8, color=GRAY, zorder=1)
 diag_label = ax.text(0.735, 0.748, "identity", ha="right", va="bottom",
                      fontsize=8, color=DARK, rotation=45,
                      rotation_mode="anchor")
-leak_label = ax.text(0.535, 0.600, "outputs leak what the label gives away",
-                     ha="center", va="bottom", fontsize=8, color=GRAY,
+leak_label = ax.text(0.71, 0.7075, "outputs leak what the label gives away",
+                     ha="center", va="top", fontsize=8, color=GRAY,
                      rotation=45, rotation_mode="anchor")
 
 xs, ys = [p[0] for p in tab], [p[1] for p in tab]
@@ -79,8 +79,8 @@ low, high = sorted(cel_pts, key=lambda p: p["pred"])
 ax.annotate("Smiling$\\to$Young", (low["pred"], low["point"]),
             xytext=(low["pred"] + 0.012, low["point"] - 0.020), fontsize=8)
 ax.annotate("Attractive$\\to$Young:\nlabel predictor is a\nloose upper bound",
-            (high["pred"] - 0.006, high["point"] + 0.004),
-            xytext=(high["pred"] - 0.005, high["point"] + 0.088),
+            (high["pred"], high["point"] + 0.006),
+            xytext=(0.775, high["point"] + 0.030),
             ha="right", fontsize=8,
             arrowprops=dict(arrowstyle="-", lw=0.6, color=DARK))
 

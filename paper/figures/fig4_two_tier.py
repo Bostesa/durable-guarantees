@@ -78,8 +78,8 @@ ax.axhline(0, color=DARK, lw=0.6)
 # plain-language annotations (display only)
 ax.text(2, -13.5, "infeasible", ha="center", va="center", fontsize=8,
         color=DARK)
-ax.text(0, 120.5, "attacker who knows the defense costs more", ha="center",
-        va="bottom", fontsize=8, color=DARK)
+ax.text(1.5, 90, "attacker who knows the\ndefense costs more", ha="center",
+        va="top", fontsize=8, color=DARK)
 ax.set_xticks(x, NAMES)
 ax.tick_params(axis="x", length=0, pad=2)
 ax.set_ylabel("utility kept at certified point\n(% of clean e2e lift)")
