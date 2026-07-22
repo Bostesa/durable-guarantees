@@ -23,8 +23,8 @@ certificate instrument (own panel; identity never color-alone).
 | Figure | PDF | Generator | Source JSON(s) | Experiment |
 |---|---|---|---|---|
 | 1 The demolition | `fig1_demolition.pdf` | `fig1_demolition.py` | `results/honest_reaudit.json` (`part2_smart_erasers.adult` + `master` "E2 noise" rows) | Exp 5 |
-| 2 Footprint diagonal | `fig2_footprint.pdf` | `fig2_footprint.py` | `results/diagnostic.json` (`part_b_c`), `results/celeba_pipeline.json` (`cells[*].verdicts`) | Exps 8, 13 |
-| 3 Cost ramp | `fig3_cost_ramp.pdf` | `fig3_cost_ramp.py` | `results/continuous_cost.json` (`rows`, `stats.cost_durable`), `results/cliff_or_ramp_constructed.json` (`rows`) | Exp 9 |
+| 2 Footprint diagonal | `fig2_footprint.pdf` | `fig2_footprint.py` | `results/diagnostic.json` (`part_b_c`), `results/celeba_pipeline.json` (`cells[*].verdicts`), `results/expansion_floor.json` (`rows`, non-degenerate) | Exps 8, 13 + expansion |
+| 3 Cost ramp | `fig3_cost_ramp.pdf` | `fig3_cost_ramp.py` | `results/continuous_cost.json` (`rows`), `results/cliff_or_ramp_constructed.json` (`rows`), `results/expansion_cost.json` (`rows`, non-degenerate; combined r/ρ recomputed live in-script) | Exp 9 + expansion |
 | 4 Two-tier certification | `fig4_two_tier.pdf` | `fig4_two_tier.py` | `results/two_tier_certification.json` (`e2e_cells[*].tier1/tier2`) | Exp 14 (5-seed cross-check: Exp 15) |
 
 ## Source-mapping notes vs the figure brief
@@ -62,13 +62,26 @@ certificate instrument (own panel; identity never color-alone).
   caption; the point is annotated as the loose-upper-bound outlier.
 - README scope note carried over: the two adult tabular floors are upper-ish
   estimates (representation only partly scrubbed within σ ≤ 12).
+- **External cells (expansion swap, commit 80b6cdd)**: the 7 usable expansion
+  cells from `expansion_floor.json` plot as vermillion open circles ("external
+  cells" legend); the 2 degenerate diabetes-hospital cells (clean lift ≈ 0, so
+  the upper-bound reading fails) are excluded, as recorded in the JSON.
+  dutch/sex/occupation is annotated as a loose-upper-bound point (Δ = −0.074
+  below the diagonal, same reading as Attractive→Young). The pre-expansion
+  figure lives in git history; `fig2_footprint_v2.*` are the development
+  copies of the same content.
 
 ## Figure 3 — flags
 
 - Cost plotted = `cost_durable` (representation **and** output ≤ 0.55 under
-  the Exp-9 black-box battery) — the diagnostic's headline quantity
-  (r = 0.795, ρ = 0.848, n = 20). No censored or degenerate rows in either
-  source (verified).
+  the Exp-9 black-box battery). Headline correlation after the expansion swap:
+  **r = 0.799, ρ = 0.828, n = 27** natural cells (20 original + 7 external),
+  recomputed live in-script from `continuous_cost.json` + `expansion_cost.json`
+  and quoted in the caption (the in-plot stats text was removed in commit
+  6787270). The pre-expansion values (r = 0.795, ρ = 0.848, n = 20) remain in
+  `continuous_cost.json` `stats.cost_durable`. No censored rows plotted; the
+  2 degenerate diabetes-hospital expansion cells are excluded (recorded in
+  `expansion_cost.json`). `fig3_cost_ramp_v2.*` are the development copies.
 
 ## Figure 4 — flags
 
@@ -88,13 +101,20 @@ Exp-5 table: no erasure 0.104/0.683 · MMD r=8 0.036/0.681 · MMD r=16
 0.035/0.683 · noise σ=1 0.046/0.589 · σ=2 0.034/0.550 · σ=4 0.026/0.534 ·
 σ=8 0.010/0.514.
 
-Figure 2 (predictor, floor) — match README Exp-8 Part C exactly:
-(0.509, 0.509) (0.514, 0.533) (0.543, 0.557) (0.584, 0.571) (0.603, 0.679)
-(0.676, 0.629); CelebA (0.522, 0.510 [0.505–0.515]) and
-(0.734, 0.526 [0.526–0.553]).
+Figure 2 (predictor, floor) — tabular/CelebA points match README Exp-8
+Part C exactly: (0.509, 0.509) (0.514, 0.533) (0.543, 0.557) (0.584, 0.571)
+(0.603, 0.679) (0.676, 0.629); CelebA (0.522, 0.510 [0.505–0.515]) and
+(0.734, 0.526 [0.526–0.553]). External points match `expansion_floor.json`
+exactly (the README predates the expansion): (0.5049, 0.5358)
+(0.5094, 0.5034) (0.5122, 0.5536) (0.5420, 0.5569) (0.5568, 0.5865)
+(0.5912, 0.5664) (0.6499, 0.5761).
 
-Figure 3 — r = 0.795, ρ = 0.848, n = 20 (README: +0.795/+0.848/20 ✓);
-20 natural + 9 constructed points plotted as stored.
+Figure 3 — combined natural r = 0.799, ρ = 0.828, n = 27 (recomputed
+live; pre-expansion stored values r = 0.795, ρ = 0.848, n = 20 ✓ README);
+20 original + 7 external + 9 constructed points plotted as stored. External
+(predictor, cost_durable) match `expansion_cost.json` exactly:
+(0.5049, 0.0354) (0.5094, 0.1791) (0.5122, 0.1052) (0.5420, 0.2149)
+(0.5568, 0.7133) (0.5912, 0.9976) (0.6499, 0.8763).
 
 Figure 4 (% clean lift kept ± std, σ) — README quotes 95→55, 57→22, −1/−7:
 easy 94.6±2.2 (σ=8) → 55.5±4.4 (σ=20); middle 56.6±0.7 (σ=12) → 21.7±0.5
