@@ -50,9 +50,12 @@ fig, ax = plt.subplots(figsize=(3.45, 2.95))
 
 lims = (0.48, 0.78)
 ax.plot(lims, lims, ls="--", lw=0.8, color=GRAY, zorder=1)
-diag_label = ax.text(0.735, 0.748, "$y=x$", ha="right", va="bottom",
+diag_label = ax.text(0.735, 0.748, "identity", ha="right", va="bottom",
                      fontsize=8, color=DARK, rotation=45,
                      rotation_mode="anchor")
+leak_label = ax.text(0.535, 0.600, "outputs leak what the label gives away",
+                     ha="center", va="bottom", fontsize=8, color=GRAY,
+                     rotation=45, rotation_mode="anchor")
 
 xs, ys = [p[0] for p in tab], [p[1] for p in tab]
 ax.scatter(xs, ys, s=26, color=DARK, zorder=3, label="tabular cells")
@@ -92,7 +95,7 @@ ax.annotate("Dutch/sex: predictor is\na loose upper bound",
 ax.set_xlim(*lims)
 ax.set_ylim(*lims)
 ax.set_xlabel("label-coupling predictor\n(XGB AUC, attribute from label alone)")
-ax.set_ylabel("output-leak floor  (best-attacker AUC on outputs)")
+ax.set_ylabel("how much the model's predictions\nreveal the attribute\n(best-attacker AUC on outputs)")
 ax.spines[["top", "right"]].set_visible(False)
 ax.set_axisbelow(True)
 ax.grid(True)
@@ -105,6 +108,7 @@ fig.canvas.draw()
 p0 = ax.transData.transform((lims[0], lims[0]))
 p1 = ax.transData.transform((lims[1], lims[1]))
 diag_label.set_rotation(np.degrees(np.arctan2(p1[1] - p0[1], p1[0] - p0[0])))
+leak_label.set_rotation(np.degrees(np.arctan2(p1[1] - p0[1], p1[0] - p0[0])))
 
 _style.save(fig, HERE / "fig2_footprint_v2.pdf")
 print("tabular (predictor, floor):")

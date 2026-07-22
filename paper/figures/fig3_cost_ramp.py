@@ -53,8 +53,13 @@ ax.scatter(cx, cy, s=30, facecolors="none", edgecolors=BLUE, marker="^",
            linewidths=0.9, zorder=3,
            label=f"constructed cells (n={len(cx)})")
 
-ax.text(0.688, 0.02, f"$r={r:.2f}$, $\\rho={rho:.2f}$ (natural, $n={n}$)",
-        ha="right", va="bottom", fontsize=8, color=DARK)
+# region labels (display only; r/rho moved to the caption)
+ax.text(0.5055, 0.62, "removal nearly free", ha="center", va="center",
+        fontsize=8, color=DARK, rotation=90)
+ax.text(0.560, 0.505, "cost climbs steeply", ha="center", va="center",
+        fontsize=8, color=DARK)
+ax.text(0.648, 0.42, "near-total cost", ha="center", va="center",
+        fontsize=8, color=DARK)
 
 ax.set_xlim(0.495, 0.695)
 ax.set_ylim(-0.04, 1.09)

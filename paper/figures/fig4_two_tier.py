@@ -38,9 +38,9 @@ import matplotlib.pyplot as plt  # noqa: E402
 t = json.loads((RESULTS / "two_tier_certification.json").read_text())
 ORDER = ["hmda/race/loan_decision", "hmda/race/loan_amount_band",
          "adult/sex/income"]
-NAMES = ["hmda\nloan_decision\n(easy, 0.514)",
-         "hmda\nloan_amount_band\n(middle, 0.584)",
-         "adult\nincome\n(hard, 0.603)"]
+NAMES = ["hmda\nloan_decision\n(easy,\ncoupling 0.514)",
+         "hmda\nloan_amount_band\n(middle,\ncoupling 0.584)",
+         "adult\nincome\n(hard,\ncoupling 0.603)"]
 cells = {c["cell"]: c for c in t["e2e_cells"]}
 
 kept, err, ops = {"tier1": [], "tier2": []}, {"tier1": [], "tier2": []}, \
@@ -74,6 +74,12 @@ for bars, k in ((b1, "tier1"), (b2, "tier2")):
                 va="bottom", fontsize=8, color=DARK)
 
 ax.axhline(0, color=DARK, lw=0.6)
+
+# plain-language annotations (display only)
+ax.text(2, -13.5, "infeasible", ha="center", va="center", fontsize=8,
+        color=DARK)
+ax.text(0, 120.5, "attacker who knows the defense costs more", ha="center",
+        va="bottom", fontsize=8, color=DARK)
 ax.set_xticks(x, NAMES)
 ax.tick_params(axis="x", length=0, pad=2)
 ax.set_ylabel("utility kept at certified point\n(% of clean e2e lift)")
