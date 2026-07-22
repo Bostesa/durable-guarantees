@@ -48,11 +48,11 @@ master_adult_noise = {r["method"]: r for r in d["master"]
 # "MMD" = LEOPARD-style class-conditional-MMD projection
 ROWS = [
     ("no erasure",  master_adult_noise["noise σ=0.0"], "ref"),
-    ("MMD r=8",     by_method["LEOPARD-MMD proj r=8"], "proj"),
-    ("MMD r=16",    by_method["LEOPARD-MMD proj r=16"], "proj"),
-    ("HSIC r=8",    by_method["HSIC proj r=8"], "proj"),
-    ("HSIC r=16",   by_method["HSIC proj r=16"], "proj"),
-    ("HSIC r=32",   by_method["HSIC proj r=32"], "proj"),
+    ("MMD proj r=8",   by_method["LEOPARD-MMD proj r=8"], "proj"),
+    ("MMD proj r=16",  by_method["LEOPARD-MMD proj r=16"], "proj"),
+    ("HSIC proj r=8",  by_method["HSIC proj r=8"], "proj"),
+    ("HSIC proj r=16", by_method["HSIC proj r=16"], "proj"),
+    ("HSIC proj r=32", by_method["HSIC proj r=32"], "proj"),
     ("noise σ=1",   by_method["noise sigma=1.0"], "noise"),
     ("noise σ=2",   by_method["noise sigma=2.0"], "noise"),
     ("noise σ=4",   master_adult_noise["noise σ=4.0"], "noise"),
