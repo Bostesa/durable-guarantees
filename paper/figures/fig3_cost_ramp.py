@@ -50,7 +50,7 @@ r, _ = pearsonr(ax_all, ay_all)
 rho, _ = spearmanr(ax_all, ay_all)
 n = len(ax_all)
 
-fig, ax = plt.subplots(figsize=(_style.COL_W, 2.6))
+fig, ax = plt.subplots(figsize=(_style.COL_W, 2.08))
 
 ax.axvspan(0.52, 0.60, color="#EEEEEE", zorder=0)
 ax.text(0.56, 1.045, "the usable middle band", ha="center", va="bottom",

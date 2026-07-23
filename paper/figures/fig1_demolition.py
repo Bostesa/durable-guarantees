@@ -69,7 +69,7 @@ y = list(range(len(ROWS)))[::-1]
 # figsize is smaller than the 3.3in column because the tight crop adds the
 # method labels and top legend; the cropped PDF lands at ~3.3in wide
 fig, (axL, axR) = plt.subplots(
-    1, 2, figsize=(2.95, 2.7), sharey=True,
+    1, 2, figsize=(2.95, 2.16), sharey=True,
     gridspec_kw=dict(width_ratios=[1, 1.3], wspace=0.14))
 
 axL.barh(y, r2, height=0.62, color=GRAY, edgecolor="none")

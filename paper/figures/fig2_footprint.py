@@ -13,6 +13,15 @@ Relative to the pre-expansion version (in git history), adds:
 This IS the shipped Figure 2 (the paper describes the external cells);
 the pre-expansion version lives in git history. Prints every plotted
 point for verification.
+
+Adult-cell floors (2026-07-23 revision): diagnostic.json's out_floor for
+adult/sex/income and adult/sex/occupation_group is grid-censored (its sweep
+stopped at sigma=12 with the rep still exposed; sigma_rep is null — see
+analysis/yus_extras/floor_censoring.md). Those two values are replaced here
+with the honest first-hidden readings from continuous_cost.json's extended
+grid (income: sigma=32, occupation_group: sigma=16), derived with the same
+first-sigma-with-P_max<=bar rule the expansion pipeline uses, and both points
+are annotated as loose-bound points in the existing annotation style.
 """
 import json
 import sys
@@ -33,6 +42,19 @@ diag = json.loads((RESULTS / "diagnostic.json").read_text())
 tab = [(r["predictor"], r["out_floor"], r["cell"])
        for r in diag["part_b_c"]]
 
+# Adult cells: replace the grid-censored diagnostic out_floor with the
+# first-hidden reading from continuous_cost.json's extended grid (docstring).
+cc = json.loads((RESULTS / "continuous_cost.json").read_text())
+BAR = 0.55
+EXPECTED_SIGMA = {"adult/sex/income": 32.0, "adult/sex/occupation_group": 16.0}
+adult_floor = {}
+for cell, sig in EXPECTED_SIGMA.items():
+    row = next(r for r in cc["rows"] if r["cell"] == cell)
+    first = next(p for p in row["sweep"] if p["P_max"] <= BAR)
+    assert first["sigma"] == sig, (cell, first["sigma"])
+    adult_floor[cell] = first["out_max"]
+tab = [(x, adult_floor.get(c, y), c) for x, y, c in tab]
+
 cel = json.loads((RESULTS / "celeba_pipeline.json").read_text())
 cel_pts = []
 for c in cel["cells"]:
@@ -47,15 +69,15 @@ ext = [(r["predictor"], r["floor"], r["cell"])
        for r in exp["rows"] if not r["degenerate"]]
 ext_excluded = [r["cell"] for r in exp["rows"] if r["degenerate"]]
 
-fig, ax = plt.subplots(figsize=(3.45, 2.95))
+fig, ax = plt.subplots(figsize=(3.45, 2.36))
 
 lims = (0.48, 0.78)
 ax.plot(lims, lims, ls="--", lw=0.8, color=GRAY, zorder=1)
-diag_label = ax.text(0.735, 0.748, "identity", ha="right", va="bottom",
+diag_label = ax.text(0.732, 0.752, "identity", ha="right", va="bottom",
                      fontsize=8, color=DARK, rotation=45,
                      rotation_mode="anchor")
-leak_label = ax.text(0.71, 0.7075, "outputs leak what the label gives away",
-                     ha="center", va="top", fontsize=8, color=GRAY,
+leak_label = ax.text(0.685, 0.6875, "outputs leak what the label gives away",
+                     ha="center", va="bottom", fontsize=8, color=GRAY,
                      rotation=45, rotation_mode="anchor")
 
 xs, ys = [p[0] for p in tab], [p[1] for p in tab]
@@ -93,6 +115,19 @@ ax.annotate("Dutch/sex: predictor is\na loose upper bound",
             ha="left", fontsize=8, color=VERM,
             arrowprops=dict(arrowstyle="-", lw=0.6, color=VERM))
 
+# the two Adult first-hidden floor points (extended grid): loose-bound
+# annotations in the same style (predictor overstates the observed floor)
+inc = next(p for p in tab if p[2] == "adult/sex/income")
+occ = next(p for p in tab if p[2] == "adult/sex/occupation_group")
+ax.annotate("adult/income: predictor is\na loose upper bound",
+            (inc[0] - 0.002, inc[1] + 0.004),
+            xytext=(0.575, 0.665), ha="center", va="bottom", fontsize=8,
+            color=DARK, arrowprops=dict(arrowstyle="-", lw=0.6, color=DARK))
+ax.annotate("adult/occupation: predictor\nis a loose upper bound",
+            (occ[0] + 0.002, occ[1] + 0.005),
+            xytext=(0.716, 0.614), ha="center", va="bottom", fontsize=8,
+            color=DARK, arrowprops=dict(arrowstyle="-", lw=0.6, color=DARK))
+
 ax.set_xlim(*lims)
 ax.set_ylim(*lims)
 ax.set_xlabel("label-coupling predictor\n(XGB AUC, attribute from label alone)")
@@ -114,7 +149,12 @@ leak_label.set_rotation(np.degrees(np.arctan2(p1[1] - p0[1], p1[0] - p0[0])))
 _style.save(fig, HERE / "fig2_footprint.pdf")
 print("tabular (predictor, floor):")
 for x, yv, c in tab:
-    print(f"  {c:<46} ({x:.3f}, {yv:.3f})")
+    src = " [continuous_cost first-hidden]" if c in adult_floor else ""
+    print(f"  {c:<46} ({x:.3f}, {yv:.3f}){src}")
+lo_pt = min(tab)
+hi_pt = max(tab)
+print(f"tabular diagonal endpoints: ({lo_pt[0]:.4f}, {lo_pt[1]:.4f}) -> "
+      f"({hi_pt[0]:.4f}, {hi_pt[1]:.4f})")
 for p in cel_pts:
     print(f"  {p['name']:<46} ({p['pred']:.3f}, {p['point']:.3f}) "
           f"arm-range [{p['lo']:.3f}, {p['hi']:.3f}]")

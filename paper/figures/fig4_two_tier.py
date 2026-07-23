@@ -55,15 +55,15 @@ for cell in ORDER:
 
 x = np.arange(len(ORDER))
 w = 0.36
-fig, ax = plt.subplots(figsize=(_style.COL_W, 2.5))
+fig, ax = plt.subplots(figsize=(_style.COL_W, 2.0))
 
 b1 = ax.bar(x - w / 2, kept["tier1"], w, yerr=err["tier1"], capsize=2,
             color=BLUE, edgecolor="none", error_kw=dict(lw=0.8),
-            label="Tier 1 (black-box) certified point")
+            label="Tier 1 (black-box) surviving point")
 b2 = ax.bar(x + w / 2, kept["tier2"], w, yerr=err["tier2"], capsize=2,
             color=LBLUE, edgecolor=DARK, linewidth=0.4, hatch="///",
             error_kw=dict(lw=0.8),
-            label="Tier 2 (+informed LRT) certified point")
+            label="Tier 2 (+informed LRT) surviving point")
 
 for bars, k in ((b1, "tier1"), (b2, "tier2")):
     for rect, v, e, op in zip(bars, kept[k], err[k], ops[k]):
@@ -82,7 +82,7 @@ ax.text(1.5, 90, "attacker who knows the\ndefense costs more", ha="center",
         va="top", fontsize=8, color=DARK)
 ax.set_xticks(x, NAMES)
 ax.tick_params(axis="x", length=0, pad=2)
-ax.set_ylabel("utility kept at certified point\n(% of clean e2e lift)")
+ax.set_ylabel("utility kept at surviving point\n(% of clean e2e lift)")
 ax.set_ylim(-31, 118)
 ax.set_yticks([0, 25, 50, 75, 100])
 ax.spines[["top", "right"]].set_visible(False)
