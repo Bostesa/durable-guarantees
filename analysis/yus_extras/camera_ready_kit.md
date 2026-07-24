@@ -207,9 +207,9 @@ adult/sex, $\sigma{=}8$ (E2)          & .518 & 2.1\% & 0.47\% & holds$^{*}$ \\
 adult/sex, $\sigma{=}8$ (E4S1)        & .518 & 2.1\% & 0.47\% & holds$^{*}$ \\
 adult/sex, $\sigma{=}4$               & .546 & 7.7\% & 3.51\% & \textbf{flips} \\
 \midrule
-VFAE (AUC passes)                     & .536 & 2.3\% & 0.51\% & above band edge$^{*}$ \\
+VFAE (AUC passes)                     & .535 & 2.3\% & 0.51\% & above band edge$^{*}$ \\
 DANN-scrub $\lambda{=}20$ (AUC fails) & .610 & 1.7\% & --     & worst-case quiet \\
-34 remaining baseline combos          & --   & mean 64\% (2.3--100\%) & -- & fail both \\
+33 remaining baseline combos          & --   & mean 66\% (2.5--100\%) & -- & fail both \\
 \bottomrule
 \end{tabular}\\
 \raggedright\footnotesize $^{*}$At a strict $2\times$-budget bar (2.0\%) the
