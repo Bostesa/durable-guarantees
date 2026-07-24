@@ -56,6 +56,26 @@ Wang 2018; Dwork and Roth 2014).
 \end{proof}
 ```
 
+## Corollary — certified recovery ceiling (LaTeX, immediately after the proof)
+
+```latex
+\begin{corollary}[Certified recovery ceiling]
+\label{cor:ceiling}
+For the mechanism of Proposition~\ref{prop:dp}, the AUC of \emph{any}
+attacker distinguishing the attribute from the released representation, or
+from any function of it, is at most $\Phi\!\big(\mu/\sqrt{2}\big)$ with
+$\mu = 2C/\sigma$: the class-conditional release distributions are mixtures
+of pairwise $\mu$-GDP-indistinguishable distributions, and trade-off
+functions are preserved under mixtures (Dong, Roth, and Su 2022), so the
+discrimination is at most as easy as separating two unit-variance Gaussians
+$\mu$ apart. At our operating points the ceilings are $0.529$, $0.558$,
+$0.669$, and $0.809$: the smallest certified point bounds every attacker,
+present or future, \emph{below the paper's $0.55$ bar} --- the only
+adversary-independent protection statement in this work --- at the utility
+cost Table~5 reports for that point.
+\end{corollary}
+```
+
 ## Scope remarks (LaTeX, immediately after the proposition)
 
 ```latex
@@ -66,9 +86,14 @@ the encoder, its normalization statistics, and the head are trained
 partition, so the proposition bounds what any attacker learns about an input
 from its released representation or the model's prediction, and says nothing
 about leakage of the training set through the choice of $\phi$ --- that would
-require private training. \emph{Second}, it protects participation, not
-correlated traits: population-level inference of the attribute from the task
-output is exactly the floor of Fig.~3, which no release mechanism crosses.
+require private training. \emph{Second}, the ceiling of
+Corollary~\ref{cor:ceiling} binds only where utility dies: at the two
+certified points below or near the bar ($0.529$, $0.558$) the channel
+retains essentially no task utility (Table~5), and at any budget preserving
+floor-level utility the certified ceiling ($0.669$ and above) sits
+\emph{above} the measured output-leak floor --- so the floor, not the
+guarantee, remains the binding constraint, and the non-private trained map
+is what carries the population correlations the floor measures.
 \emph{Third}, no analogous statement exists for the subspace-confined
 channel: its complement $h_\perp$ is released with zero noise, so two inputs
 differing in $h_\perp$ are perfectly distinguishable and $\varepsilon$ is
@@ -122,9 +147,16 @@ ledger, priced there without a guarantee and bounded here with one.
   paper's only guarantee-bearing mechanism against its measured-resistance
   one."
 - Future work: replace "A formally private variant exists…" with a pointer to
-  Prop. 3, and adopt: "Differential privacy protects participation, not
-  correlated traits: it composes past the averaging attack but cannot cross
-  the floor."
+  Prop. 3 and the corollary, e.g.: "A certified variant exists
+  (Proposition 3): its recovery ceiling binds every future attacker below our
+  bar at one operating point, at the cost of essentially all task utility
+  (Table 5); at utility-preserving budgets the ceiling sits above the
+  output-leak floor, which no release mechanism crosses. Certified
+  composition replaces the informal query cap."
+  Do NOT adopt the uncorrected "DP does not bound attribute inference" —
+  false for this construction (Corollary 1 is exactly such a bound); the
+  correct statement is that the bound is vacuous at utility-preserving
+  budgets.
 
 ## New references required
 
