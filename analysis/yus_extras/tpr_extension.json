@@ -1,0 +1,28 @@
+{
+ "experiment": "tpr_extension",
+ "status": "REGISTERED PREDICTIONS ONLY — committed before any run; results are filled in by analysis/yus_extras/run_tpr_extension.py and this header block is preserved verbatim",
+ "date_registered": "2026-07-23",
+ "fprs": [0.001, 0.01],
+ "tpr_convention": "max TPR at FPR <= target (step function, no interpolation; the run_tpr.py convention). Binary cells scored on the positive class; 5-class HMDA race and other multiclass attributes scored per-class OvR with worst-class reported (macro alongside; classes with < 500 positive eval rows flagged noisy). Per-config headline = mean over the config's ORIGINAL (train seed x probe seed) grid of the best attacker within the config's originally scored suite; worst seed reported alongside.",
+ "populations": {
+  "a_survivors": "the 8 audit configurations passing the 0.55 bar: honest_reaudit.json master rows with honest_stopped=true (adult/sex E2 noise sigma=4, E2 noise sigma=8, E4S1 noise sigma=8 — the two sigma=8 rows are the SAME measurement, identical stored AUCs, so 8 config rows map to 7 distinct measurements) + expansion_reaudit_paperframing.json rows with approved_at_rest and not fails_paperframing (noise sigma=8 on diabetes_hospital/race/readmit_30_days, folktables/race/employment, folktables/race/public_coverage, folktables/race/income, lawschool/sex/pass_bar). Suites as originally scored: XGB+MLP for the honest_reaudit three; XGB+MLP+LoRA (tier 1) and +Gaussian-LRT (tier 2, recorded alongside) for the expansion five.",
+  "b_gauntlet36": "the 36 published-method combinations of the paper's gauntlet table at their scored operating points: 24 baseline_gauntlet.json (4 methods x 3 cells x 2 tiers; certified combos at their certified label over 3 train seeds x probe seeds [0,1,2], uncertified combos at their 'closest' sweep label, train seed 0, probe seeds [0,1]), 6 obliviator_gauntlet.json (iter 15 on all 3 cells, both tiers), 6 laftr_official.json (gamma=1 on the two HMDA cells, gamma=8 on adult, both tiers). Attacker sets exactly as originally scored per row (XGB+MLP+LRT; LoRA only where the original row included it). No new attacker variants."
+ },
+ "registered_predictions": {
+  "P-A1": "every survivor's best-suite-attacker mean TPR@0.01 lies in [0.008, 0.050] — essentially the 1% false-positive budget, consistent with the existing surviving-point reading of 1.4-3.7% at 1% FPR (tpr_results.md).",
+  "P-A2": "every survivor's best-suite-attacker mean TPR@0.001 lies in [0.0004, 0.012] — the 0.1% budget regime, no worst-case identification power.",
+  "P-B1": "every failing combo whose scored suite-max AUC >= 0.93 (the 22 combos: all 6 gauntlet-LAFTR, all 6 LEACE, all 6 Obliviator, the 4 official-LAFTR HMDA combos) reads best-attacker mean TPR@0.01 >= 0.60 — near-total member identification at a 1% false-positive cost.",
+  "P-B2": "the 2 official-LAFTR adult combos (scored suite max 0.846) read mean TPR@0.01 in [0.25, 0.80].",
+  "P-B3": "the 11 mid-band failing combos (6 DANN-scrub at suite max 0.610-0.664, 5 uncertified VFAE at 0.558-0.622) read mean TPR@0.01 in [0.02, 0.30], typically 0.05-0.15 — above the survivor regime but far below the near-perfect reps.",
+  "P-B4": "the single certifying combo (VFAE beta=1 sampled-z, easy cell, Tier 1) lands inside the P-A1 survivor band.",
+  "P-B5_separation": "the failing-combo population mean TPR@0.01 exceeds the survivor population mean by at least an order of magnitude; a strict min-over-failing > max-over-survivors separation is EXPECTED but NOT registered as a claim (the weakest failing combos at suite AUC 0.585-0.610 may overlap the top of the survivor band — prior data: an AUC-0.584 surface read TPR@0.01 = 0.038)."
+ },
+ "falsified_if": "P-A1: any survivor outside [0.008, 0.050] at 1% FPR. P-A2: any survivor above 0.012 at 0.1% FPR. P-B1: any >=0.93-AUC combo below 0.60. P-B2: either official-LAFTR adult combo outside [0.25, 0.80]. P-B3: any mid-band combo below 0.02 or above 0.30. P-B4: the VFAE certified combo outside the survivor band. Scoring is literal on the mean-over-original-grid numbers with the stated best-attacker-per-suite convention.",
+ "protocol_pins": {
+  "score_capture": "same attacker configs, splits, and seeds as the original runs (hardening_test._probe / diagnostic._split / diagnostic.probe_lora / utils.battery._lrt_scores verbatim); fresh-noise conventions preserved (noise before split, default_rng(seed) for XGB/MLP/LRT, default_rng(100+seed) for the LoRA channel member on expansion cells); trainings reproduced at the original train seeds; reproduction gate = re-run AUC vs stored JSON AUC, tolerance 0.01, every comparison recorded",
+  "infrastructure_note": "the official-code populations (Obliviator, official LAFTR) require re-provisioning their external clones (deleted after the original runs); the pinned commits in the results JSONs are used. If a clone or environment cannot be restored bit-compatibly this is disclosed per-combo rather than silently substituted.",
+  "no_new_attackers": true,
+  "surfaces": "representation surface only — the gauntlet verdict surface and the audit surface; output surfaces are out of scope for this extension"
+ },
+ "results": null
+}
