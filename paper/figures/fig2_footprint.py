@@ -20,8 +20,13 @@ stopped at sigma=12 with the rep still exposed; sigma_rep is null — see
 analysis/yus_extras/floor_censoring.md). Those two values are replaced here
 with the honest first-hidden readings from continuous_cost.json's extended
 grid (income: sigma=32, occupation_group: sigma=16), derived with the same
-first-sigma-with-P_max<=bar rule the expansion pipeline uses, and both points
-are annotated as loose-bound points in the existing annotation style.
+first-sigma-with-P_max<=bar rule the expansion pipeline uses.
+
+Declutter (readable-without-the-caption revision): the five per-point text
+callouts are replaced by ONE region label for all below-line points
+("predictor is a loose upper bound"), matching fig3_cost_ramp's region-label
+style; the redundant "identity" tag is dropped (the dashed y=x line plus the
+single rotated message carries it). Point identities move to the caption.
 """
 import json
 import sys
@@ -73,10 +78,7 @@ fig, ax = plt.subplots(figsize=(3.45, 2.36))
 
 lims = (0.48, 0.78)
 ax.plot(lims, lims, ls="--", lw=0.8, color=GRAY, zorder=1)
-diag_label = ax.text(0.732, 0.752, "identity", ha="right", va="bottom",
-                     fontsize=8, color=DARK, rotation=45,
-                     rotation_mode="anchor")
-leak_label = ax.text(0.685, 0.6875, "outputs leak what the label gives away",
+leak_label = ax.text(0.66, 0.6625, "outputs leak what the label gives away",
                      ha="center", va="bottom", fontsize=8, color=GRAY,
                      rotation=45, rotation_mode="anchor")
 
@@ -96,37 +98,11 @@ ex, ey = [p[0] for p in ext], [p[1] for p in ext]
 ax.scatter(ex, ey, s=26, facecolors="none", edgecolors=VERM,
            linewidths=0.9, zorder=3, label="external cells")
 
-# annotations: the two CelebA points; the high one moves up slightly so the
-# dutch external point (0.650, 0.576) and its own label have room
-low, high = sorted(cel_pts, key=lambda p: p["pred"])
-ax.annotate("Smiling$\\to$Young", (low["pred"], low["point"]),
-            xytext=(low["pred"] + 0.012, low["point"] - 0.020), fontsize=8)
-ax.annotate("Attractive$\\to$Young:\nlabel predictor is a\nloose upper bound",
-            (high["pred"], high["point"] + 0.006),
-            xytext=(0.775, high["point"] + 0.030),
-            ha="right", fontsize=8,
-            arrowprops=dict(arrowstyle="-", lw=0.6, color=DARK))
-
-# dutch/sex/occupation: the external loose-bound point, same style
-dutch = next(p for p in ext if p[2] == "dutch/sex/occupation")
-ax.annotate("Dutch/sex: predictor is\na loose upper bound",
-            (dutch[0], dutch[1] - 0.006),
-            xytext=(dutch[0] - 0.043, dutch[1] - 0.072),
-            ha="left", fontsize=8, color=VERM,
-            arrowprops=dict(arrowstyle="-", lw=0.6, color=VERM))
-
-# the two Adult first-hidden floor points (extended grid): loose-bound
-# annotations in the same style (predictor overstates the observed floor)
-inc = next(p for p in tab if p[2] == "adult/sex/income")
-occ = next(p for p in tab if p[2] == "adult/sex/occupation_group")
-ax.annotate("adult/income: predictor is\na loose upper bound",
-            (inc[0] - 0.002, inc[1] + 0.004),
-            xytext=(0.575, 0.665), ha="center", va="bottom", fontsize=8,
-            color=DARK, arrowprops=dict(arrowstyle="-", lw=0.6, color=DARK))
-ax.annotate("adult/occupation: predictor\nis a loose upper bound",
-            (occ[0] + 0.002, occ[1] + 0.005),
-            xytext=(0.716, 0.614), ha="center", va="bottom", fontsize=8,
-            color=DARK, arrowprops=dict(arrowstyle="-", lw=0.6, color=DARK))
+# ONE region label for every below-line point (Attractive->Young, Dutch/sex,
+# adult/income, adult/occupation) — fig3_cost_ramp's region-label style.
+# Individual point identities live in the caption.
+ax.text(0.664, 0.494, "points below the line:\npredictor is a loose upper bound",
+        ha="center", va="bottom", fontsize=8, color=DARK)
 
 ax.set_xlim(*lims)
 ax.set_ylim(*lims)
@@ -143,7 +119,6 @@ import numpy as np  # noqa: E402
 fig.canvas.draw()
 p0 = ax.transData.transform((lims[0], lims[0]))
 p1 = ax.transData.transform((lims[1], lims[1]))
-diag_label.set_rotation(np.degrees(np.arctan2(p1[1] - p0[1], p1[0] - p0[0])))
 leak_label.set_rotation(np.degrees(np.arctan2(p1[1] - p0[1], p1[0] - p0[0])))
 
 _style.save(fig, HERE / "fig2_footprint.pdf")
