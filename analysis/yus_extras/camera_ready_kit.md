@@ -166,6 +166,69 @@ channel; the full-rank points of Fig.~5/Table~3 use $\sigma$ = 8–64."
 - **Fig. 5 label:** regenerated — near-zero bars now print one decimal
   (−0.5%), matching the text (commit alongside this kit).
 
+## 6b. Worst-case dual verdict (option (a): measured populations only) — 2026-07-24
+
+Source: `tpr_extension.json` (user-run, predictions registered before the run;
+reproduction gate 94/94). Scoring convention: the survivor band [0.8%, 5%] at a
+1% FPR budget was REGISTERED (P-A1) before measurement — score against it, and
+disclose the strict 2x-budget reading alongside (do not silently adopt a
+post-hoc bar).
+
+**Appendix table (LaTeX):**
+
+```latex
+\begin{table}[t]
+\centering\small
+\caption{Worst-case co-criterion for the eight AUC-surviving audit
+configurations and reference baseline combinations: TPR at a 1\% (and 0.1\%)
+false-positive budget, best attacker, mean over each configuration's original
+seed grid. The registered survivor band is $[0.8\%, 5\%]$ at the 1\% budget.
+The two criteria disagree in both directions: the sole AUC-passing baseline
+(VFAE) is worst-case noisier than a decisively AUC-failing one (DANN-scrub,
+$\lambda{=}20$).}
+\label{tab:tpr}
+\begin{tabular}{lrrrl}
+\toprule
+configuration & AUC & TPR@1\% & TPR@0.1\% & verdict \\
+\midrule
+folktables/employment, $\sigma{=}8$   & .510 & 0.9\% & 0.10\% & holds \\
+folktables/income, $\sigma{=}8$       & .531 & 1.4\% & 0.12\% & holds \\
+lawschool/pass\_bar, $\sigma{=}8$     & .539 & 1.5\% & 0.07\% & holds \\
+diab.-hosp./readmit, $\sigma{=}8$     & .543 & 1.5\% & 0.21\% & holds \\
+folktables/pub.\ cov., $\sigma{=}8$   & .545 & 1.5\% & 0.15\% & holds \\
+adult/sex, $\sigma{=}8$ (E2)          & .518 & 2.1\% & 0.47\% & holds$^{*}$ \\
+adult/sex, $\sigma{=}8$ (E4S1)        & .518 & 2.1\% & 0.47\% & holds$^{*}$ \\
+adult/sex, $\sigma{=}4$               & .546 & 7.7\% & 3.51\% & \textbf{flips} \\
+\midrule
+VFAE (AUC passes)                     & .536 & 2.3\% & 0.51\% & above band edge$^{*}$ \\
+DANN-scrub $\lambda{=}20$ (AUC fails) & .610 & 1.7\% & --     & worst-case quiet \\
+34 remaining baseline combos          & --   & mean 64\% (2.3--100\%) & -- & fail both \\
+\bottomrule
+\end{tabular}\\
+\raggedright\footnotesize $^{*}$At a strict $2\times$-budget bar (2.0\%) the
+two adult $\sigma{=}8$ configurations (2.07\%) and VFAE (2.3\%) would sit just
+over; the registered band is $[0.8\%,5\%]$.
+\end{table}
+```
+
+**Replacement passage for the Limitations TPR sentences:**
+
+"Extending the same measurement to the eight surviving audit configurations
+and the 36 baseline combinations (Table~\ref{tab:tpr}), seven of eight
+survivors fall inside the pre-registered worst-case band $[0.8\%, 5\%]$ at a
+1\% budget while the eighth (Adult, $\sigma{=}4$) reads 7.7\% — passing the
+AUC bar at 0.546 yet flagging true group members at nearly eight times the
+false-positive budget. The two criteria disagree in both directions: the one
+AUC-passing baseline reads 2.3\%, worst-case noisier than a decisively
+AUC-failing configuration (DANN-scrub at $\lambda{=}20$, AUC 0.610, 1.7\%).
+Average-case and worst-case audits are therefore not interchangeable, and we
+report both."
+
+**Not covered by this option:** the 59 AUC-failing audit configurations have
+no per-config TPR readings (only the baseline combos do). Their worst-case
+failure is expected from the baseline distribution (mean 64\%) but is
+unmeasured — running them is option (b), ~2h, registration first.
+
 ## 6. Remaining compute item (offered, not yet run)
 
 R2's headline condition — TPR@{0.1%, 1%} FPR for the 8 surviving audit
