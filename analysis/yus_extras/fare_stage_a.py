@@ -57,7 +57,13 @@ def leaf_medians(X_tr, leaves_tr):
 def dp_ub_cert(k, z, s, tr, va, te):
     """FARE's certificate: AlphaBetaAdversary on the leaf-median embeddings.
     Binary s -> single call; multiclass s -> all-pairs with Bonferroni-split
-    budget, exactly as src/tree/main.py's multi branch."""
+    budget, exactly as src/tree/main.py's multi branch.
+
+    Their bound code asserts every leaf cell appears in every split of every
+    class pair; with sparse minority classes this fails for some (pair, seed).
+    We do NOT alter their certificate — if any pair aborts, no valid upper
+    bound exists at this config and we return (None, n_failed_pairs);
+    verdicts never depend on dp_ub."""
     def one_pair(emb, budget):
         emb = {kk: (v.reshape(-1, 1) if kk.startswith("c_") else v)
                for kk, v in emb.items()}   # adversary asserts s.shape[1] == 1
@@ -70,9 +76,12 @@ def dp_ub_cert(k, z, s, tr, va, te):
     if n_s == 2:
         emb = {"z_train": z[tr], "z_val": z[va], "z_test": z[te],
                "c_train": s[tr], "c_val": s[va], "c_test": s[te]}
-        return one_pair(emb, ERR_BUDGET)
+        try:
+            return one_pair(emb, ERR_BUDGET), 0
+        except (AssertionError, IndexError):
+            return None, 1
     budget = ERR_BUDGET / (n_s * (n_s - 1) / 2)
-    total = 0.0
+    total, failed = 0.0, 0
     for i in range(n_s):
         for j in range(i + 1, n_s):
             emb = {}
@@ -84,8 +93,11 @@ def dp_ub_cert(k, z, s, tr, va, te):
                 c[c == -1] = 0
                 emb[f"c_{name}"] = c
                 emb[f"z_{name}"] = z[idx][m]
-            total = max(total, one_pair(emb, budget))
-    return total
+            try:
+                total = max(total, one_pair(emb, budget))
+            except (AssertionError, IndexError):
+                failed += 1
+    return (total if failed == 0 else None), failed
 
 
 def run_one(key, ts, k_max, alpha):
@@ -110,12 +122,12 @@ def run_one(key, ts, k_max, alpha):
     cell_idx = np.array([lut[c] for c in leaves_all], dtype=np.int32)
     z = med[cell_idx]
     acc_tree = float((T.predict(X[te]) == task[te]).mean())
-    ub = dp_ub_cert(len(ids), z, attr, tr, va, te)
+    ub, failed_pairs = dp_ub_cert(len(ids), z, attr, tr, va, te)
     np.savez_compressed(SHARD_DIR / f"{key}_{tag}.npz",
                         cells=cell_idx, medians=med)
     (SHARD_DIR / f"{key}_{tag}.json").write_text(json.dumps(dict(
         tag=tag, ts=ts, max_k=k_max, alpha=alpha, nb_cells=int(len(ids)),
-        dp_ub=ub, tree_test_acc=acc_tree,
+        dp_ub=ub, cert_failed_pairs=failed_pairs, tree_test_acc=acc_tree,
         seconds=round(time.time() - t0, 1))))
 
 
@@ -155,8 +167,10 @@ def drive(keys):
                     sh = np.load(SHARD_DIR / f"{key}_{tag}.npz")
                     out_npz[f"{tag}_cells"] = sh["cells"]
                     out_npz[f"{tag}_medians"] = sh["medians"]
+                    ub_s = ("none" if row["dp_ub"] is None
+                            else f"{row['dp_ub']:.4f}")
                     print(f"  {tag:<22} cells={row['nb_cells']:>3} "
-                          f"dp_ub={row['dp_ub']:.4f} "
+                          f"dp_ub={ub_s} "
                           f"tree_acc={row['tree_test_acc']:.4f} "
                           f"({row['seconds']:.0f}s)", flush=True)
         np.savez_compressed(CELL_DIR / f"{key}_fare_embeddings.npz", **out_npz)

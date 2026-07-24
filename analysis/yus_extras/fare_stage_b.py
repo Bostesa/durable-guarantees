@@ -154,15 +154,20 @@ def run_cell(key, ds, attr_name, task_name, clean_lift, device):
         P, L = exposure(npz, tag, task, seed=0)
         pt = measure(P, L, ctx, device, SWEEP_SEEDS)
         pt.update(tag=tag, max_k=m["max_k"], alpha=m["alpha"],
-                  nb_cells=m["nb_cells"], dp_ub=m["dp_ub"])
+                  nb_cells=m["nb_cells"], dp_ub=m["dp_ub"],
+                  cert_failed_pairs=m.get("cert_failed_pairs", 0))
         rows.append(pt)
+        ub_s = "none " if m["dp_ub"] is None else f"{m['dp_ub']:.3f}"
         print(f"  k={m['max_k']:>3} α={m['alpha']:<5g} cells={m['nb_cells']:>3} "
-              f"dp_ub={m['dp_ub']:.3f} {fmt_point(pt)} out={pt['out_max']:.3f} "
+              f"dp_ub={ub_s} {fmt_point(pt)} out={pt['out_max']:.3f} "
               f"lift={pt['lift_best']:+.4f}", flush=True)
 
-    # ---- claim-4 correlation on the ts=0 grid ----
-    rho, pval = spearman([r["dp_ub"] for r in rows],
-                         [r["tier1_max"] for r in rows])
+    # ---- claim-4 correlation on the ts=0 grid (configs with a certificate) ----
+    pairs = [(r["dp_ub"], r["tier1_max"]) for r in rows if r["dp_ub"] is not None]
+    if len(pairs) >= 3:
+        rho, pval = spearman([p[0] for p in pairs], [p[1] for p in pairs])
+    else:
+        rho, pval = float("nan"), float("nan")
 
     # ---- tier_pick, mirroring run_baseline ----
     cert_cache = {}
@@ -193,10 +198,11 @@ def run_cell(key, ds, attr_name, task_name, clean_lift, device):
     for nm, t in (("TIER 1", t1), ("TIER 2", t2)):
         if t["certified"]:
             c = t["cert"]
+            ub_s = "none" if c["dp_ub"] is None else f"{c['dp_ub']:.3f}"
             print(f"  >>> FARE {nm}: CERTIFIES at {c['tag']} — lift "
                   f"{c['lift_best']:+.4f} ({100*c['lift_best']/clean_lift:.0f}%), "
                   f"rep T1={c['rep_tier1_max']:.3f} T2={c['rep_tier2_max']:.3f}, "
-                  f"out T2={c['out_tier2_max']:.3f}, dp_ub={c['dp_ub']:.3f}",
+                  f"out T2={c['out_tier2_max']:.3f}, dp_ub={ub_s}",
                   flush=True)
         else:
             b = t["closest"]
@@ -205,7 +211,8 @@ def run_cell(key, ds, attr_name, task_name, clean_lift, device):
                   f"at lift {b['lift_best']:+.4f}", flush=True)
     return dict(cell=f"{ds}/{attr_name}/{task_name}", key=key,
                 clean_lift=clean_lift, rows=rows,
-                spearman_dpub_tier1=dict(rho=rho, p=pval),
+                spearman_dpub_tier1=dict(rho=rho, p=pval,
+                                         n=len(pairs), n_grid=len(rows)),
                 tier1=t1, tier2=t2, certs=cert_cache,
                 minutes=round((time.time() - t0) / 60, 1))
 
