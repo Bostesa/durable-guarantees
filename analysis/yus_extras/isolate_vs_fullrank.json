@@ -1,0 +1,112 @@
+{
+ "experiment": "isolate_vs_fullrank_matched_tier1",
+ "prediction_file": "isolate_vs_fullrank_prediction.md",
+ "train_seeds": [
+  0,
+  1,
+  2
+ ],
+ "probe_seeds": [
+  0,
+  1
+ ],
+ "clean_lifts": {
+  "easy": 0.02228183287056653,
+  "middle": 0.40912356659921256,
+  "hard": 0.14349140608821695
+ },
+ "rows": [
+  {
+   "cell": "easy",
+   "coupling": 0.514,
+   "isolate": {
+    "config": {
+     "rank": 32,
+     "sigma": 16.0,
+     "lam": 10.0
+    },
+    "t1_max_mean": 0.5093891205441572,
+    "t1_max_std": 0.0024896606703136274,
+    "lrt_mean": 0.8542237934281701,
+    "lrt_std": 0.013716232352593824,
+    "util_mean": 101.56763353046087,
+    "util_std": 3.416445889490686
+   },
+   "fullrank": {
+    "sigma": 32.0,
+    "t1_max_mean": 0.5083084843538758,
+    "t1_max_std": 0.002824359101956303,
+    "lrt_mean": 0.5218256975264056,
+    "lrt_std": 0.006439156891555235,
+    "util_mean": 1.8539378578806993,
+    "util_std": 0.7972067845425342
+   },
+   "t1_matched_within_0.01": true
+  },
+  {
+   "cell": "middle",
+   "coupling": 0.584,
+   "isolate": {
+    "config": {
+     "rank": 16,
+     "sigma": 16.0,
+     "lam": 100.0
+    },
+    "t1_max_mean": 0.534910792379783,
+    "t1_max_std": 0.005370477850360664,
+    "lrt_mean": 0.8639938598132509,
+    "lrt_std": 0.00783457952385382,
+    "util_mean": 100.41257035935031,
+    "util_std": 0.17822952022418218
+   },
+   "fullrank": {
+    "sigma": 16.0,
+    "t1_max_mean": 0.5342126713736062,
+    "t1_max_std": 0.002704426004998832,
+    "lrt_mean": 0.5707198413863352,
+    "lrt_std": 0.002164557129173112,
+    "util_mean": 38.58964330812922,
+    "util_std": 0.9673495629172019
+   },
+   "t1_matched_within_0.01": true
+  },
+  {
+   "cell": "hard",
+   "coupling": 0.603,
+   "isolate": {
+    "config": {
+     "rank": 32,
+     "sigma": 16.0,
+     "lam": 100.0
+    },
+    "t1_max_mean": 0.5369270754366817,
+    "t1_max_std": 0.0005301620559649935,
+    "lrt_mean": 0.6617114916174585,
+    "lrt_std": 0.011400182470858007,
+    "util_mean": 84.29063480151632,
+    "util_std": 2.163062363164732
+   },
+   "fullrank": {
+    "sigma": 32.0,
+    "t1_max_mean": 0.5324182965355643,
+    "t1_max_std": 0.013045891535290977,
+    "lrt_mean": 0.5805132350809973,
+    "lrt_std": 0.005408458195041076,
+    "util_mean": 0.10583232311569322,
+    "util_std": 0.5213191396464969
+   },
+   "t1_matched_within_0.01": true
+  }
+ ],
+ "scoring": {
+  "claim1_isolate_more_utility": "HELD",
+  "claim2_isolate_leaks_tier2_more": "HELD",
+  "claim2b_isolate_lrt_above_0.60": "HELD",
+  "util_gap_by_cell": {
+   "easy": 99.7,
+   "middle": 61.8,
+   "hard": 84.2
+  }
+ },
+ "minutes": 11.5
+}
