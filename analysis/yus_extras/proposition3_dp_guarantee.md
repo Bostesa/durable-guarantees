@@ -1,10 +1,17 @@
 # Proposition 3 — a per-release DP guarantee for the clipped full-rank channel
 
-Drafted 2026-07-24 for the camera-ready/rebuttal. Pure mathematics + accounting
-on the mechanism already measured in Table 5 (`dp_fullrank.json`, registered
-bet e87332b); no new experiments. All numeric values below verified by
-computation (session log); the composition algebra is the same law the
-averaging attack confirmed empirically to 0.001.
+Drafted 2026-07-24; REVISED same day after the eight-point verification audit
+(session log; artifacts `prop3_exact_eps_check.json`, `prop3_reaccounting.json`).
+The four audit flags are fixed in this revision:
+(1) adjacency stated explicitly (replace-one);
+(2) certified values are EXACT analytic epsilons — the round labels 0.5/1/3/6
+are demoted to design knobs, since the classical calibration is only valid for
+ε ≤ 1;
+(3) δ moved to 10⁻⁶, comfortably below 1/n on every cell (15.7× on HMDA,
+41× on Adult), at zero utility cost — same C, same runs, re-accounted;
+(4) the non-private encoder is stated outright.
+No mechanism, run, or utility number changed: `dp_fullrank.json` rows are
+byte-identical; only the accounting statement about them is sharpened.
 
 ## The proposition (LaTeX, drop into the appendix after the Prop. 2 proof)
 
@@ -19,20 +26,16 @@ M(x) \;=\; \Pi_C\!\big(\phi(x)\big) \;+\; \sigma Z,
 \qquad Z \sim \mathcal N(0, I_d),
 \]
 with a fresh draw $Z$ per release, where $\Pi_C$ is projection onto the
-$\ell_2$ ball of radius $C$. Then for every pair of inputs $x, x'$ and every
-measurable set $S$,
+$\ell_2$ ball of radius $C$. Under replace-one adjacency --- indistinguishability
+of any two inputs $x, x'$ --- the release is $\mu$-GDP with
+$\mu = 2C/\sigma$ (Dong, Roth, and Su 2022), hence
+$(\varepsilon,\delta)$-indistinguishable for every $\varepsilon \ge 0$ with
 \[
-\Pr[M(x) \in S] \;\le\; e^{\varepsilon}\, \Pr[M(x') \in S] \;+\; \delta
+\delta(\varepsilon) \;=\; \Phi\!\big(-\tfrac{\varepsilon}{\mu} + \tfrac{\mu}{2}\big)
+ \;-\; e^{\varepsilon}\,\Phi\!\big(-\tfrac{\varepsilon}{\mu} - \tfrac{\mu}{2}\big)
 \]
-holds for exactly the $(\varepsilon,\delta)$ pairs of the Gaussian mechanism
-with sensitivity $2C$: the release is $\mu$-GDP with $\mu = 2C/\sigma$
-(Dong, Roth, and Su 2022), hence $(\varepsilon,\delta)$-indistinguishable for
-every $\varepsilon \ge 0$ with
-$\delta(\varepsilon) = \Phi(-\varepsilon/\mu + \mu/2)
- - e^{\varepsilon}\,\Phi(-\varepsilon/\mu - \mu/2)$
-(Balle and Wang 2018), and in particular
-$(\varepsilon,\delta)$-indistinguishable for
-$\varepsilon = \tfrac{2C}{\sigma}\sqrt{2\ln(1.25/\delta)}$
+(Balle and Wang 2018); for $\varepsilon \le 1$ this recovers the classical
+calibration $\varepsilon = \tfrac{2C}{\sigma}\sqrt{2\ln(1.25/\delta)}$
 (Dwork and Roth 2014). Any function of the release, including the deployed
 head's prediction $\hat y = f(M(x))$, inherits the guarantee by
 post-processing, and $k$ adaptive releases of the same input compose to
@@ -42,13 +45,14 @@ $\sqrt{k}\,\mu$-GDP.
 \begin{proof}
 Both clipped points lie in the $C$-ball, so
 $\lVert \Pi_C(\phi(x)) - \Pi_C(\phi(x')) \rVert_2 \le 2C$ for every pair
-$(x, x')$; the map $x \mapsto \Pi_C(\phi(x))$ therefore has global $\ell_2$
-sensitivity $2C$, and $M$ is the Gaussian mechanism at noise scale $\sigma$
+$(x, x')$: under replace-one adjacency the map $x \mapsto \Pi_C(\phi(x))$ has
+global $\ell_2$ sensitivity $2C$ (the ball's diameter; add--remove adjacency
+would give $C$), and $M$ is the Gaussian mechanism at noise scale $\sigma$
 applied to it. The $\mu$-GDP characterization with $\mu = 2C/\sigma$, the
-exact $(\varepsilon,\delta)$ conversion, the classical corollary, the
-post-processing property, and $\sqrt{k}$ composition are the standard
-statements for this mechanism (Dong, Roth, and Su 2022; Balle and Wang 2018;
-Dwork and Roth 2014).
+exact $(\varepsilon,\delta)$ conversion, the $\varepsilon \le 1$ classical
+corollary, the post-processing property, and $\sqrt{k}$ composition are the
+standard statements for this mechanism (Dong, Roth, and Su 2022; Balle and
+Wang 2018; Dwork and Roth 2014).
 \end{proof}
 ```
 
@@ -57,10 +61,12 @@ Dwork and Roth 2014).
 ```latex
 Three remarks fix the scope. \emph{First}, the guarantee is per-release input
 indistinguishability at serving time, conditional on the trained release map:
-it bounds what any attacker, present or future, learns about an input from
-its released representation or the model's prediction, but it says nothing
-about leakage of the \emph{training} set through the choice of $\phi$, which
-would require private training. \emph{Second}, it protects participation, not
+the encoder, its normalization statistics, and the head are trained
+\emph{non-privately} by ordinary gradient descent on the full training
+partition, so the proposition bounds what any attacker learns about an input
+from its released representation or the model's prediction, and says nothing
+about leakage of the training set through the choice of $\phi$ --- that would
+require private training. \emph{Second}, it protects participation, not
 correlated traits: population-level inference of the attribute from the task
 output is exactly the floor of Fig.~3, which no release mechanism crosses.
 \emph{Third}, no analogous statement exists for the subspace-confined
@@ -72,45 +78,53 @@ subspace channel is measured resistance by construction; the full-rank
 channel is the guarantee-bearing arm, and Table~5 is its price.
 ```
 
-## Numeric addendum (verified; optional table footnote for Table 5)
+## Certified operating points (verified; `prop3_reaccounting.json`)
 
-The Table-5 grid sets C = ε_nom·σ/K with K = 2√(2 ln(1.25/δ)) = 9.6896 at
-δ = 10⁻⁵, so every labeled point is certified by Proposition 3 **with room to
-spare** — the classical calibration is conservative and the exact analytic
-values are lower:
+The clip radii were chosen before the run via the classical δ=10⁻⁵
+calibration (registered bet e87332b) — those round targets are DESIGN KNOBS,
+not the certified values, because the classical formula is valid only for
+ε ≤ 1. The certified statement per point is the exact analytic ε at
+**δ = 10⁻⁶**, which is comfortably below 1/n on every cell (HMDA n=63,747:
+15.7×; Adult n=24,145: 41×):
 
-| ε_nominal | μ = 2C/σ | ε_exact (δ=10⁻⁵) | slack |
+| design label | C (σ=8 / σ=32) | μ = 2C/σ | **ε certified (δ=10⁻⁶)** |
 |---|---|---|---|
-| 0.5 | 0.103 | 0.35 | 29% |
-| 1 | 0.206 | 0.75 | 25% |
-| 3 | 0.619 | 2.53 | 16% |
-| 6 | 1.238 | 5.62 | 6% |
+| "0.5" | 0.41 / 1.65 | 0.103 | **0.41** |
+| "1" | 0.83 / 3.30 | 0.206 | **0.86** |
+| "3" | 2.48 / 9.91 | 0.619 | **2.85** |
+| "6" | 4.95 / 19.82 | 1.238 | **6.25** |
 
-Composition ledger (exact, √k·μ-GDP — the same algebra the averaging attack
-measured): a nominal-ε=1 release queried 16 times is (3.51, 10⁻⁵)-DP; a
-nominal-ε=3 release queried 16 times is (13.05, 10⁻⁵)-DP. Suggested footnote:
-"Each labeled point satisfies Proposition 3; nominal ε is the conservative
-classical calibration, and k queries of one input compose exactly to
-√k · (2C/σ)-GDP — the ledger whose attacker side is the averaging curve of
-Appendix B."
+Utility numbers are unchanged — same C, same runs (`dp_fullrank.json`), the
+re-accounting is computation, not measurement.
+
+Composition ledger at δ=10⁻⁶ (exact, √k·μ-GDP): the ε=0.86 point queried
+4 times is (1.83, 10⁻⁶)-DP and queried 16 times is (3.93, 10⁻⁶)-DP; the
+ε=2.85 point queried 16 times is (14.3, 10⁻⁶)-DP. The same √k algebra is
+what the averaging attack measured empirically — on the subspace channel
+(Appendix B) — so the averaging curve is the attacker's side of exactly this
+ledger, priced there without a guarantee and bounded here with one.
 
 ## Wiring into the paper
 
 - Appendix: proposition + proof + remarks after the Prop. 2 proof (or at the
   head of the "formally private variant" section, renaming it "A
   guarantee-bearing variant (Proposition 3)").
+- Table 5: relabel the ε columns with the certified values —
+  "ε = 0.41 / 0.86 / 2.85 / 6.25 (exact, δ = 10⁻⁶)" — and adjust the caption:
+  "clip radii set by the conservative classical calibration; each point's
+  certified (ε, δ) is the exact analytic value of Proposition 3, with
+  δ = 10⁻⁶ < 1/(15n) on every cell." Update any main-text "ε ≈ 5–6" mention
+  to "ε ≈ 6" (the middle cell reaches Tier-2 utility between the ε=2.85 and
+  ε=6.25 points).
 - Main text, one sentence where Table 5 is introduced: "The clipped full-rank
-  variant is not merely measured: it carries a per-release
-  $(\varepsilon,\delta)$ guarantee (Proposition 3), so Table~5 prices the
-  paper's only guarantee-bearing mechanism against its
-  measured-resistance one."
+  variant is not merely measured: each point carries an exact per-release
+  $(\varepsilon, 10^{-6})$ guarantee (Proposition 3), so Table~5 prices the
+  paper's only guarantee-bearing mechanism against its measured-resistance
+  one."
 - Future work: replace "A formally private variant exists…" with a pointer to
-  Prop. 3, and adopt the sentence: "Differential privacy protects
-  participation, not correlated traits: it composes past the averaging attack
-  but cannot cross the floor."
-- Contributions bullet 4 (optional, if space allows): append "; a clipped
-  variant carries a per-release guarantee (Prop. 3) at the utility cost of
-  Table 5."
+  Prop. 3, and adopt: "Differential privacy protects participation, not
+  correlated traits: it composes past the averaging attack but cannot cross
+  the floor."
 
 ## New references required
 
@@ -123,14 +137,15 @@ Appendix B."
 
 ## What this changes about the paper's claims (and what it must not)
 
-Gains: the paper now contains a true guarantee-bearing mechanism with exact
-accounting and an honest price tag; the averaging attack upgrades from "an
-attack our mechanism suffers" to "the attacker's side of a ledger the DP arm
-prices exactly"; the reviewer question "why not just use DP?" is answered
-with a proposition, a table, and a composition curve.
+Gains: a true guarantee-bearing mechanism with exact accounting at a δ that
+clears the 1/n convention with room, an honest price tag, and a composition
+ledger whose attacker side the paper already measured. The reviewer question
+"why not just use DP?" is answered with a proposition, a table, and a curve.
 
 Must not change: the abstract and contributions still describe
 isolate-then-noise as measured resistance — Proposition 3 certifies the
 full-rank arm only. Do not let any sentence drift toward "our defense is
 differentially private"; the defense the paper recommends at Tier 1 remains
-uncertified by construction (third remark).
+uncertified by construction (third remark). And keep the design-knob/
+certified-value distinction: quoting "ε = 3" as a guarantee would be the
+classical formula outside its validity range — the certified value is 2.85.

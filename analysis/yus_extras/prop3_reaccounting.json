@@ -1,0 +1,121 @@
+{
+ "experiment": "prop3_reaccounting_final",
+ "purpose": "fixes for the four Prop-3 audit flags: certified values are EXACT Balle-Wang epsilons at delta=1e-6 (replace-one adjacency, sensitivity 2C); the nominal labels 0.5/1/3/6 are demoted to design knobs (C-calibration at delta=1e-5, registered bet e87332b). Utility rows in dp_fullrank.json are unchanged: same C, same runs, re-accounted only.",
+ "delta_certified": 1e-06,
+ "adjacency": "replace-one (bounded pair; add-remove would give sensitivity C)",
+ "encoder": "trained NON-privately (plain Adam, run_dp_fullrank.py train_dp_channel); guarantee is serving-time, conditional on the fixed map",
+ "delta_vs_n": {
+  "hmda_n63747": {
+   "inv_n": 1.5687012722167318e-05,
+   "ratio_invn_over_delta": 15.7
+  },
+  "adult_n24145": {
+   "inv_n": 4.141644232760406e-05,
+   "ratio_invn_over_delta": 41.4
+  }
+ },
+ "rows": [
+  {
+   "design_label_eps_nominal": 0.5,
+   "sigma": 8.0,
+   "C": 0.4128,
+   "mu": 0.1032,
+   "eps_exact_delta1e6": 0.4105,
+   "eps_exact_delta1e5": 0.3526,
+   "classical_eps_at_1e5": 0.5,
+   "classical_valid": true
+  },
+  {
+   "design_label_eps_nominal": 0.5,
+   "sigma": 32.0,
+   "C": 1.6513,
+   "mu": 0.103206,
+   "eps_exact_delta1e6": 0.4105,
+   "eps_exact_delta1e5": 0.3526,
+   "classical_eps_at_1e5": 0.5,
+   "classical_valid": true
+  },
+  {
+   "design_label_eps_nominal": 1.0,
+   "sigma": 8.0,
+   "C": 0.8256,
+   "mu": 0.2064,
+   "eps_exact_delta1e6": 0.8629,
+   "eps_exact_delta1e5": 0.751,
+   "classical_eps_at_1e5": 1.0,
+   "classical_valid": true
+  },
+  {
+   "design_label_eps_nominal": 1.0,
+   "sigma": 32.0,
+   "C": 3.3025,
+   "mu": 0.206406,
+   "eps_exact_delta1e6": 0.8629,
+   "eps_exact_delta1e5": 0.751,
+   "classical_eps_at_1e5": 1.0,
+   "classical_valid": true
+  },
+  {
+   "design_label_eps_nominal": 3.0,
+   "sigma": 8.0,
+   "C": 2.4769,
+   "mu": 0.619225,
+   "eps_exact_delta1e6": 2.8539,
+   "eps_exact_delta1e5": 2.5333,
+   "classical_eps_at_1e5": 3.0,
+   "classical_valid": false
+  },
+  {
+   "design_label_eps_nominal": 3.0,
+   "sigma": 32.0,
+   "C": 9.9075,
+   "mu": 0.619219,
+   "eps_exact_delta1e6": 2.8539,
+   "eps_exact_delta1e5": 2.5333,
+   "classical_eps_at_1e5": 3.0,
+   "classical_valid": false
+  },
+  {
+   "design_label_eps_nominal": 6.0,
+   "sigma": 8.0,
+   "C": 4.9538,
+   "mu": 1.23845,
+   "eps_exact_delta1e6": 6.2447,
+   "eps_exact_delta1e5": 5.6179,
+   "classical_eps_at_1e5": 6.0,
+   "classical_valid": false
+  },
+  {
+   "design_label_eps_nominal": 6.0,
+   "sigma": 32.0,
+   "C": 19.815,
+   "mu": 1.238438,
+   "eps_exact_delta1e6": 6.2446,
+   "eps_exact_delta1e5": 5.6178,
+   "classical_eps_at_1e5": 6.0,
+   "classical_valid": false
+  }
+ ],
+ "composition": {
+  "eps_label_1": {
+   "k4": {
+    "mu_composed": 0.4128,
+    "eps_exact_delta1e6": 1.827
+   },
+   "k16": {
+    "mu_composed": 0.8256,
+    "eps_exact_delta1e6": 3.934
+   }
+  },
+  "eps_label_3": {
+   "k4": {
+    "mu_composed": 1.2384,
+    "eps_exact_delta1e6": 6.245
+   },
+   "k16": {
+    "mu_composed": 2.4769,
+    "eps_exact_delta1e6": 14.285
+   }
+  }
+ }
+}

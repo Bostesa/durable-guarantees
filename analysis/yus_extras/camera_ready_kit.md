@@ -65,6 +65,13 @@ r = 0.86), and the seven pre-registered external cells alone give r = 0.87
 
 ## 3. DP comparison appendix table (R1-W4/Q4, R2-W3/Q3)
 
+> **UPDATED 2026-07-24 — superseded accounting.** After the Prop-3 audit, the
+> certified values are the exact analytic epsilons at δ=10⁻⁶
+> (0.41 / 0.86 / 2.85 / 6.25 for the nominal 0.5/1/3/6 labels; see
+> `proposition3_dp_guarantee.md` and `prop3_reaccounting.json`). Use that
+> file's Table-5 relabeling and caption instead of the δ=10⁻⁵ caption below;
+> the utility numbers in the LaTeX table are unchanged.
+
 Source: `analysis/yus_extras/dp_fullrank.json` (registered bet e87332b,
 results 538c840). Clip-in-the-loop full-rank Gaussian channel: release =
 clip_C(h) + σ·N(0, I₆₄), C = ε·σ/(2√(2 ln(1.25/δ))), δ = 10⁻⁵, classical

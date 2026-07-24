@@ -1,0 +1,94 @@
+{
+ "experiment": "prop3_exact_eps_verification",
+ "delta": 1e-05,
+ "source": "dp_fullrank.json sigma & C",
+ "method": "Balle-Wang 2018 analytic Gaussian mechanism; brentq root-find",
+ "rows": [
+  {
+   "eps_nominal": 0.5,
+   "sigma": 8.0,
+   "C": 0.4128,
+   "mu": 0.1032,
+   "eps_exact_bw": 0.35256012842671963,
+   "eps_classical": 0.49998390310087615,
+   "classical_in_valid_range": true,
+   "md_claimed_exact": 0.35
+  },
+  {
+   "eps_nominal": 0.5,
+   "sigma": 32.0,
+   "C": 1.6513,
+   "mu": 0.10320625,
+   "eps_exact_bw": 0.352583385443071,
+   "eps_classical": 0.5000141831337674,
+   "classical_in_valid_range": true,
+   "md_claimed_exact": 0.35
+  },
+  {
+   "eps_nominal": 1.0,
+   "sigma": 8.0,
+   "C": 0.8256,
+   "mu": 0.2064,
+   "eps_exact_bw": 0.7509505108494998,
+   "eps_classical": 0.9999678062017523,
+   "classical_in_valid_range": true,
+   "md_claimed_exact": 0.75
+  },
+  {
+   "eps_nominal": 1.0,
+   "sigma": 32.0,
+   "C": 3.3025,
+   "mu": 0.20640625,
+   "eps_exact_bw": 0.7509753847770475,
+   "eps_classical": 0.9999980862346436,
+   "classical_in_valid_range": true,
+   "md_claimed_exact": 0.75
+  },
+  {
+   "eps_nominal": 3.0,
+   "sigma": 8.0,
+   "C": 2.4769,
+   "mu": 0.619225,
+   "eps_exact_bw": 2.5332927993051153,
+   "eps_classical": 3.000024538736822,
+   "classical_in_valid_range": false,
+   "md_claimed_exact": 2.53
+  },
+  {
+   "eps_nominal": 3.0,
+   "sigma": 32.0,
+   "C": 9.9075,
+   "mu": 0.61921875,
+   "eps_exact_bw": 2.533263993540077,
+   "eps_classical": 2.9999942587039308,
+   "classical_in_valid_range": false,
+   "md_claimed_exact": 2.53
+  },
+  {
+   "eps_nominal": 6.0,
+   "sigma": 8.0,
+   "C": 4.9538,
+   "mu": 1.23845,
+   "eps_exact_bw": 5.617870602833775,
+   "eps_classical": 6.000049077473644,
+   "classical_in_valid_range": false,
+   "md_claimed_exact": 5.62
+  },
+  {
+   "eps_nominal": 6.0,
+   "sigma": 32.0,
+   "C": 19.815,
+   "mu": 1.2384375,
+   "eps_exact_bw": 5.617803890601833,
+   "eps_classical": 5.9999885174078615,
+   "classical_in_valid_range": false,
+   "md_claimed_exact": 5.62
+  }
+ ],
+ "composition": {
+  "mu_at_eps_nom_1": 0.2064,
+  "k4_eps": 1.6102585483475067,
+  "k16_eps_nom1": 3.511049121392879,
+  "k16_eps_nom3": 13.052696895286768
+ }
+}
