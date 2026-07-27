@@ -68,8 +68,8 @@ b2 = ax.bar(x + w / 2, kept["tier2"], w, yerr=err["tier2"], capsize=2,
 for bars, k in ((b1, "tier1"), (b2, "tier2")):
     for rect, v, e, op in zip(bars, kept[k], err[k], ops[k]):
         ytxt = max(v, 0) + e + 3
-        # one decimal for near-zero bars so the label matches the text's -0.5%
-        lab = f"{v:.1f}%" if abs(v) < 2 else f"{v:.0f}%"
+        # one decimal on every bar so the figure matches the text (94.6/56.6)
+        lab = f"{v:.1f}%"
         ax.text(rect.get_x() + rect.get_width() / 2, ytxt,
                 lab, ha="center", va="bottom", fontsize=8)
         ax.text(rect.get_x() + rect.get_width() / 2, -28, op, ha="center",
