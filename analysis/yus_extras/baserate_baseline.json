@@ -1,0 +1,318 @@
+{
+ "experiment": "baserate_gap_baseline",
+ "n_cells": 27,
+ "n_binary_cells": 11,
+ "all27": {
+  "gap": {
+   "pearson_r": 0.8189077111613894,
+   "pearson_p": 1.7749333116030752e-07,
+   "spearman_r": 0.8309151651814282,
+   "spearman_p": 8.068210015213317e-08,
+   "n": 27
+  },
+  "predictor": {
+   "pearson_r": 0.7991437704746869,
+   "pearson_p": 5.776889672105281e-07,
+   "spearman_r": 0.8281658135319308,
+   "spearman_p": 9.715739849247052e-08,
+   "n": 27
+  }
+ },
+ "binary_only": {
+  "gap": {
+   "pearson_r": 0.8821793479539507,
+   "pearson_p": 0.0003258286905081461,
+   "spearman_r": 0.9157199156321926,
+   "spearman_p": 7.584505093519598e-05,
+   "n": 11
+  },
+  "predictor": {
+   "pearson_r": 0.8891506616731053,
+   "pearson_p": 0.00025021850974772365,
+   "spearman_r": 0.9476106589626668,
+   "spearman_p": 9.356372175999976e-06,
+   "n": 11
+  }
+ },
+ "stored_paper_predictor_27": {
+  "pearson_r": 0.7991437704746869,
+  "spearman_r": 0.8281658135319308,
+  "n": 27
+ },
+ "rows": [
+  {
+   "cell": "hmda/sex/loan_decision",
+   "source": "original",
+   "gap": 0.017928346550574875,
+   "n_y": 2,
+   "n_s": 2,
+   "binary": true,
+   "predictor": 0.5031163295096645,
+   "cost": 0.0
+  },
+  {
+   "cell": "diabetes/gender/medication_change_outcome",
+   "source": "original",
+   "gap": 0.017574486082337554,
+   "n_y": 2,
+   "n_s": 2,
+   "binary": true,
+   "predictor": 0.5093476352394352,
+   "cost": 9.660640868269788e-06
+  },
+  {
+   "cell": "hmda/race/loan_decision",
+   "source": "original",
+   "gap": 0.04980019881776403,
+   "n_y": 2,
+   "n_s": 5,
+   "binary": false,
+   "predictor": 0.5138321967431266,
+   "cost": 0.0
+  },
+  {
+   "cell": "hmda/race/tract_denial_high",
+   "source": "original",
+   "gap": 0.028970003522075082,
+   "n_y": 2,
+   "n_s": 5,
+   "binary": false,
+   "predictor": 0.517628590653477,
+   "cost": 0.4683745084926587
+  },
+  {
+   "cell": "diabetes/age_bucket/medication_change_outcome",
+   "source": "original",
+   "gap": 0.04361457648623698,
+   "n_y": 2,
+   "n_s": 10,
+   "binary": false,
+   "predictor": 0.5215155191014239,
+   "cost": 0.00082218481683205
+  },
+  {
+   "cell": "adult/sex/education_level",
+   "source": "original",
+   "gap": 0.08579513502930855,
+   "n_y": 4,
+   "n_s": 2,
+   "binary": false,
+   "predictor": 0.5386179525051232,
+   "cost": 0.002270665820392037
+  },
+  {
+   "cell": "diabetes/gender/primary_diagnosis_category",
+   "source": "original",
+   "gap": 0.1160840242494133,
+   "n_y": 9,
+   "n_s": 2,
+   "binary": false,
+   "predictor": 0.5431283785155202,
+   "cost": 0.20195045243001075
+  },
+  {
+   "cell": "diabetes/race/primary_diagnosis_category",
+   "source": "original",
+   "gap": 0.19106442551045158,
+   "n_y": 9,
+   "n_s": 5,
+   "binary": false,
+   "predictor": 0.5443393140708878,
+   "cost": 0.260881323668945
+  },
+  {
+   "cell": "adult/marital_status/education_level",
+   "source": "original",
+   "gap": 0.1343630860274254,
+   "n_y": 4,
+   "n_s": 2,
+   "binary": false,
+   "predictor": 0.5550597734657221,
+   "cost": 0.07452989307761793
+  },
+  {
+   "cell": "adult/race/income",
+   "source": "original",
+   "gap": 0.0712156424567445,
+   "n_y": 2,
+   "n_s": 5,
+   "binary": false,
+   "predictor": 0.555990625941032,
+   "cost": 0.38072295577659165
+  },
+  {
+   "cell": "hmda/sex/loan_amount_band",
+   "source": "original",
+   "gap": 0.16638434902243215,
+   "n_y": 5,
+   "n_s": 2,
+   "binary": false,
+   "predictor": 0.5629812663829369,
+   "cost": 0.6375156732075163
+  },
+  {
+   "cell": "adult/age_group/income",
+   "source": "original",
+   "gap": 0.2379719003793046,
+   "n_y": 2,
+   "n_s": 4,
+   "binary": false,
+   "predictor": 0.5677048515791888,
+   "cost": 0.8838643859109846
+  },
+  {
+   "cell": "hmda/race/loan_amount_band",
+   "source": "original",
+   "gap": 0.22393631866809127,
+   "n_y": 5,
+   "n_s": 5,
+   "binary": false,
+   "predictor": 0.5835186160519573,
+   "cost": 0.6478941316706197
+  },
+  {
+   "cell": "adult/race/education_level",
+   "source": "original",
+   "gap": 0.09528112993157005,
+   "n_y": 4,
+   "n_s": 5,
+   "binary": false,
+   "predictor": 0.588550368712607,
+   "cost": 0.01813097894081772
+  },
+  {
+   "cell": "adult/sex/income",
+   "source": "original",
+   "gap": 0.23624080496640076,
+   "n_y": 2,
+   "n_s": 2,
+   "binary": true,
+   "predictor": 0.6033502051832492,
+   "cost": 1.0
+  },
+  {
+   "cell": "adult/marital_status/occupation_group",
+   "source": "original",
+   "gap": 0.29276150318671207,
+   "n_y": 6,
+   "n_s": 2,
+   "binary": false,
+   "predictor": 0.6068621794441901,
+   "cost": 0.5334888967896565
+  },
+  {
+   "cell": "hmda/ethnicity/loan_amount_band",
+   "source": "original",
+   "gap": 0.2507753367952006,
+   "n_y": 5,
+   "n_s": 2,
+   "binary": false,
+   "predictor": 0.6234949371225044,
+   "cost": 0.8016127879623244
+  },
+  {
+   "cell": "diabetes/age_bucket/primary_diagnosis_category",
+   "source": "original",
+   "gap": 0.3425969482030801,
+   "n_y": 9,
+   "n_s": 10,
+   "binary": false,
+   "predictor": 0.6647105340166553,
+   "cost": 1.0
+  },
+  {
+   "cell": "adult/sex/occupation_group",
+   "source": "original",
+   "gap": 0.47422846986589107,
+   "n_y": 6,
+   "n_s": 2,
+   "binary": false,
+   "predictor": 0.6761539026653908,
+   "cost": 0.8552612807713469
+  },
+  {
+   "cell": "adult/marital_status/income",
+   "source": "original",
+   "gap": 0.5048182699667363,
+   "n_y": 2,
+   "n_s": 2,
+   "binary": true,
+   "predictor": 0.688360040408207,
+   "cost": 1.0
+  },
+  {
+   "cell": "folktables/race/employment",
+   "source": "external",
+   "gap": 0.005852702874240029,
+   "n_y": 2,
+   "n_s": 2,
+   "binary": true,
+   "predictor": 0.5048688656469227,
+   "cost": 0.0354355551814749
+  },
+  {
+   "cell": "lawschool/sex/pass_bar",
+   "source": "external",
+   "gap": 0.053285870140837854,
+   "n_y": 2,
+   "n_s": 2,
+   "binary": true,
+   "predictor": 0.5094341615089025,
+   "cost": 0.17908763791015936
+  },
+  {
+   "cell": "folktables/race/public_coverage",
+   "source": "external",
+   "gap": 0.02934604457679227,
+   "n_y": 2,
+   "n_s": 2,
+   "binary": true,
+   "predictor": 0.5122371872201893,
+   "cost": 0.10518463588347793
+  },
+  {
+   "cell": "folktables/race/income",
+   "source": "external",
+   "gap": 0.08379308621840312,
+   "n_y": 2,
+   "n_s": 2,
+   "binary": true,
+   "predictor": 0.5419807779986615,
+   "cost": 0.21490056382318024
+  },
+  {
+   "cell": "folktables/sex/income",
+   "source": "external",
+   "gap": 0.11997516223400587,
+   "n_y": 2,
+   "n_s": 2,
+   "binary": true,
+   "predictor": 0.556770030816641,
+   "cost": 0.7133257158593547
+  },
+  {
+   "cell": "lawschool/race/pass_bar",
+   "source": "external",
+   "gap": 0.27029203337345453,
+   "n_y": 2,
+   "n_s": 2,
+   "binary": true,
+   "predictor": 0.5911646537725569,
+   "cost": 0.9976193094470418
+  },
+  {
+   "cell": "dutch/sex/occupation",
+   "source": "external",
+   "gap": 0.2991643261311867,
+   "n_y": 2,
+   "n_s": 2,
+   "binary": true,
+   "predictor": 0.6499333972631062,
+   "cost": 0.8762771626390836
+  }
+ ],
+ "minutes": 0.0,
+ "winner_pearson_all27": "base-rate gap",
+ "delta_pearson_all27": -0.019763940686702508,
+ "delta_spearman_all27": -0.0027493516494974113
+}
