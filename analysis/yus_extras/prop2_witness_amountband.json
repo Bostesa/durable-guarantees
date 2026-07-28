@@ -1,0 +1,48 @@
+{
+ "experiment": "prop2_witness_amountband_correction",
+ "note_file": "amount_band_recompute_note.md",
+ "note_commit": "c993f5a",
+ "purpose": "recomputation correcting a channel mislabel in the second-moment ceiling table; not a new experimental claim",
+ "cell": "hmda/race/loan_amount_band",
+ "train_channel_seed": 0,
+ "n_sample": 60000,
+ "seed": 20260728,
+ "bar": 0.55,
+ "rows": [
+  {
+   "label": "middle (HMDA/amount)",
+   "tier": "T1",
+   "sigma": 12.0,
+   "channel": "hmda/race/loan_amount_band",
+   "n_attr": 5,
+   "mislabelled_stored_value": 0.9598947468180754,
+   "mislabelled_source": "loan_decision channel (mi_ceiling.json)",
+   "marginal_ceiling_correct_channel": 0.9793727388136811,
+   "appendix_faithful_auc": 0.6038310144009454,
+   "appendix_faithful_on_wrong_channel": 0.5679,
+   "total_var": 299.91810607910156,
+   "tr_Sigma_y_mean": 264.91693868112293,
+   "min_opposite_sheet_distance": 1.1893966420389557,
+   "dmin_over_sigma": 0.09911638683657964,
+   "exceeds_bar": true
+  },
+  {
+   "label": "middle (HMDA/amount)",
+   "tier": "T2",
+   "sigma": 24.0,
+   "channel": "hmda/race/loan_amount_band",
+   "n_attr": 5,
+   "mislabelled_stored_value": 0.8035629014523376,
+   "mislabelled_source": "loan_decision channel (mi_ceiling.json)",
+   "marginal_ceiling_correct_channel": 0.8077612055789478,
+   "appendix_faithful_auc": 0.5476271382491519,
+   "appendix_faithful_on_wrong_channel": 0.5302,
+   "total_var": 217.82477819919586,
+   "tr_Sigma_y_mean": 184.24020625299187,
+   "min_opposite_sheet_distance": 0.9769037451263475,
+   "dmin_over_sigma": 0.040704322713597814,
+   "exceeds_bar": false
+  }
+ ],
+ "minutes": 0.1
+}
