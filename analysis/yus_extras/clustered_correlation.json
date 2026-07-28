@@ -1,0 +1,294 @@
+{
+ "experiment": "clustered_correlation",
+ "n_cells": 27,
+ "datasets": [
+  "adult",
+  "diabetes",
+  "dutch",
+  "folktables",
+  "hmda",
+  "lawschool"
+ ],
+ "cells_per_dataset": {
+  "adult": 9,
+  "diabetes": 5,
+  "dutch": 1,
+  "folktables": 4,
+  "hmda": 6,
+  "lawschool": 2
+ },
+ "all27": {
+  "pearson": 0.7991437704746869,
+  "pearson_p": 5.776889672105281e-07,
+  "spearman": 0.8281658135319308,
+  "spearman_p": 9.715739849247052e-08
+ },
+ "stored_paper": {
+  "pearson": 0.799,
+  "ci": [
+   0.6,
+   0.9
+  ],
+  "spearman": 0.828
+ },
+ "leave_one_dataset_out": [
+  {
+   "held_out": "adult",
+   "n_out": 9,
+   "n_kept": 18,
+   "pearson": 0.8878183798412265,
+   "spearman": 0.9086217008485094,
+   "pearson_p": 8.821623715741077e-07
+  },
+  {
+   "held_out": "diabetes",
+   "n_out": 5,
+   "n_kept": 22,
+   "pearson": 0.7522007086973301,
+   "spearman": 0.7841809161130229,
+   "pearson_p": 5.400089875857726e-05
+  },
+  {
+   "held_out": "dutch",
+   "n_out": 1,
+   "n_kept": 26,
+   "pearson": 0.7870304394657336,
+   "spearman": 0.8212150138980857,
+   "pearson_p": 1.849084380703805e-06
+  },
+  {
+   "held_out": "folktables",
+   "n_out": 4,
+   "n_kept": 23,
+   "pearson": 0.7938576192006592,
+   "spearman": 0.8374975486879489,
+   "pearson_p": 6.15105864648115e-06
+  },
+  {
+   "held_out": "hmda",
+   "n_out": 6,
+   "n_kept": 21,
+   "pearson": 0.7958399746385171,
+   "spearman": 0.8101437278955412,
+   "pearson_p": 1.6031907401106842e-05
+  },
+  {
+   "held_out": "lawschool",
+   "n_out": 2,
+   "n_kept": 25,
+   "pearson": 0.809602969967161,
+   "spearman": 0.8323391728087576,
+   "pearson_p": 9.498525967659397e-07
+  }
+ ],
+ "loo_pearson_range": [
+  0.7522007086973301,
+  0.8878183798412265
+ ],
+ "loo_spearman_range": [
+  0.7841809161130229,
+  0.9086217008485094
+ ],
+ "cluster_bootstrap": {
+  "n_boot": 20000,
+  "n_used": 20000,
+  "seed": 20260728,
+  "ci95": [
+   0.6985026019765379,
+   0.9278631331384175
+  ],
+  "frac_le_zero": 0.0
+ },
+ "survives_clustering": true,
+ "rows": [
+  {
+   "cell": "hmda/sex/loan_decision",
+   "dataset": "hmda",
+   "predictor": 0.5031163295096645,
+   "cost": 0.0,
+   "source": "continuous_cost.json"
+  },
+  {
+   "cell": "diabetes/gender/medication_change_outcome",
+   "dataset": "diabetes",
+   "predictor": 0.5093476352394352,
+   "cost": 9.660640868269788e-06,
+   "source": "continuous_cost.json"
+  },
+  {
+   "cell": "hmda/race/loan_decision",
+   "dataset": "hmda",
+   "predictor": 0.5138321967431266,
+   "cost": 0.0,
+   "source": "continuous_cost.json"
+  },
+  {
+   "cell": "hmda/race/tract_denial_high",
+   "dataset": "hmda",
+   "predictor": 0.517628590653477,
+   "cost": 0.4683745084926587,
+   "source": "continuous_cost.json"
+  },
+  {
+   "cell": "diabetes/age_bucket/medication_change_outcome",
+   "dataset": "diabetes",
+   "predictor": 0.5215155191014239,
+   "cost": 0.00082218481683205,
+   "source": "continuous_cost.json"
+  },
+  {
+   "cell": "adult/sex/education_level",
+   "dataset": "adult",
+   "predictor": 0.5386179525051232,
+   "cost": 0.002270665820392037,
+   "source": "continuous_cost.json"
+  },
+  {
+   "cell": "diabetes/gender/primary_diagnosis_category",
+   "dataset": "diabetes",
+   "predictor": 0.5431283785155202,
+   "cost": 0.20195045243001075,
+   "source": "continuous_cost.json"
+  },
+  {
+   "cell": "diabetes/race/primary_diagnosis_category",
+   "dataset": "diabetes",
+   "predictor": 0.5443393140708878,
+   "cost": 0.260881323668945,
+   "source": "continuous_cost.json"
+  },
+  {
+   "cell": "adult/marital_status/education_level",
+   "dataset": "adult",
+   "predictor": 0.5550597734657221,
+   "cost": 0.07452989307761793,
+   "source": "continuous_cost.json"
+  },
+  {
+   "cell": "adult/race/income",
+   "dataset": "adult",
+   "predictor": 0.555990625941032,
+   "cost": 0.38072295577659165,
+   "source": "continuous_cost.json"
+  },
+  {
+   "cell": "hmda/sex/loan_amount_band",
+   "dataset": "hmda",
+   "predictor": 0.5629812663829369,
+   "cost": 0.6375156732075163,
+   "source": "continuous_cost.json"
+  },
+  {
+   "cell": "adult/age_group/income",
+   "dataset": "adult",
+   "predictor": 0.5677048515791888,
+   "cost": 0.8838643859109846,
+   "source": "continuous_cost.json"
+  },
+  {
+   "cell": "hmda/race/loan_amount_band",
+   "dataset": "hmda",
+   "predictor": 0.5835186160519573,
+   "cost": 0.6478941316706197,
+   "source": "continuous_cost.json"
+  },
+  {
+   "cell": "adult/race/education_level",
+   "dataset": "adult",
+   "predictor": 0.588550368712607,
+   "cost": 0.01813097894081772,
+   "source": "continuous_cost.json"
+  },
+  {
+   "cell": "adult/sex/income",
+   "dataset": "adult",
+   "predictor": 0.6033502051832492,
+   "cost": 1.0,
+   "source": "continuous_cost.json"
+  },
+  {
+   "cell": "adult/marital_status/occupation_group",
+   "dataset": "adult",
+   "predictor": 0.6068621794441901,
+   "cost": 0.5334888967896565,
+   "source": "continuous_cost.json"
+  },
+  {
+   "cell": "hmda/ethnicity/loan_amount_band",
+   "dataset": "hmda",
+   "predictor": 0.6234949371225044,
+   "cost": 0.8016127879623244,
+   "source": "continuous_cost.json"
+  },
+  {
+   "cell": "diabetes/age_bucket/primary_diagnosis_category",
+   "dataset": "diabetes",
+   "predictor": 0.6647105340166553,
+   "cost": 1.0,
+   "source": "continuous_cost.json"
+  },
+  {
+   "cell": "adult/sex/occupation_group",
+   "dataset": "adult",
+   "predictor": 0.6761539026653908,
+   "cost": 0.8552612807713469,
+   "source": "continuous_cost.json"
+  },
+  {
+   "cell": "adult/marital_status/income",
+   "dataset": "adult",
+   "predictor": 0.688360040408207,
+   "cost": 1.0,
+   "source": "continuous_cost.json"
+  },
+  {
+   "cell": "folktables/race/employment",
+   "dataset": "folktables",
+   "predictor": 0.5048688656469227,
+   "cost": 0.0354355551814749,
+   "source": "expansion_cost.json"
+  },
+  {
+   "cell": "lawschool/sex/pass_bar",
+   "dataset": "lawschool",
+   "predictor": 0.5094341615089025,
+   "cost": 0.17908763791015936,
+   "source": "expansion_cost.json"
+  },
+  {
+   "cell": "folktables/race/public_coverage",
+   "dataset": "folktables",
+   "predictor": 0.5122371872201893,
+   "cost": 0.10518463588347793,
+   "source": "expansion_cost.json"
+  },
+  {
+   "cell": "folktables/race/income",
+   "dataset": "folktables",
+   "predictor": 0.5419807779986615,
+   "cost": 0.21490056382318024,
+   "source": "expansion_cost.json"
+  },
+  {
+   "cell": "folktables/sex/income",
+   "dataset": "folktables",
+   "predictor": 0.556770030816641,
+   "cost": 0.7133257158593547,
+   "source": "expansion_cost.json"
+  },
+  {
+   "cell": "lawschool/race/pass_bar",
+   "dataset": "lawschool",
+   "predictor": 0.5911646537725569,
+   "cost": 0.9976193094470418,
+   "source": "expansion_cost.json"
+  },
+  {
+   "cell": "dutch/sex/occupation",
+   "dataset": "dutch",
+   "predictor": 0.6499333972631062,
+   "cost": 0.8762771626390836,
+   "source": "expansion_cost.json"
+  }
+ ]
+}
