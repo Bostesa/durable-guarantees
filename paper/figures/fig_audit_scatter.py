@@ -69,10 +69,10 @@ ax.text(0.0015, BAR + 0.012, "0.55 bar", ha="left", va="bottom", fontsize=8,
 
 n_above = sum(1 for r in rows if r["y"] > BAR)
 # the two mechanisms leave an empty band between them (projections >= 0.92,
-# noise <= 0.69); the annotation and legend both live there
-ax.text(0.0485, 0.855, f"{n_above} of the {len(rows)} shown above the bar\n"
-                       "(59 of 67 audited)",
-        ha="right", va="top", fontsize=8, color=DARK, linespacing=1.25)
+# noise <= 0.69), so the annotation sits there. It counts the PLOTTED points
+# only; the 59-of-67 audit total and the coverage gap belong in the caption.
+ax.text(0.0485, 0.845, f"{n_above} of the {len(rows)} shown above the bar",
+        ha="right", va="top", fontsize=8, color=DARK)
 
 ax.set_xlim(0, TAU)
 ax.set_xticks([0, 0.01, 0.02, 0.03, 0.04, 0.05])
