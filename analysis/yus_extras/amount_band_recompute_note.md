@@ -1,0 +1,1 @@
+Training hmda/race/loan_amount_band channels at sigma=12 and sigma=24 (train_channel, seed 0, deterministic) is a RECOMPUTATION to correct a channel mislabel in the second-moment ceiling table — the two rows labelled "middle (HMDA/amount)" were computed from the loan_decision channel — and is not a new experimental claim.
