@@ -1,0 +1,115 @@
+{
+ "a_headline_accuracies": [
+  {
+   "cell": "easy",
+   "name": "hmda/race/loan_decision",
+   "majority_baseline_acc": 0.8929535044236682,
+   "clean_lift_insample": 0.02228183287056653,
+   "clean_accuracy": 0.9152353372942347,
+   "one_acc_point_as_pct_of_lift": 44.879611377076735,
+   "source_lift": "two_tier_certification.json:e2e_cells.clean_lift",
+   "source_majority": "fresh_partition_generalization.json:cells.task_maj_eval"
+  },
+  {
+   "cell": "middle",
+   "name": "hmda/race/loan_amount_band",
+   "majority_baseline_acc": 0.20963794942586433,
+   "clean_lift_insample": 0.40912356659921256,
+   "clean_accuracy": 0.6187615160250769,
+   "one_acc_point_as_pct_of_lift": 2.444249321329427,
+   "source_lift": "two_tier_certification.json:e2e_cells.clean_lift",
+   "source_majority": "fresh_partition_generalization.json:cells.task_maj_eval"
+  },
+  {
+   "cell": "hard",
+   "name": "adult/sex/income",
+   "majority_baseline_acc": 0.7519257848090781,
+   "clean_lift_insample": 0.14349140608821695,
+   "clean_accuracy": 0.8954171908972951,
+   "one_acc_point_as_pct_of_lift": 6.969058477169085,
+   "source_lift": "two_tier_certification.json:e2e_cells.clean_lift",
+   "source_majority": "fresh_partition_generalization.json:cells.task_maj_eval"
+  }
+ ],
+ "b_vfae_beta_sweep": [
+  {
+   "beta": 1.0,
+   "label": "\u03b2=1 sampled-z",
+   "xgb": 0.5246791391557961,
+   "mlp": 0.5351021332707188,
+   "lora": 0.5361434356904862,
+   "lrt": 0.5575673791109234,
+   "tier1_max": 0.5361434356904862,
+   "tier2_max": 0.5575673791109234,
+   "source": "baseline_gauntlet.json:cells[easy].baselines[VFAE].rows",
+   "paper_claims": 0.536,
+   "confirms": true
+  },
+  {
+   "beta": 1000.0,
+   "label": "\u03b2=1000 sampled-z",
+   "xgb": 0.7086839724583773,
+   "mlp": 0.7427834897480521,
+   "lora": null,
+   "lrt": 0.6312543939079294,
+   "tier1_max": 0.7427834897480521,
+   "tier2_max": 0.7427834897480521,
+   "source": "baseline_gauntlet.json:cells[easy].baselines[VFAE].rows",
+   "paper_claims": 0.743,
+   "confirms": true
+  }
+ ],
+ "c_adult_survivors_tier2": {
+  "rows": [
+   {
+    "config": "honest_reaudit|adult/sex|E2 noise \u03c3=4.0",
+    "sigma_rel": 4.0,
+    "tier1_best": 0.5464628732281797,
+    "gauss_lrt": 0.5551002621646506,
+    "tier2_max": 0.5551002621646506,
+    "above_bar": true,
+    "source_tier1": "tpr_extension.json:results.configs.best_auc_mean",
+    "source_lrt": "mi_ceiling.json:channels.adult_frozen.rows.gauss_lrt_auc"
+   },
+   {
+    "config": "honest_reaudit|adult/sex|E2 noise \u03c3=8.0",
+    "sigma_rel": 8.0,
+    "tier1_best": 0.5182041144086135,
+    "gauss_lrt": 0.5427240021728239,
+    "tier2_max": 0.5427240021728239,
+    "above_bar": false,
+    "source_tier1": "tpr_extension.json:results.configs.best_auc_mean",
+    "source_lrt": "mi_ceiling.json:channels.adult_frozen.rows.gauss_lrt_auc"
+   },
+   {
+    "config": "honest_reaudit|adult/sex|E4S1 noise sigma=8.0",
+    "sigma_rel": 8.0,
+    "tier1_best": 0.5182041144086135,
+    "gauss_lrt": 0.5427240021728239,
+    "tier2_max": 0.5427240021728239,
+    "above_bar": false,
+    "source_tier1": "tpr_extension.json:results.configs.best_auc_mean",
+    "source_lrt": "mi_ceiling.json:channels.adult_frozen.rows.gauss_lrt_auc"
+   }
+  ],
+  "n_above_bar": 1,
+  "n_total": 3,
+  "note": "rows 2 and 3 are duplicate measurements of the same sigma=8 configuration (E4S1 repeats the E2 measurement verbatim), so the three rows cover two distinct operating points"
+ },
+ "d_relu_tap_vs_no_erasure": {
+  "post_relu_adapter_tap": 0.1038348750320982,
+  "post_relu_source": "falsification_attack.json:final.attack_linear_r2",
+  "no_erasure_attacked": 0.10362235128290258,
+  "no_erasure_sources_identical": {
+   "smart_erasure_adult": 0.10362235128290258,
+   "noise_channel_test": 0.10362235128290258,
+   "honest_reaudit_master": 0.10362235128290258,
+   "all_equal": true
+  },
+  "at_rest_certificate": 0.034942350219597684,
+  "at_rest_source": "noise_channel_test.json:rows[sigma_rel=0].baseline_linear_r2",
+  "falsification_baseline": 0.034942350219597684,
+  "difference": 0.00021252374919562833,
+  "verdict": "distinct measurements that coincide to 2.1e-4: the post-ReLU tap is a 300-step LoRA adaptation (falsification_attack.py), the 0.1036 value is the frozen representation's attacked R^2 (noise_channel_test.py). They are NOT a copy-through of each other. The 0.1036 value IS a copy-through across three files."
+ }
+}
