@@ -1,0 +1,69 @@
+{
+ "experiment": "fare_maxseed",
+ "bar": 0.55,
+ "rows": [
+  {
+   "cell": "hmda/race/loan_decision",
+   "tier": "tier1",
+   "label": null,
+   "mean_max": 0.5393853765046093,
+   "max_max": 0.5486875598147415,
+   "passes_mean": true,
+   "passes_max": true,
+   "flips": false
+  },
+  {
+   "cell": "hmda/race/loan_decision",
+   "tier": "tier2",
+   "label": null,
+   "mean_max": 0.5393853765046093,
+   "max_max": 0.5486875598147415,
+   "passes_mean": true,
+   "passes_max": true,
+   "flips": false
+  },
+  {
+   "cell": "hmda/race/loan_amount_band",
+   "tier": "tier1",
+   "label": null,
+   "mean_max": 0.5355067206811625,
+   "max_max": 0.5396702258252445,
+   "passes_mean": true,
+   "passes_max": true,
+   "flips": false
+  },
+  {
+   "cell": "hmda/race/loan_amount_band",
+   "tier": "tier2",
+   "label": null,
+   "mean_max": 0.5355067206811625,
+   "max_max": 0.5396702258252445,
+   "passes_mean": true,
+   "passes_max": true,
+   "flips": false
+  },
+  {
+   "cell": "adult/sex/income",
+   "tier": "tier1",
+   "label": null,
+   "mean_max": 0.545511007702279,
+   "max_max": 0.545511007702279,
+   "passes_mean": true,
+   "passes_max": true,
+   "flips": false
+  },
+  {
+   "cell": "adult/sex/income",
+   "tier": "tier2",
+   "label": null,
+   "mean_max": 0.545511007702279,
+   "max_max": 0.545511007702279,
+   "passes_mean": true,
+   "passes_max": true,
+   "flips": false
+  }
+ ],
+ "n": 6,
+ "n_pass_mean": 6,
+ "n_pass_max": 6
+}
