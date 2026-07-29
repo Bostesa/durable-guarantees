@@ -1,0 +1,179 @@
+{
+ "experiment": "gate_5seed_recertification",
+ "prediction_file": "gate_5seed_prediction.md",
+ "prediction_commit": "66390e1",
+ "bar": 0.55,
+ "conventions": {
+  "paper": "max over architectures of mean over (train,probe) seeds -- two_tier_certification.py:152-156",
+  "strict": "max over all (arch, train seed, probe seed)"
+ },
+ "comparator_3seed": "worstpair_supported_sweep.json @ 5e47b8b",
+ "cells": [
+  {
+   "cell": "easy",
+   "n_train_seeds": 5,
+   "sigma": 256.0,
+   "rank": 32,
+   "lam": 10.0,
+   "train_seeds": [
+    0,
+    1,
+    2,
+    3,
+    4
+   ],
+   "class_counts": [
+    41134,
+    3796,
+    16968,
+    1344,
+    505
+   ],
+   "supported_classes": [
+    0,
+    1,
+    2
+   ],
+   "rep_macro_paper": 0.5017321720960731,
+   "rep_macro_strict": 0.5095960485989621,
+   "rep_macro_argmax_arch": "XGB",
+   "rep_all_paper": 0.5378272069434401,
+   "rep_all_strict": 0.5845379818594104,
+   "rep_all_argmax_arch": "XGB",
+   "rep_sup_paper": 0.5123304748622736,
+   "rep_sup_strict": 0.5275194763191507,
+   "rep_sup_argmax_arch": "LoRA",
+   "out_macro_paper": 0.5057871521790461,
+   "out_macro_strict": 0.5179964226941658,
+   "out_macro_argmax_arch": "XGB",
+   "out_all_paper": 0.5569289277642188,
+   "out_all_strict": 0.5878212396069539,
+   "out_all_argmax_arch": "LoRA",
+   "out_sup_paper": 0.5314639270409746,
+   "out_sup_strict": 0.5459254331874654,
+   "out_sup_argmax_arch": "LoRA",
+   "lift_per_seed": [
+    0.006604232356032469,
+    0.01593800492572206,
+    0.010698542676518152,
+    0.016753729587274724,
+    -0.004298241485873766
+   ],
+   "lift_mean": 0.009139253611934729,
+   "lift_std": 0.007663253270826797,
+   "lift_min": -0.004298241485873766,
+   "util_pct": 41.01661503801755,
+   "clean_lift": 0.02228183287056653,
+   "n_seeds_negative_lift": 1,
+   "passes_paper": true,
+   "passes_strict": true
+  },
+  {
+   "cell": "middle",
+   "n_train_seeds": 5,
+   "sigma": 1024.0,
+   "rank": 16,
+   "lam": 100.0,
+   "train_seeds": [
+    0,
+    1,
+    2,
+    3,
+    4
+   ],
+   "class_counts": [
+    41134,
+    3796,
+    16968,
+    1344,
+    505
+   ],
+   "supported_classes": [
+    0,
+    1,
+    2
+   ],
+   "rep_macro_paper": 0.4987763890161594,
+   "rep_macro_strict": 0.5139762000764522,
+   "rep_macro_argmax_arch": "LoRA",
+   "rep_all_paper": 0.5493359385683898,
+   "rep_all_strict": 0.6031037414965987,
+   "rep_all_argmax_arch": "XGB",
+   "rep_sup_paper": 0.5116745971388671,
+   "rep_sup_strict": 0.528264447700227,
+   "rep_sup_argmax_arch": "XGB",
+   "out_macro_paper": 0.5223788859706222,
+   "out_macro_strict": 0.5375047355889317,
+   "out_macro_argmax_arch": "XGB",
+   "out_all_paper": 0.5652765878411816,
+   "out_all_strict": 0.6217452740171976,
+   "out_all_argmax_arch": "XGB",
+   "out_sup_paper": 0.5328521030193584,
+   "out_sup_strict": 0.5460266021601327,
+   "out_sup_argmax_arch": "XGB",
+   "lift_per_seed": [
+    0.3193875790233266,
+    0.29552763267291016,
+    0.3202503647230458,
+    0.32605455943024775,
+    0.32147395171537485
+   ],
+   "lift_mean": 0.316538817512981,
+   "lift_std": 0.010754215983051988,
+   "lift_min": 0.29552763267291016,
+   "util_pct": 77.36997898805232,
+   "clean_lift": 0.40912356659921256,
+   "n_seeds_negative_lift": 0,
+   "passes_paper": true,
+   "passes_strict": true
+  }
+ ],
+ "scoring": {
+  "G1": {
+   "per_cell": {
+    "easy": true,
+    "middle": true
+   },
+   "verdict": "HELD"
+  },
+  "G2": {
+   "per_cell_fails": {
+    "easy": false,
+    "middle": false
+   },
+   "verdict": "FALSIFIED"
+  },
+  "G3": {
+   "per_cell": {
+    "easy": {
+     "rep_gap": 0.015189001456877183,
+     "out_gap": 0.014461506146490888,
+     "out_larger": false
+    },
+    "middle": {
+     "rep_gap": 0.016589850561359865,
+     "out_gap": 0.013174499140774287,
+     "out_larger": false
+    }
+   },
+   "verdict": "FALSIFIED"
+  },
+  "G4": {
+   "per_cell": {
+    "easy": {
+     "util_5seed": 41.01661503801755,
+     "util_3seed": 49.7,
+     "delta_pp": 8.683384961982455,
+     "within_3pp": false
+    },
+    "middle": {
+     "util_5seed": 77.36997898805232,
+     "util_3seed": 76.2,
+     "delta_pp": 1.1699789880523213,
+     "within_3pp": true
+    }
+   },
+   "verdict": "FALSIFIED"
+  }
+ }
+}
