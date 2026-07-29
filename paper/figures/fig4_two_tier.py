@@ -59,11 +59,11 @@ fig, ax = plt.subplots(figsize=(_style.COL_W, 2.0))
 
 b1 = ax.bar(x - w / 2, kept["tier1"], w, yerr=err["tier1"], capsize=2,
             color=BLUE, edgecolor="none", error_kw=dict(lw=0.8),
-            label="Tier 1 (black-box) surviving point")
+            label="Tier 1, defense-agnostic")
 b2 = ax.bar(x + w / 2, kept["tier2"], w, yerr=err["tier2"], capsize=2,
             color=LBLUE, edgecolor=DARK, linewidth=0.4, hatch="///",
             error_kw=dict(lw=0.8),
-            label="Tier 2 (+informed LRT) surviving point")
+            label="Tier 2, defense-aware")
 
 for bars, k in ((b1, "tier1"), (b2, "tier2")):
     for rect, v, e, op in zip(bars, kept[k], err[k], ops[k]):
