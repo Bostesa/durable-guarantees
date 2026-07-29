@@ -1,0 +1,336 @@
+{
+ "experiment": "worstpair_null_calibration",
+ "note": "features carry zero attribute information by construction; any reading above 0.5 is sampling noise",
+ "n_rows": 63747,
+ "n_classes": 5,
+ "class_counts": [
+  41134,
+  3796,
+  16968,
+  1344,
+  505
+ ],
+ "test_split_counts": [
+  10283,
+  949,
+  4242,
+  336,
+  126
+ ],
+ "n_measurements": 27,
+ "worstpair_max": 0.5555717619603268,
+ "worstpair_mean": 0.5360685031642048,
+ "worstpair_p95": 0.5543549997006503,
+ "macro_max": 0.507348924982528,
+ "macro_mean": 0.49860382936007075,
+ "exceeds_bar": true,
+ "argmax_pair_counts": {
+  "(0, 3)": 3,
+  "(2, 4)": 7,
+  "(1, 3)": 5,
+  "(3, 4)": 7,
+  "(0, 1)": 1,
+  "(1, 4)": 2,
+  "(0, 4)": 2
+ },
+ "per_measurement": [
+  {
+   "draw": 0,
+   "probe_seed": 0,
+   "attacker": "XGB",
+   "worst_pair": 0.5211256274193847,
+   "pair": [
+    0,
+    3
+   ],
+   "macro": 0.49711717470413685
+  },
+  {
+   "draw": 0,
+   "probe_seed": 0,
+   "attacker": "MLP",
+   "worst_pair": 0.5368312341438226,
+   "pair": [
+    2,
+    4
+   ],
+   "macro": 0.5049628346230102
+  },
+  {
+   "draw": 0,
+   "probe_seed": 0,
+   "attacker": "LoRA",
+   "worst_pair": 0.5413436449395354,
+   "pair": [
+    1,
+    3
+   ],
+   "macro": 0.5004046370778129
+  },
+  {
+   "draw": 0,
+   "probe_seed": 1,
+   "attacker": "XGB",
+   "worst_pair": 0.5281575776625281,
+   "pair": [
+    2,
+    4
+   ],
+   "macro": 0.49084731006831445
+  },
+  {
+   "draw": 0,
+   "probe_seed": 1,
+   "attacker": "MLP",
+   "worst_pair": 0.5422335600907029,
+   "pair": [
+    3,
+    4
+   ],
+   "macro": 0.5005775682332142
+  },
+  {
+   "draw": 0,
+   "probe_seed": 1,
+   "attacker": "LoRA",
+   "worst_pair": 0.5269340200887012,
+   "pair": [
+    0,
+    1
+   ],
+   "macro": 0.49104249412784773
+  },
+  {
+   "draw": 0,
+   "probe_seed": 2,
+   "attacker": "XGB",
+   "worst_pair": 0.5550653704826265,
+   "pair": [
+    2,
+    4
+   ],
+   "macro": 0.5063971094128289
+  },
+  {
+   "draw": 0,
+   "probe_seed": 2,
+   "attacker": "MLP",
+   "worst_pair": 0.530608660745647,
+   "pair": [
+    1,
+    4
+   ],
+   "macro": 0.4971737704761206
+  },
+  {
+   "draw": 0,
+   "probe_seed": 2,
+   "attacker": "LoRA",
+   "worst_pair": 0.5433673469387755,
+   "pair": [
+    3,
+    4
+   ],
+   "macro": 0.48826145741672483
+  },
+  {
+   "draw": 1,
+   "probe_seed": 0,
+   "attacker": "XGB",
+   "worst_pair": 0.5168009772462077,
+   "pair": [
+    0,
+    3
+   ],
+   "macro": 0.49707605141526157
+  },
+  {
+   "draw": 1,
+   "probe_seed": 0,
+   "attacker": "MLP",
+   "worst_pair": 0.5224979980991297,
+   "pair": [
+    2,
+    4
+   ],
+   "macro": 0.5056668997662499
+  },
+  {
+   "draw": 1,
+   "probe_seed": 0,
+   "attacker": "LoRA",
+   "worst_pair": 0.5498884922505856,
+   "pair": [
+    2,
+    4
+   ],
+   "macro": 0.5025513745013309
+  },
+  {
+   "draw": 1,
+   "probe_seed": 1,
+   "attacker": "XGB",
+   "worst_pair": 0.5355093916737752,
+   "pair": [
+    1,
+    4
+   ],
+   "macro": 0.5024953408418961
+  },
+  {
+   "draw": 1,
+   "probe_seed": 1,
+   "attacker": "MLP",
+   "worst_pair": 0.5474537037037037,
+   "pair": [
+    3,
+    4
+   ],
+   "macro": 0.5032523254837773
+  },
+  {
+   "draw": 1,
+   "probe_seed": 1,
+   "attacker": "LoRA",
+   "worst_pair": 0.5526974678760392,
+   "pair": [
+    3,
+    4
+   ],
+   "macro": 0.505621665069888
+  },
+  {
+   "draw": 1,
+   "probe_seed": 2,
+   "attacker": "XGB",
+   "worst_pair": 0.5452672818302239,
+   "pair": [
+    2,
+    4
+   ],
+   "macro": 0.500643570412142
+  },
+  {
+   "draw": 1,
+   "probe_seed": 2,
+   "attacker": "MLP",
+   "worst_pair": 0.5237739760370594,
+   "pair": [
+    2,
+    4
+   ],
+   "macro": 0.4968143193562047
+  },
+  {
+   "draw": 1,
+   "probe_seed": 2,
+   "attacker": "LoRA",
+   "worst_pair": 0.5324143530094522,
+   "pair": [
+    0,
+    4
+   ],
+   "macro": 0.5002742023736124
+  },
+  {
+   "draw": 2,
+   "probe_seed": 0,
+   "attacker": "XGB",
+   "worst_pair": 0.5277305366591081,
+   "pair": [
+    3,
+    4
+   ],
+   "macro": 0.5021492848382904
+  },
+  {
+   "draw": 2,
+   "probe_seed": 0,
+   "attacker": "MLP",
+   "worst_pair": 0.5329649849048915,
+   "pair": [
+    0,
+    3
+   ],
+   "macro": 0.48942400331330616
+  },
+  {
+   "draw": 2,
+   "probe_seed": 0,
+   "attacker": "LoRA",
+   "worst_pair": 0.5416430461073318,
+   "pair": [
+    3,
+    4
+   ],
+   "macro": 0.507348924982528
+  },
+  {
+   "draw": 2,
+   "probe_seed": 1,
+   "attacker": "XGB",
+   "worst_pair": 0.5555717619603268,
+   "pair": [
+    0,
+    4
+   ],
+   "macro": 0.48488061212115435
+  },
+  {
+   "draw": 2,
+   "probe_seed": 1,
+   "attacker": "MLP",
+   "worst_pair": 0.5402271814943048,
+   "pair": [
+    1,
+    3
+   ],
+   "macro": 0.4935214261718649
+  },
+  {
+   "draw": 2,
+   "probe_seed": 1,
+   "attacker": "LoRA",
+   "worst_pair": 0.5262745245621958,
+   "pair": [
+    1,
+    3
+   ],
+   "macro": 0.49874936351903704
+  },
+  {
+   "draw": 2,
+   "probe_seed": 2,
+   "attacker": "XGB",
+   "worst_pair": 0.5433758593005168,
+   "pair": [
+    1,
+    3
+   ],
+   "macro": 0.5011527711260616
+  },
+  {
+   "draw": 2,
+   "probe_seed": 2,
+   "attacker": "MLP",
+   "worst_pair": 0.5323837121782328,
+   "pair": [
+    1,
+    3
+   ],
+   "macro": 0.4977722584391947
+  },
+  {
+   "draw": 2,
+   "probe_seed": 2,
+   "attacker": "LoRA",
+   "worst_pair": 0.5217072940287225,
+   "pair": [
+    3,
+    4
+   ],
+   "macro": 0.49612464285009816
+  }
+ ],
+ "minutes": 1.3
+}

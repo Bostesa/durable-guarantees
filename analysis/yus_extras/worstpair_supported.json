@@ -1,0 +1,168 @@
+{
+ "experiment": "worstpair_support_restricted",
+ "min_class_rows": 3000,
+ "kept_classes": [
+  0,
+  1,
+  2
+ ],
+ "hmda_race_counts": [
+  41134,
+  3796,
+  16968,
+  1344,
+  505
+ ],
+ "bar": 0.55,
+ "null_all_pairs": 0.5556,
+ "null_supported_pairs": 0.5217,
+ "rows": [
+  {
+   "config": "subspace_easy",
+   "cell": "easy",
+   "tier": "Tier 1",
+   "surface": "rep",
+   "macro_max": 0.5162374351456825,
+   "worst_all_max": 0.5792898121665245,
+   "worst_supported_max": 0.5412233229946508,
+   "passes_macro": true,
+   "passes_worst_all": false,
+   "passes_worst_supported": true
+  },
+  {
+   "config": "subspace_easy",
+   "cell": "easy",
+   "tier": "Tier 1",
+   "surface": "out",
+   "macro_max": 0.5489456120095114,
+   "worst_all_max": 0.6441115961663907,
+   "worst_supported_max": 0.6068496122143762,
+   "passes_macro": true,
+   "passes_worst_all": false,
+   "passes_worst_supported": false
+  },
+  {
+   "config": "subspace_middle",
+   "cell": "middle",
+   "tier": "Tier 1",
+   "surface": "rep",
+   "macro_max": 0.5434620433765188,
+   "worst_all_max": 0.6419831821617537,
+   "worst_supported_max": 0.5687976323886764,
+   "passes_macro": true,
+   "passes_worst_all": false,
+   "passes_worst_supported": false
+  },
+  {
+   "config": "subspace_middle",
+   "cell": "middle",
+   "tier": "Tier 1",
+   "surface": "out",
+   "macro_max": 0.7218094942922035,
+   "worst_all_max": 0.8769715824510346,
+   "worst_supported_max": 0.7922640224281348,
+   "passes_macro": false,
+   "passes_worst_all": false,
+   "passes_worst_supported": false
+  },
+  {
+   "config": "fullrank_tier1_easy",
+   "cell": "easy",
+   "tier": "Tier 1",
+   "surface": "rep",
+   "macro_max": 0.5493208892621066,
+   "worst_all_max": 0.6449079877128161,
+   "worst_supported_max": 0.6449079877128161,
+   "passes_macro": true,
+   "passes_worst_all": false,
+   "passes_worst_supported": false
+  },
+  {
+   "config": "fullrank_tier1_easy",
+   "cell": "easy",
+   "tier": "Tier 1",
+   "surface": "out",
+   "macro_max": 0.5585362708953001,
+   "worst_all_max": 0.675873857143354,
+   "worst_supported_max": 0.675873857143354,
+   "passes_macro": false,
+   "passes_worst_all": false,
+   "passes_worst_supported": false
+  },
+  {
+   "config": "fullrank_tier1_middle",
+   "cell": "middle",
+   "tier": "Tier 1",
+   "surface": "rep",
+   "macro_max": 0.5579423398912982,
+   "worst_all_max": 0.6313775510204082,
+   "worst_supported_max": 0.5911806945822103,
+   "passes_macro": false,
+   "passes_worst_all": false,
+   "passes_worst_supported": false
+  },
+  {
+   "config": "fullrank_tier1_middle",
+   "cell": "middle",
+   "tier": "Tier 1",
+   "surface": "out",
+   "macro_max": 0.5865529671064791,
+   "worst_all_max": 0.7033493953136811,
+   "worst_supported_max": 0.6243287432762544,
+   "passes_macro": false,
+   "passes_worst_all": false,
+   "passes_worst_supported": false
+  },
+  {
+   "config": "fullrank_tier2_easy",
+   "cell": "easy",
+   "tier": "Tier 2",
+   "surface": "rep",
+   "macro_max": 0.5557364987658974,
+   "worst_all_max": 0.6144781797162104,
+   "worst_supported_max": 0.6144781797162104,
+   "passes_macro": false,
+   "passes_worst_all": false,
+   "passes_worst_supported": false
+  },
+  {
+   "config": "fullrank_tier2_easy",
+   "cell": "easy",
+   "tier": "Tier 2",
+   "surface": "out",
+   "macro_max": 0.5439094758175629,
+   "worst_all_max": 0.608431217952444,
+   "worst_supported_max": 0.608431217952444,
+   "passes_macro": true,
+   "passes_worst_all": false,
+   "passes_worst_supported": false
+  },
+  {
+   "config": "fullrank_tier2_middle",
+   "cell": "middle",
+   "tier": "Tier 2",
+   "surface": "rep",
+   "macro_max": 0.5590299666832178,
+   "worst_all_max": 0.629558767951625,
+   "worst_supported_max": 0.5811998932845264,
+   "passes_macro": false,
+   "passes_worst_all": false,
+   "passes_worst_supported": false
+  },
+  {
+   "config": "fullrank_tier2_middle",
+   "cell": "middle",
+   "tier": "Tier 2",
+   "surface": "out",
+   "macro_max": 0.538621632283765,
+   "worst_all_max": 0.621952947845805,
+   "worst_supported_max": 0.5748262768471638,
+   "passes_macro": true,
+   "passes_worst_all": false,
+   "passes_worst_supported": false
+  }
+ ],
+ "n_pass_macro": 6,
+ "n_pass_worst_all": 0,
+ "n_pass_worst_supported": 1
+}
