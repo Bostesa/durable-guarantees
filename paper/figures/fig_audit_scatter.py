@@ -77,7 +77,7 @@ ax.text(0.0485, 0.845, f"{n_above} of the {len(rows)} shown above the bar",
 ax.set_xlim(0, TAU)
 ax.set_xticks([0, 0.01, 0.02, 0.03, 0.04, 0.05])
 ax.set_xticklabels(["0", ".01", ".02", ".03", ".04", r"$\tau$=.05"])
-ax.set_xlabel("certificate reading at rest (linear $R^2$)")
+ax.set_xlabel("certificate reading, non-adaptive (linear $R^2$)")
 
 ax.set_ylim(0.48, 1.02)
 ax.set_yticks([0.5, 0.6, 0.7, 0.8, 0.9, 1.0])
