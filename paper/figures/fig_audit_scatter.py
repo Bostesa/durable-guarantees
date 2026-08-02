@@ -1,7 +1,7 @@
 """Audit scatter — the certificate reading against what the attacker gets.
 
 Reads results/audit_scatter_rows.csv (built by
-analysis/yus_extras/build_audit_scatter_rows.py). No values are embedded here.
+experiments/build_audit_scatter_rows.py). No values are embedded here.
 
 X = the certificate AS ISSUED AT REST, which is the audit's inclusion
 instrument: a configuration enters the audit iff this reads R^2 <= tau = 0.05.

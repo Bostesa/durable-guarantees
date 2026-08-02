@@ -17,7 +17,7 @@ point for verification.
 Adult-cell floors (2026-07-23 revision): diagnostic.json's out_floor for
 adult/sex/income and adult/sex/occupation_group is grid-censored (its sweep
 stopped at sigma=12 with the rep still exposed; sigma_rep is null — see
-analysis/yus_extras/floor_censoring.md). Those two values are replaced here
+notes/floor_censoring.md). Those two values are replaced here
 with the honest first-hidden readings from continuous_cost.json's extended
 grid (income: sigma=32, occupation_group: sigma=16), derived with the same
 first-sigma-with-P_max<=bar rule the expansion pipeline uses.
