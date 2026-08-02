@@ -11,6 +11,8 @@ and evaluate seven published methods under a single shared threat model.
 Python 3.11 or newer (developed on 3.13).
 
 ```bash
+python -m venv .venv
+source .venv/bin/activate
 pip install -r requirements.txt
 ```
 
@@ -41,7 +43,9 @@ Full reproduction retrains every channel and re-runs every attacker suite from
 scratch on CPU or Apple MPS; budget hours per experiment rather than minutes.
 It needs the audited system's checkout on `$PCRL_ROOT`, and the baseline
 comparisons additionally need the external method repositories, each pinned to
-an exact commit in the script that uses it.
+an exact commit in the script that uses it. Input datasets are cached under
+`data_cache/` and generated intermediates under `analysis/`; both are rebuilt
+on demand and neither is tracked.
 
 ## Pre-registration
 
