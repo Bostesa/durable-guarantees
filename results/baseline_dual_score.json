@@ -1,0 +1,229 @@
+{
+ "experiment": "baseline_dual_score_v2",
+ "bar": 0.55,
+ "min_class_rows": 3000,
+ "train_seeds": [
+  0,
+  1,
+  2
+ ],
+ "probe_seeds": [
+  0,
+  1,
+  2
+ ],
+ "nulls": {
+  "all_pairs": 0.5556,
+  "supported": 0.5217
+ },
+ "note": "macro/all/supported are MAX over 3 train x 3 probe seeds, stricter than the paper's mean; compare supported vs macro within this run",
+ "rows": [
+  {
+   "cell": "easy",
+   "method": "FARE",
+   "tier": 1,
+   "surface": "rep",
+   "macro": 0.5515,
+   "all_pairs": 0.6198,
+   "supported": 0.6128,
+   "refit": false,
+   "passes_macro": false,
+   "passes_supported": false
+  },
+  {
+   "cell": "easy",
+   "method": "FARE",
+   "tier": 1,
+   "surface": "out",
+   "macro": 0.5515,
+   "all_pairs": 0.6182,
+   "supported": 0.6128,
+   "refit": false,
+   "passes_macro": false,
+   "passes_supported": false
+  },
+  {
+   "cell": "easy",
+   "method": "FARE",
+   "tier": 2,
+   "surface": "rep",
+   "macro": 0.5515,
+   "all_pairs": 0.6214,
+   "supported": 0.6128,
+   "refit": false,
+   "passes_macro": false,
+   "passes_supported": false
+  },
+  {
+   "cell": "easy",
+   "method": "FARE",
+   "tier": 2,
+   "surface": "out",
+   "macro": 0.5515,
+   "all_pairs": 0.6182,
+   "supported": 0.6128,
+   "refit": false,
+   "passes_macro": false,
+   "passes_supported": false
+  },
+  {
+   "cell": "easy",
+   "method": "LAFTR",
+   "tier": 1,
+   "surface": "rep",
+   "macro": 1.0,
+   "all_pairs": 1.0,
+   "supported": 1.0,
+   "refit": true,
+   "passes_macro": false,
+   "passes_supported": false
+  },
+  {
+   "cell": "easy",
+   "method": "LAFTR",
+   "tier": 1,
+   "surface": "out",
+   "macro": 0.709,
+   "all_pairs": 0.8952,
+   "supported": 0.8206,
+   "refit": true,
+   "passes_macro": false,
+   "passes_supported": false
+  },
+  {
+   "cell": "easy",
+   "method": "LAFTR",
+   "tier": 2,
+   "surface": "rep",
+   "macro": 1.0,
+   "all_pairs": 1.0,
+   "supported": 1.0,
+   "refit": true,
+   "passes_macro": false,
+   "passes_supported": false
+  },
+  {
+   "cell": "easy",
+   "method": "LAFTR",
+   "tier": 2,
+   "surface": "out",
+   "macro": 0.698,
+   "all_pairs": 0.864,
+   "supported": 0.8442,
+   "refit": true,
+   "passes_macro": false,
+   "passes_supported": false
+  },
+  {
+   "cell": "middle",
+   "method": "FARE",
+   "tier": 1,
+   "surface": "rep",
+   "operating_point": "k100_a0.975",
+   "refit": false,
+   "macro": 0.5447405733001923,
+   "all_pairs": 0.6526795122685534,
+   "supported": 0.5791080613405313,
+   "passes_macro": true,
+   "passes_supported": false
+  },
+  {
+   "cell": "middle",
+   "method": "FARE",
+   "tier": 1,
+   "surface": "out",
+   "operating_point": "k100_a0.975",
+   "refit": false,
+   "macro": 0.5447405733001923,
+   "all_pairs": 0.6526795122685534,
+   "supported": 0.5791080613405313,
+   "passes_macro": true,
+   "passes_supported": false
+  },
+  {
+   "cell": "middle",
+   "method": "FARE",
+   "tier": 2,
+   "surface": "rep",
+   "operating_point": "k100_a0.975",
+   "refit": false,
+   "macro": 0.5447405733001923,
+   "all_pairs": 0.6526795122685534,
+   "supported": 0.5791080613405313,
+   "passes_macro": true,
+   "passes_supported": false
+  },
+  {
+   "cell": "middle",
+   "method": "FARE",
+   "tier": 2,
+   "surface": "out",
+   "operating_point": "k100_a0.975",
+   "refit": false,
+   "macro": 0.5447405733001923,
+   "all_pairs": 0.6526795122685534,
+   "supported": 0.5791080613405313,
+   "passes_macro": true,
+   "passes_supported": false
+  }
+ ],
+ "n_flips": 4,
+ "flips": [
+  {
+   "cell": "middle",
+   "method": "FARE",
+   "tier": 1,
+   "surface": "rep",
+   "operating_point": "k100_a0.975",
+   "refit": false,
+   "macro": 0.5447405733001923,
+   "all_pairs": 0.6526795122685534,
+   "supported": 0.5791080613405313,
+   "passes_macro": true,
+   "passes_supported": false
+  },
+  {
+   "cell": "middle",
+   "method": "FARE",
+   "tier": 1,
+   "surface": "out",
+   "operating_point": "k100_a0.975",
+   "refit": false,
+   "macro": 0.5447405733001923,
+   "all_pairs": 0.6526795122685534,
+   "supported": 0.5791080613405313,
+   "passes_macro": true,
+   "passes_supported": false
+  },
+  {
+   "cell": "middle",
+   "method": "FARE",
+   "tier": 2,
+   "surface": "rep",
+   "operating_point": "k100_a0.975",
+   "refit": false,
+   "macro": 0.5447405733001923,
+   "all_pairs": 0.6526795122685534,
+   "supported": 0.5791080613405313,
+   "passes_macro": true,
+   "passes_supported": false
+  },
+  {
+   "cell": "middle",
+   "method": "FARE",
+   "tier": 2,
+   "surface": "out",
+   "operating_point": "k100_a0.975",
+   "refit": false,
+   "macro": 0.5447405733001923,
+   "all_pairs": 0.6526795122685534,
+   "supported": 0.5791080613405313,
+   "passes_macro": true,
+   "passes_supported": false
+  }
+ ],
+ "not_covered": [
+  "Obliviator (separate code path, not run here)"
+ ],
+ "minutes": 0.9
+}

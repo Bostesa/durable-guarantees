@@ -23,7 +23,7 @@ FAILURE to be reported, not a shim to be extended.
 Usage:
     import utils.fnf_shim as fnf_shim
     fnf_shim.install(device="cpu")          # before importing any fnf module
-    fnf_shim.add_fnf_to_path("/Users/nathansamson/fnf")
+    fnf_shim.add_fnf_to_path()              # honours $FNF_ROOT
 """
 from __future__ import annotations
 
@@ -31,7 +31,9 @@ import os
 import sys
 from pathlib import Path
 
-FNF_ROOT_DEFAULT = "/Users/nathansamson/fnf"
+# Location of the official eth-sri/fnf checkout. Override with $FNF_ROOT;
+# the default assumes it sits beside this repository as ../fnf.
+FNF_ROOT_DEFAULT = str(Path(__file__).resolve().parents[1].parent / "fnf")
 _installed = False
 
 
@@ -73,12 +75,18 @@ def install(device: str | None = None) -> str:
     return dev
 
 
-def add_fnf_to_path(root: str = FNF_ROOT_DEFAULT) -> Path:
+def add_fnf_to_path(root: str | None = None) -> Path:
     """Put the FNF checkout on sys.path (their code uses top-level imports and
-    expects cwd == repo root for its relative data/model paths)."""
-    p = Path(root).resolve()
+    expects cwd == repo root for its relative data/model paths).
+
+    Resolution order: explicit `root` argument, then $FNF_ROOT, then ../fnf
+    beside this repository.
+    """
+    p = Path(root or os.environ.get("FNF_ROOT", FNF_ROOT_DEFAULT)).resolve()
     if not p.exists():
-        raise FileNotFoundError(f"FNF checkout not found at {p}")
+        raise FileNotFoundError(
+            f"FNF checkout not found at {p}. Set $FNF_ROOT to the official "
+            "eth-sri/fnf clone, or pass root= explicitly.")
     if str(p) not in sys.path:
         sys.path.insert(0, str(p))
     return p
