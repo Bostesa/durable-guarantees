@@ -1,12 +1,20 @@
+# Environments and interpreter debris
 .venv/
 __pycache__/
 *.pyc
+
+# Cached input datasets (rebuild with experiments/celeba_extract.py and the
+# *_io.py loaders; see README "Retraining")
 data_cache/
+
+# Generated intermediates: attacker score arrays, representation dumps,
+# per-seed shards and run logs. Kept on disk, never committed -- these are
+# regenerable outputs, not source. Override the location with DG_ARTIFACTS.
+/analysis/
+*.log
 
 # LaTeX build artifacts + macOS debris
 *.aux
 *.bbl
 *.blg
-*.log
 .DS_Store
-analysis/yus_extras/gate_reps/
