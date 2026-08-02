@@ -1,4 +1,4 @@
-# Durable guarantees for attribute removal
+# Outputs Leak What They Use: Auditing Attribute Removal Beyond Its Certificates
 
 This repository is the code and results artifact for a study of attribute-removal
 methods — techniques that claim to strip a sensitive attribute out of a learned
