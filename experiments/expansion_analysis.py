@@ -1,7 +1,7 @@
 """Expansion Phase 2 — analysis only. Reads the existing results JSONs
 (read-only) and the new expansion_{cost,floor,reaudit}.json, prints the
 comparison report, and writes results/expansion_analysis.json (a NEW file).
-No figures are regenerated; nothing under paper/ is touched.
+No figures are regenerated; nothing under figures/ is touched.
 
   1. Diagnostic correlation: the existing 20 continuous-cost cells vs the
      20 + new natural cells (predictor vs cost_durable and cost_rep,

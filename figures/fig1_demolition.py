@@ -29,7 +29,7 @@ sys.path.insert(0, str(HERE))
 import _style  # noqa: E402
 from _style import BLUE, DARK, GRAY, VERM  # noqa: E402
 
-REPO = HERE.parent.parent
+REPO = HERE.parent
 RESULTS = REPO / "results"
 
 _style.apply()

@@ -1,6 +1,6 @@
 """Worst-pair sigma sweep on the two HMDA/race cells.
 
-Registered in worstpair_sweep_prediction.md (commit 50d7537) BEFORE this file
+Registered in docs/worstpair_sweep_prediction.md (commit 50d7537) BEFORE this file
 existed.
 
 Scoring rule for this run: WORST-PAIR AUC — max over label pairs (i, j) of the
@@ -298,7 +298,7 @@ def main():
                          else "FALSIFIED")),
         gate_failures=[f"{r['cell']}/{r['channel']}" for r in results
                        if not r["gate"]["passed"]])
-    print("\n" + "=" * 92 + "\nSCORING (worstpair_sweep_prediction.md @ 50d7537)\n"
+    print("\n" + "=" * 92 + "\nSCORING (docs/worstpair_sweep_prediction.md @ 50d7537)\n"
           + "=" * 92)
     for k, v in scoring.items():
         print(f"  {k}: {v if isinstance(v, list) else v.get('verdict', v)}")

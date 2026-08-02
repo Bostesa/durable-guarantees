@@ -4,13 +4,13 @@ Regenerate any figure with one command (repo venv; matplotlib only, no
 experiments are run):
 
 ```bash
-.venv/bin/python paper/figures/fig1_demolition.py
-.venv/bin/python paper/figures/fig2_footprint.py
-.venv/bin/python paper/figures/fig3_cost_ramp.py
-.venv/bin/python paper/figures/fig4_two_tier.py
+.venv/bin/python figures/fig1_demolition.py
+.venv/bin/python figures/fig2_footprint.py
+.venv/bin/python figures/fig3_cost_ramp.py
+.venv/bin/python figures/fig4_two_tier.py
 ```
 
-Shared style: `paper/figures/_style.py` — Times New Roman serif (newtx/Times
+Shared style: `figures/_style.py` — Times New Roman serif (newtx/Times
 body-font match), 8pt minimum, Okabe-Ito colorblind-safe palette (validated
 with the six-check palette validator; light hues carry direct labels/hatch as
 secondary encoding), 3.3in single-column width, vector PDF with embedded

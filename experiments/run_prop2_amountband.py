@@ -1,5 +1,5 @@
 """Amount-band correction to the Prop-2 witness table (see
-amount_band_recompute_note.md, committed before this ran).
+docs/amount_band_recompute_note.md, committed before this ran).
 
 The two rows labelled "middle (HMDA/amount)" in
 results/mi_ceiling.json["operating_point_extension"]["points"] were computed

@@ -88,7 +88,7 @@ already knows the rep hides — it simply never wrote an `out_floor` key.
 Not triggered as a *correction* (verdict: convention, not bug), but for completeness,
 adopting the honest longer-grid floors would change exactly this and nothing else:
 
-- **fig2_footprint plotted points** (`paper/figures/fig2_footprint.py` reads
+- **fig2_footprint plotted points** (`figures/fig2_footprint.py` reads
   `diagnostic.json` `part_b_c[].out_floor` unfiltered):
   (0.6034, 0.6787) → (0.6034, 0.5612) and (0.6762, 0.6286) → (0.6762, 0.5896).
   Both points would move from on/near the identity diagonal to visibly **below**

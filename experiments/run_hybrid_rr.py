@@ -1,4 +1,4 @@
-"""Hybrid + leaf randomized response — registered in hybrid_rr_prediction.md
+"""Hybrid + leaf randomized response — registered in docs/hybrid_rr_prediction.md
 (commit 7b8e956) BEFORE this file existed.
 
 Identical to run_hybrid_coarsen.py (sha256 8939c7db) except at release: each

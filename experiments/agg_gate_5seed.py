@@ -1,5 +1,5 @@
 """Aggregate the 5-seed gate shards under BOTH conventions and score
-gate_5seed_prediction.md (commit 66390e1). No training; reads shards only.
+docs/gate_5seed_prediction.md (commit 66390e1). No training; reads shards only.
 
 paper  = max over architectures of the mean over all (train seed, probe seed)
          values -- matches two_tier_certification.py:152-156

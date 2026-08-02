@@ -1,4 +1,4 @@
-"""Isolate-noise-coarsen hybrid — registered in hybrid_coarsen_prediction.md
+"""Isolate-noise-coarsen hybrid — registered in docs/hybrid_coarsen_prediction.md
 (commit 364870e) BEFORE this file existed.
 
 Per cell (one fixed config, no tuning): retrain the e2e subspace operating
@@ -295,7 +295,7 @@ def main():
     scoring = score(rows)
 
     print("\n" + "=" * 92)
-    print("SCORING (registered predictions, hybrid_coarsen_prediction.md @ 364870e)")
+    print("SCORING (registered predictions, docs/hybrid_coarsen_prediction.md @ 364870e)")
     print("=" * 92)
     for k, v in scoring.items():
         print(f"  {k}: {v}")

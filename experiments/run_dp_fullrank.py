@@ -1,7 +1,7 @@
 """Clipped full-rank DP channel — scoring run for the registered bet in
-notes/dp_bet.md (committed e87332b BEFORE this script existed).
+docs/dp_bet.md (committed e87332b BEFORE this script existed).
 
-Mechanism (clip-in-the-loop, per dp_feasibility.md): identical architecture and
+Mechanism (clip-in-the-loop, per docs/dp_feasibility.md): identical architecture and
 training protocol to the stored full-rank channel (mi_ceiling.train_channel:
 _mlp encoder -> BatchNorm1d(64) -> linear head, Adam 1e-3, TRAIN_STEPS steps,
 batch TRAIN_BS, torch.manual_seed(seed)), with the release changed to
@@ -19,7 +19,7 @@ own-head lift over all rows (argmax acc - task majority), retained % against
 the stored 5-seed clean lifts in two_tier_certification.json.
 
 Also records, per point: fraction of rows clipped at eval (||h|| > C) and
-pre-clip norm quantiles — the empirical norm measurement dp_feasibility.md
+pre-clip norm quantiles — the empirical norm measurement docs/dp_feasibility.md
 flagged as missing (full-rank channel variant).
 
 New file; no existing experiment code path is modified. Local MPS/CPU.

@@ -1,5 +1,5 @@
 """Supported-pair sigma sweep — registered in
-worstpair_supported_sweep_prediction.md (commit c084ad3) BEFORE this file.
+docs/worstpair_supported_sweep_prediction.md (commit c084ad3) BEFORE this file.
 
 Identical to run_worstpair_sweep.py except the scoring is worst-pair restricted
 to SUPPORTED pairs (both classes >= MIN_CLASS_ROWS rows), whose no-signal null

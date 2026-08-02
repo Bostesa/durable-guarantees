@@ -1,4 +1,4 @@
-"""Shared style for the four paper figures (AAAI 2027, two-column).
+"""Shared style for the paper figures (two-column).
 
 Serif (Times New Roman, matching newtx/Times body font), >= 8pt at final
 size, Okabe-Ito colorblind-safe palette (validated with the six-check
@@ -60,7 +60,7 @@ def apply():
 def save(fig, path):
     """Write the figure PDF.
 
-    Every figure script saves next to itself, i.e. into paper/figures/, which
+    Every figure script saves next to itself, i.e. into figures/, which
     means running one OVERWRITES the PDF shipped with the repository. That is
     intended -- the shipped PDF and a freshly regenerated one should agree --
     but keep it in mind before running with modified results JSON.

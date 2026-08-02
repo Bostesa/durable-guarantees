@@ -1,4 +1,4 @@
-"""Knows-Q attacker — registered in knows_q_prediction.md (commit ca420fe)
+"""Knows-Q attacker — registered in docs/knows_q_prediction.md (commit ca420fe)
 BEFORE this file existed.
 
 The missing rung between Tier 1 (knows nothing) and Tier 2 (knows Q, sigma AND

@@ -1,6 +1,6 @@
 """Fair PCA (amazon-science/fair-pca, Apache-2.0) under the two-tier gauntlet.
 
-Registered prediction: fairpca_prediction.md, committed at 8b7d873 BEFORE this
+Registered prediction: docs/fairpca_prediction.md, committed at 8b7d873 BEFORE this
 file existed. Conventions identical to the FARE / baseline-gauntlet runs:
 3 training seeds, sweep probe seeds [0,1], certification probe seeds [0,1,2],
 bar 0.55 on the 3-seed mean, both surfaces (representation and output),
@@ -341,7 +341,7 @@ def main():
             cells.append(run_cell(k, device, clean[k]))
 
     scoring = score(cells)
-    print("\n" + "=" * 92 + "\nSCORING (fairpca_prediction.md @ 8b7d873)\n" + "=" * 92)
+    print("\n" + "=" * 92 + "\nSCORING (docs/fairpca_prediction.md @ 8b7d873)\n" + "=" * 92)
     for k, v in scoring.items():
         print(f"  {k}: {v if isinstance(v, str) else v['verdict']}")
         if not isinstance(v, str):

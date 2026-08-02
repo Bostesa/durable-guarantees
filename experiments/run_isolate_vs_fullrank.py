@@ -1,6 +1,6 @@
 """Isolate-then-noise vs plain full-rank noise, matched at Tier-1.
 
-Registered prediction: isolate_vs_fullrank_prediction.md (before this script).
+Registered prediction: docs/isolate_vs_fullrank_prediction.md (before this script).
 For each headline cell, train both channels at 3 seeds and report black-box
 Tier-1 max, Tier-2 Gaussian-LRT AUC, and retained utility, so the honest
 tradeoff (isolate = more Tier-1 utility, no Tier-2; full-rank = less utility,

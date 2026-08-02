@@ -4,7 +4,7 @@ on each exported cell and writes leaf assignments + leaf medians + the FARE
 dp_ub certificate per (config, training seed). No attacker measurements here —
 those happen in stage B inside the project venv.
 
-Protocol pinned in fare_prediction.md (committed ab76813 before any run):
+Protocol pinned in docs/fare_prediction.md (committed ab76813 before any run):
   grid max_k in {5,10,25,50,100} x alpha in {0.5,0.75,0.9,0.975,0.999},
   min_samples_leaf=100, cat_pos=[] (features are preprocessed floats),
   60/20/20 train/val/test split with numpy seed 42+ts (FARE's own 60:20:20

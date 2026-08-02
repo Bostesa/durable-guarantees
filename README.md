@@ -20,20 +20,19 @@ pip install -r requirements.txt
 
 - `experiments/` — experiment and analysis drivers; each script's docstring gives its protocol and verdict criteria.
 - `results/` — the JSON each experiment writes; every number in the paper is read from here.
-- `predictions/` — the pre-registration record (see below).
-- `paper/` — style files, bibliography, figure generators, and the figure PDFs.
-- `notes/` — standalone analysis writeups that support the paper without being part of it.
+- `figures/` — the paper figure generators, their shared style, and the built PDFs.
+- `docs/` — the pre-registration record (see below), plus supporting analysis writeups.
 - `utils/` — shared data loaders, the attacker battery, and compatibility shims for external code.
 
 ## Reproducing the paper
 
 | Artifact | Command |
 |---|---|
-| Figure 1 | `python paper/figures/fig1_demolition.py` |
-| Figure 2 | `python paper/figures/fig2_footprint.py` |
-| Figure 3 | `python paper/figures/fig3_cost_ramp.py` |
-| Figure 4 | `python paper/figures/fig4_two_tier.py` |
-| Audit scatter | `python paper/figures/fig_audit_scatter.py` |
+| Figure 1 | `python figures/fig1_demolition.py` |
+| Figure 2 | `python figures/fig2_footprint.py` |
+| Figure 3 | `python figures/fig3_cost_ramp.py` |
+| Figure 4 | `python figures/fig4_two_tier.py` |
+| Audit scatter | `python figures/fig_audit_scatter.py` |
 | Table 1 | `python experiments/master_gauntlet_table.py` |
 | Table 2 | `python -c "import json;print(json.dumps(json.load(open('results/mi_ceiling.json'))['operating_point_extension'],indent=2))"` |
 

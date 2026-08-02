@@ -1,6 +1,6 @@
 """One work unit of the 5-seed recertification: (cell, training seed).
 
-Registered in gate_5seed_prediction.md (commit 66390e1) BEFORE this file.
+Registered in docs/gate_5seed_prediction.md (commit 66390e1) BEFORE this file.
 
 Usage:  run_gate_shard.py <cell> <train_seed>
 

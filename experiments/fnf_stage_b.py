@@ -223,7 +223,7 @@ def main():
     scoring = {"P1_tier1_range": p1, "P2_tier2_fails_at_useful_points": p2,
                "P3_measured_exceeds_own_bound": p3}
 
-    print("\n" + "=" * 92 + "\nSCORING (fnf_prediction.md @ 8b7d873)\n" + "=" * 92)
+    print("\n" + "=" * 92 + "\nSCORING (docs/fnf_prediction.md @ 8b7d873)\n" + "=" * 92)
     for k, v in scoring.items():
         print(f"  {k}: {v['verdict']}\n    {v}")
 

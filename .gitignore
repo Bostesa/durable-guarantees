@@ -13,6 +13,10 @@ data_cache/
 /analysis/
 *.log
 
+# Per-experiment diagnostic plots, re-emitted by ~19 scripts in experiments/.
+# The paper figures live in figures/ and are built by figures/fig*.py.
+results/*.png
+
 # LaTeX build artifacts + macOS debris
 *.aux
 *.bbl

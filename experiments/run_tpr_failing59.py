@@ -1,6 +1,6 @@
 """Worst-case TPR for the 59 AUC-failing audit configurations — option (b).
 
-Registered prediction: tpr_failing59_prediction.md (commit b4deca6, BEFORE this
+Registered prediction: docs/tpr_failing59_prediction.md (commit b4deca6, BEFORE this
 script existed). Completes the dual verdict: with tpr_extension.json's 8
 survivors, all 67 approved audit configurations are measured under both
 criteria.

@@ -1,6 +1,6 @@
 """Averaging attack on the isolate-then-noise (e2e surgical) defense.
 
-Registered prediction: results/averaging_attack_prediction.md (committed
+Registered prediction: docs/averaging_attack_prediction.md (committed
 before this script existed). Easy cell hmda/race/loan_decision at the
 verified Tier-1 operating point of the e2e surgical channel — rank=32,
 sigma=16, lambda=10, train seed 0 (results/end_to_end_surgical.json arm D
@@ -182,7 +182,7 @@ def main():
                       "train_seed": TRAIN_SEED, "probe_seeds": PROBE_SEEDS,
                       "draw_seed": DRAW_SEED, "bar": BAR,
                       "draws_nested": True},
-           "prediction_file": "results/averaging_attack_prediction.md",
+           "prediction_file": "docs/averaging_attack_prediction.md",
            "sanity": sanity, "rows": rows,
            "minutes": round((time.time() - t0) / 60, 1)}
     (RESULTS_DIR / "averaging_attack.json").write_text(json.dumps(out, indent=2))

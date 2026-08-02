@@ -26,7 +26,7 @@ sys.path.insert(0, str(HERE))
 import _style  # noqa: E402
 from _style import DARK  # noqa: E402
 
-REPO = HERE.parent.parent
+REPO = HERE.parent
 CSV = REPO / "results" / "audit_scatter_rows.csv"
 
 PROJ = "#D55E00"

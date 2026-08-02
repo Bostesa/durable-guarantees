@@ -5,7 +5,7 @@ partition the representation model trained on. Objection: an encoder can
 memorize/embed the attribute for training rows, so the audit should be checked
 on rows the representation model never saw.
 
-Protocol (pinned in fresh_partition_prediction.md, committed 592c551 BEFORE this
+Protocol (pinned in docs/fresh_partition_prediction.md, committed 592c551 BEFORE this
 script ran):
   * 50/50 disjoint row split per dataset, split seed 20260724, stratified on
     (attr, task) jointly, before any training.
