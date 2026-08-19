@@ -1,10 +1,10 @@
-"""Expansion natural cells — three additional public tabular sources beyond
+"""Expansion natural cells. Three additional public tabular sources beyond
 folktables (see utils/folktables_io.py for the fourth):
 
   * lawschool          LSAC bar-passage (Wightman 1998), cleaned CSV from the
                        Le Quy et al. (2022) fairness-dataset survey mirror
-                       (tailequy/fairness_dataset). Label pass_bar — the file's
-                       single bar-passage label; per the survey's dataset table
+                       (tailequy/fairness_dataset). Label pass_bar, the file's
+                       single bar-passage label. Per the survey's dataset table
                        this is FIRST-TIME bar passage (recorded in provenance).
                        Attrs: sex (male=1), race binarized White=1/Non-White=0
                        (the file ships race already binarized to those two
@@ -15,7 +15,7 @@ folktables (see utils/folktables_io.py for the fourth):
                        columns are integer-coded categoricals -> one-hot.
   * diabetes_hospital  Diabetes 130-US Hospitals via
                        fairlearn.datasets.fetch_diabetes_hospital (fairlearn's
-                       cleaned OpenML build; weight/payer_code already absent).
+                       cleaned OpenML build, with weight/payer_code absent).
                        Label readmit_30_days (30-day readmission). Cleaning:
                        drop medical_specialty (~49% Missing), drop the
                        readmitted/readmit_binary leakage columns, drop rows
@@ -26,14 +26,14 @@ folktables (see utils/folktables_io.py for the fourth):
 Conventions identical to utils/folktables_io.py (and thereby to the existing
 tabular cells): standardized numerics (train-fit stats), one-hot categoricals,
 binarized protected attribute kept in the feature set, deterministic
-stratified 80/20 train/holdout split (seed 42, stratified on label x attrs;
-both attributes of a source share one train partition). Experiments run on
-the train partition; probes make their own 75/25 stratified held-out splits
+stratified 80/20 train/holdout split (seed 42, stratified on label x attrs,
+so both attributes of a source share one train partition). Experiments run on
+the train partition. Probes make their own 75/25 stratified held-out splits
 downstream. Processed arrays cached to data_cache/expansion/*.npz.
 
 Requires the optional `fairlearn` package for diabetes_hospital
-(see requirements.txt); lawschool/dutch need only the cached CSVs (downloaded
-from the recorded URLs if absent).
+(see requirements.txt). lawschool/dutch need only the cached CSVs, downloaded
+from the recorded URLs if absent.
 """
 
 from __future__ import annotations

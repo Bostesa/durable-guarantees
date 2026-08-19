@@ -1,7 +1,7 @@
-"""Folktables (ACS PUMS) natural cells — CA, 2018 1-Year person survey.
+"""Folktables (ACS PUMS) natural cells. CA, 2018 1-Year person survey.
 
 Extension loader for the diagnostic: three official folktables prediction
-tasks (ACSIncome, ACSEmployment, ACSPublicCoverage; Ding et al., NeurIPS
+tasks (ACSIncome, ACSEmployment, ACSPublicCoverage, from Ding et al., NeurIPS
 2021) x two protected attributes (SEX, RAC1P), giving 6 candidate
 (task, attribute) cells on natural census data.
 
@@ -12,28 +12,28 @@ like an adult/hmda/diabetes cell:
   * TASKS: the official folktables task objects, each with its OWN standard
     population filter and target transform (e.g. ACSIncome keeps employed
     adults with PINCP > 100 and predicts PINCP > 50k). We use the official
-    per-task populations — not a unified frame — so the label-coupling
+    per-task populations rather than a unified frame, so the label-coupling
     numbers are comparable to the fairness literature that uses these tasks.
   * STATE/YEAR: fixed single state CA (largest 1-Year sample), 2018 1-Year.
   * ATTRIBUTES (binary, matching PCRL's pcrl/data/folktables.py and the
     FFB convention of Han et al. ICLR 2024):
       sex  = 1 iff SEX == 1   (ACS code 1 = Male)
-      race = 1 iff RAC1P == 1 (ACS code 1 = "White alone"; 0 = non-White)
+      race = 1 iff RAC1P == 1 (ACS code 1 = "White alone", 0 = non-White)
   * FEATURES: standardized numerics (AGEP, WKHP, PINCP) + one-hot
-    categoricals with a NaN -> -1 bucket; SCHL is bucketed to the same
+    categoricals with a NaN -> -1 bucket. SCHL is bucketed to the same
     4-level education group and OCCP/POBP to the same coarse buckets as
     pcrl/data/folktables.py. SEX and RAC1P (binarized) stay in the feature
-    set — the same "attribute is also an input" convention as the existing
-    tabular cells. ST is dropped (constant: single state).
+    set, the same "attribute is also an input" convention as the existing
+    tabular cells. ST is dropped, being constant for a single state.
   * SPLIT: deterministic stratified 80/20 train/holdout split, seed 42,
     stratified on (task label, sex, race) jointly so both attributes of a
-    task share one train partition — the analogue of the PCRL datasets'
+    task share one train partition, the analogue of the PCRL datasets'
     seed-42 dataset-level train split. Experiments run on the train
-    partition; probes make their own 75/25 stratified held-out splits
+    partition. Probes make their own 75/25 stratified held-out splits
     downstream, exactly like the existing cells.
 
 Raw PUMS source: reuses the (read-only) CSV already cached under
-$PCRL_ROOT/data/folktables when present; otherwise downloads into this
+$PCRL_ROOT/data/folktables when present, otherwise downloads into this
 repo's data_cache/folktables. Processed per-task arrays are cached to
 data_cache/folktables/*.npz so re-runs skip the 255 MB CSV parse.
 
@@ -65,7 +65,7 @@ WHITE_RAC1P = 1  # ACS RAC1P == 1 is "White alone"
 TASK_NAMES = ("income", "employment", "public_coverage")
 ATTR_NAMES = ("sex", "race")
 
-# Columns treated as standardized numerics; everything else in a task's
+# Columns treated as standardized numerics. Everything else in a task's
 # feature list is one-hot encoded (after the bucketings below).
 NUMERIC_COLS = ("AGEP", "WKHP", "PINCP")
 DROP_COLS = ("ST",)  # constant under a single-state pull
@@ -121,7 +121,7 @@ def _bucket_pobp(s: pd.Series) -> pd.Series:
 # ── Raw data ────────────────────────────────────────────────────────────
 def _acs_root() -> tuple[Path, bool]:
     """(root_dir for ACSDataSource, download flag). Prefer the read-only CSV
-    already cached under $PCRL_ROOT/data/folktables; else our data_cache."""
+    already cached under $PCRL_ROOT/data/folktables, else our data_cache."""
     pcrl_root = os.environ.get("PCRL_ROOT")
     if pcrl_root:
         cand = Path(pcrl_root) / "data" / "folktables"
@@ -176,7 +176,7 @@ def _encode(feat: pd.DataFrame, train_mask: np.ndarray) -> tuple[np.ndarray, lis
         else:
             series = pd.to_numeric(feat[col], errors="coerce").fillna(-1).astype(np.int64)
         if col in ("SEX", "RAC1P"):
-            # already binary 0/1 — keep as a single column, like the PCRL loader
+            # already binary 0/1, so keep it as a single column like the PCRL loader
             cols.append(series.to_numpy(np.float32).reshape(-1, 1))
             names.append(f"{col}_bin")
             continue

@@ -5,14 +5,14 @@ schema data/adult/adult.npz uses (x_train/x_test, y (n,2+) one-hot,
 attr (n,1) float, train_inds/valid_inds). The LAFTR code is untouched.
 
 Choices (favorable/neutral to the baseline, mirroring the gauntlet protocol):
-- train = ALL rows (every other gauntlet baseline trains on the full cell);
-  valid = a seed-0 10% subset (their patience=1000 => no early stopping;
-  valid is logging-only).
+- train = ALL rows, since every other gauntlet baseline trains on the full
+  cell. valid = a seed-0 10% subset. Their patience=1000 means no early
+  stopping, so valid is used for logging only.
 - x_test = ALL rows in original order, so the tester's saved Z aligns
   row-for-row with our attr/task arrays for the probe battery.
 
 Usage: .venv/bin/python utils/export_cells_for_laftr.py [out_dir]
-       (out_dir defaults to ../laftr_cells; each cell lands in
+       (out_dir defaults to ../laftr_cells. Each cell lands in
         <out_dir>/<dataset>_<attr>_<task>/adult/adult.npz + meta.json,
         pointed at via `-o dirs.data_dir=...` in the official runs)
 """

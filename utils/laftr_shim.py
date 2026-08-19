@@ -1,18 +1,20 @@
 """Environment shim to run the OFFICIAL VectorInstitute/laftr (TF 1.9-era)
 unmodified under modern TensorFlow (2.21, tf.compat.v1) / Python 3.12 / numpy 2.
 
-The LAFTR source tree is NOT edited. Three environment-level aliases only:
-  1. sys.modules['tensorflow'] -> tf.compat.v1 (with v2 behavior disabled) —
-     the standard TF1-code migration shim, no semantic change.
+The LAFTR source tree is NOT edited. Four environment-level aliases:
+  1. sys.modules['tensorflow'] -> tf.compat.v1, with v2 behavior disabled.
+     This is the standard TF1-code migration shim, no semantic change.
   2. tf.contrib.layers.xavier_initializer -> tf.glorot_uniform_initializer.
-     These are the SAME initializer (Glorot/Xavier uniform); tf.contrib was
-     removed in TF2. Mathematically identical.
-  3. collections.Iterator -> collections.abc.Iterator (moved in Python 3.10).
+     These are the SAME initializer (Glorot/Xavier uniform), and tf.contrib
+     was removed in TF2. Mathematically identical.
+  3. collections.Iterator -> collections.abc.Iterator, and
+  4. collections.Mapping -> collections.abc.Mapping. Both ABCs moved to
+     collections.abc in Python 3.10. The objects themselves are unchanged.
 
 Usage:  python utils/laftr_shim.py <script-under-laftr/src> [laftr args...]
-        (cwd must be the laftr repo root, as their README requires; the
-        launching venv needs modern tensorflow + jinja2, e.g. python3.12 +
-        tensorflow 2.21 — see experiments/laftr_official.py)
+        (cwd must be the laftr repo root, as their README requires. The
+        launching venv needs modern tensorflow + jinja2, e.g. python3.12 with
+        tensorflow 2.21. See experiments/laftr_official.py.)
 """
 import collections
 import collections.abc

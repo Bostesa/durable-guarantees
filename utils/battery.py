@@ -1,16 +1,17 @@
 """The standing attacker battery, in two certification tiers.
 
-Experiment 11's side finding: a channel-aware Gaussian-LRT attacker — fit class
-Gaussians on the CLEAN (pre-noise) representation, integrate the known channel
-noise analytically — sits 0.02–0.05 ABOVE the trained battery at operating sigma
-(e.g. 0.574 on the HMDA e2e cell at sigma=8, where the battery certified 0.530).
+Experiment 11's side finding. A Gaussian-LRT attacker that knows the channel,
+fitting class Gaussians on the CLEAN (pre-noise) representation and integrating
+the known channel noise analytically, sits ABOVE the trained battery at
+operating sigma by 0.02 to 0.05 depending on the cell. On the HMDA e2e cell at
+sigma=8 it reads 0.574 where the battery certified 0.530.
 Per the project's own thesis (a guarantee is only as strong as the strongest
 attacker used to certify it), that attacker joins the battery here as a standard
 member, and the battery splits into two explicit threat-model tiers:
 
-  TIER 1 (black-box)  XGBoost + deep MLP + rank-32 ReLU LoRA. The attacker sees
-                      only the deployed (noised) representation / outputs — the
-                      standing battery of Exp 5–10.
+  TIER 1 (black box)  XGBoost + deep MLP + rank-32 ReLU LoRA. The attacker sees
+                      only the deployed (noised) representation and outputs.
+                      This is the standing battery of Exp 5 through 10.
   TIER 2 (informed)   Tier 1 + the Gaussian-LRT. The attacker additionally has
                       clean-representation side information and knows the channel
                       (noise level sigma, and the destroyed subspace Q for
@@ -22,12 +23,12 @@ member, and the battery splits into two explicit threat-model tiers:
 The LRT is channel-aware through its noise covariance:
   * blunt isotropic channel:  Sigma_noise = sigma^2 I
   * subspace/surgical channel (noise confined to span(Q), Q d x r orthonormal):
-    Sigma_noise = sigma^2 Q Q^T   (zero noise in the complement — the LRT sees
-    the surviving directions at full strength; surgical channels have no
+    Sigma_noise = sigma^2 Q Q^T   (zero noise in the complement, so the LRT
+    sees the surviving directions at full strength. Surgical channels have no
     distribution-free ceiling, Exp 11)
 Per class k it fits N(mu_k, Sigma_k + Sigma_noise) on the clean train split and
-scores the EXPOSED (noised) held-out rows by class posterior — same probe-style
-held-out AUC as every other battery member. Never R^2.
+scores the EXPOSED (noised) held-out rows by class posterior, giving the same
+kind of held-out AUC as every other battery member. Never R^2.
 """
 
 from __future__ import annotations
@@ -57,8 +58,8 @@ def _split_idx(y, seed):
 
 
 def _lrt_scores(H_clean_tr, y_tr, X_te, noise_cov, n_classes):
-    """Fit N(mu_k, Sigma_k + Sigma_noise) per class on clean train rows; return
-    class-posterior scores for the (noised) test rows."""
+    """Fit N(mu_k, Sigma_k + Sigma_noise) per class on clean train rows, then
+    return class-posterior scores for the (noised) test rows."""
     from scipy.linalg import solve_triangular
     d = H_clean_tr.shape[1]
     ridge = 1e-4 * np.eye(d)
@@ -87,9 +88,9 @@ def _auc(y_te, post, n_classes):
 def gaussian_lrt(H_clean, P_exposed, y, noise_cov, n_classes, seeds):
     """The Tier-2 Gaussian-LRT battery member on a FIXED exposed matrix.
 
-    H_clean: pre-noise representation (the side information); P_exposed: the
-    deployed noised representation, row-aligned with H_clean (the same matrix
-    the Tier-1 members attack). Returns (mean, std) held-out AUC over seeds.
+    H_clean is the pre-noise representation, the side information. P_exposed is
+    the deployed noised representation, row-aligned with H_clean, the same matrix
+    the Tier-1 members attack. Returns (mean, std) held-out AUC over seeds.
     """
     H_clean = np.asarray(H_clean, dtype=np.float64)
     P_exposed = np.asarray(P_exposed, dtype=np.float64)
@@ -125,8 +126,8 @@ def two_tier_battery(H_clean, P_exposed, y, n_classes, device, seeds, noise_cov)
 
     Returns {"XGB": {...}, "MLP": {...}, "LoRA32": {...}, "LRT": {...},
              "tier1_max": float, "tier2_max": float}.
-    tier1_max = max over the black-box members; tier2_max additionally includes
-    the informed Gaussian-LRT.
+    tier1_max is the max over the black box members. tier2_max additionally
+    includes the informed Gaussian-LRT.
     """
     from experiments.diagnostic import battery as _t1_battery
     out = _t1_battery(P_exposed, y, n_classes, device, seeds, archs=TIER1_ARCHS)

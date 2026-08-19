@@ -2,7 +2,7 @@
 
 This module is the ONLY place that knows about PCRL internals. It adds the
 (read-only) PCRL repo to sys.path and imports/adapts its code. We never modify
-the PCRL repo — we mirror exactly the patterns the audit identified:
+the PCRL repo. We mirror exactly the patterns the audit identified:
 
   * encoder build + checkpoint load (scripts/crosspurp/run_eval_multi.py::load_encoder),
     including the lora_target auto-detection (_detect_lora_target).
@@ -48,7 +48,7 @@ from pcrl.data.base import collate_pcrl_batch  # noqa: E402
 from pcrl.models.encoder import StandardEncoder  # noqa: E402
 from pcrl.models.lora import LoRAAdapter, PerPurposeLoRAEncoder  # noqa: E402
 
-# PCRL's certificate instruments — the measuring devices for this experiment.
+# PCRL's certificate instruments, the measuring devices for this experiment.
 from pcrl.vision.r2_helper import linear_r2  # noqa: E402,F401  (re-exported)
 from pcrl.evaluation.certificates import compute_dominant_axis_r2  # noqa: E402,F401
 
@@ -74,7 +74,7 @@ def _detect_lora_target(lora_adapters_sd: dict) -> str:
     Copied verbatim in behaviour from scripts/crosspurp/run_eval_multi.py so we
     don't hardcode the adapter layout. Keys look like
     ``<purpose_idx>.<linear_idx>.{A.weight,B.weight,bias}``. A linear_idx of 1
-    or 2 means all three backbone Linears were adapted ("all_linear");
+    or 2 means all three backbone Linears were adapted ("all_linear"),
     otherwise only the final repr_proj was ("repr_proj_only").
     """
     for key in lora_adapters_sd.keys():
@@ -103,7 +103,7 @@ def _build_and_load_encoder(ckpt_path, input_dim, n_purposes, rank, alpha):
 
     Mirrors run_eval_multi.py::load_encoder for ANY tabular PCRL checkpoint:
     weights_only=False, lora_target auto-detect, LEACE buffer restore. repr_dim
-    is always 64. The (rank, alpha) passed in are only fallbacks — the
+    is always 64. The (rank, alpha) passed in are only fallbacks. The
     AUTHORITATIVE values come from the checkpoint's own ``config`` (some
     checkpoints, e.g. v2_diabetes_s0, were trained at a different rank than the
     run_eval_multi DATASET_CONFIG default). We don't hardcode the adapter layout.
@@ -159,7 +159,7 @@ def build_adult_train_loader(batch_size: int = 512):
 
 
 # --- Multi-dataset generalization (mirrors run_eval_multi.py DATASET_CONFIG) -
-# repr_dim is always 64; only input_dim, rank/alpha, data_root and the dataset
+# repr_dim is always 64. Only input_dim, rank/alpha, data_root and the dataset
 # class differ. rank/alpha match PCRL's per-dataset training config.
 DATASET_CFG: dict[str, dict] = {
     "adult": dict(loader_module="pcrl.data.adult", dataset_class="AdultDataset",

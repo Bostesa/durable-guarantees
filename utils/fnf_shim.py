@@ -1,23 +1,27 @@
 """Environment shim to run the OFFICIAL eth-sri/fnf (2022-era, CUDA-assuming)
 unmodified under modern numpy 2.5 / torch 2.12 / Python 3.13 on Apple silicon.
 
-The FNF source tree is NOT edited. Three environment-level aliases only, each
-an identity operation semantically:
+The FNF source tree is NOT edited. Four environment-level aliases, each an
+identity operation semantically:
 
-  1. numpy.object / numpy.bool -> builtin object / bool. These attributes WERE
-     exactly those builtins (deprecated in numpy 1.20, removed in 1.24);
-     restoring the alias changes no behaviour. Used by datasets/*.py.
-  2. torch.load(..., weights_only=False) as the default. torch >= 2.6 flipped
-     this default to True; FNF saves and reloads whole nn.Module pickles
+  1. numpy.object / numpy.int / numpy.float / numpy.bool / numpy.str -> the
+     builtins of the same name. These attributes WERE exactly those builtins
+     (deprecated in numpy 1.20, removed in 1.24). Restored only where numpy no
+     longer defines the name, so numpy 2.x's own np.bool / np.str_ are left
+     alone. Used by datasets/*.py.
+  2. pandas.DataFrame.applymap -> DataFrame.map, which pandas 3.0 renamed it
+     to. Same elementwise apply, same semantics.
+  3. torch.load(..., weights_only=False) as the default. torch >= 2.6 flipped
+     this default to True. FNF saves and reloads whole nn.Module pickles
      (e.g. `adult/made1.pt`) that it wrote itself moments earlier in the same
      pipeline. No third-party checkpoint is ever loaded.
-  3. Module-level `device = 'cuda'` globals (train_fnf, *_flow_multi, toy_*)
-     rebound to the device given by FNF_DEVICE (default 'cpu'); this machine
-     has no CUDA. Their scripts already expose --device for the same purpose;
-     the module globals were simply missed by that flag.
+  4. Module-level `device = 'cuda'` globals (train_fnf, *_flow_multi, toy_*)
+     rebound to the device given by FNF_DEVICE (default 'cpu'), because this
+     machine has no CUDA. Their scripts already expose --device for the same
+     purpose. The module globals were simply missed by that flag.
 
 Nothing else is patched: no optimizer, loss, architecture, schedule or metric
-is touched. If a run needs more than the three aliases above, that is a GATE
+is touched. If a run needs more than the four aliases above, that is a GATE
 FAILURE to be reported, not a shim to be extended.
 
 Usage:
@@ -31,21 +35,21 @@ import os
 import sys
 from pathlib import Path
 
-# Location of the official eth-sri/fnf checkout. Override with $FNF_ROOT;
-# the default assumes it sits beside this repository as ../fnf.
+# Location of the official eth-sri/fnf checkout. Override with $FNF_ROOT.
+# The default assumes it sits beside this repository as ../fnf.
 FNF_ROOT_DEFAULT = str(Path(__file__).resolve().parents[1].parent / "fnf")
 _installed = False
 
 
 def install(device: str | None = None) -> str:
-    """Apply the three aliases. Returns the device string that was installed."""
+    """Apply the four aliases. Returns the device string that was installed."""
     global _installed
     dev = device or os.environ.get("FNF_DEVICE", "cpu")
 
     import numpy as np
     # Restore ONLY the aliases numpy actually removed. numpy 2.x reintroduced
     # `np.bool` as its own boolean scalar (np.bool_), and clobbering that with
-    # the builtin breaks numpy.ma internals — so never overwrite what exists.
+    # the builtin breaks numpy.ma internals, so never overwrite what exists.
     for _name, _builtin in (("object", object), ("int", int), ("float", float),
                             ("bool", bool), ("str", str)):
         try:
@@ -107,7 +111,7 @@ if __name__ == "__main__":
     # cwd must be the FNF repo root (their relative data/model paths need it).
     # Under fnf/.venv (numpy 1.23.5 / pandas 1.5.3) the numpy and pandas
     # aliases are already present, so install() reduces to the torch.load
-    # default — needed because their pipeline reloads the MADE prior pickle it
+    # default, needed because their pipeline reloads the MADE prior pickle it
     # wrote itself minutes earlier in the same run.
     import runpy
 
